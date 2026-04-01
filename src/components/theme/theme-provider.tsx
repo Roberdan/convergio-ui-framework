@@ -64,7 +64,11 @@ export function ThemeProvider({ children, defaultTheme = "navy" }: {
 
   const value = useMemo(() => ({ theme, setTheme, themes: THEMES }), [theme, setTheme]);
 
-  return <ThemeContext value={value}>{children}</ThemeContext>;
+  return (
+    <ThemeContext value={value}>
+      {children}
+    </ThemeContext>
+  );
 }
 
 export function useTheme() {

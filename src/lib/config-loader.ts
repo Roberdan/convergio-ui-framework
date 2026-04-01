@@ -3,6 +3,7 @@ import { join } from "path";
 import YAML from "yaml";
 import type { AppConfig, NavSection, PageConfig, PageRow } from "@/types";
 import type { AIConfig } from "@/types";
+import { rawConfigSchema, type ValidatedConfig } from "./config-schema";
 
 /**
  * Unified configuration loader.
@@ -12,51 +13,28 @@ import type { AIConfig } from "@/types";
  *
  * This runs at build time (in server components / generateStaticParams).
  * The YAML is parsed once and cached for the lifetime of the build.
+ * Config is validated against a Zod schema at load time.
  *
  * To override: set CONVERGIO_CONFIG_PATH env var to a custom path.
  */
 
-interface RawConfig {
-  app?: { name?: string; description?: string; logo?: string };
-  theme?: { default?: string; storageKey?: string };
-  api?: { baseUrl?: string };
-  ai?: { defaultAgent?: string; agents?: RawAgent[] };
-  navigation?: { sections?: RawNavSection[] };
-  pages?: Record<string, RawPage>;
-}
+let cached: ValidatedConfig | null = null;
 
-interface RawAgent {
-  id: string;
-  name: string;
-  description: string;
-  provider: string;
-  model: string;
-  systemPrompt: string;
-  apiRoute?: string;
-  avatar?: string;
-  maxTokens?: number;
-}
-
-interface RawNavSection {
-  label: string;
-  items: { id: string; label: string; href: string; icon: string; badge?: number }[];
-}
-
-interface RawPage {
-  title: string;
-  description?: string;
-  rows: { columns: number; blocks: Record<string, unknown>[] }[];
-}
-
-let cached: RawConfig | null = null;
-
-function loadRaw(): RawConfig {
+function loadRaw(): ValidatedConfig {
   if (cached) return cached;
   const configPath =
     process.env.CONVERGIO_CONFIG_PATH ??
     join(/* turbopackIgnore: true */ process.cwd(), "convergio.yaml");
   const content = readFileSync(configPath, "utf-8");
-  cached = YAML.parse(content) as RawConfig;
+  const parsed: unknown = YAML.parse(content);
+  const result = rawConfigSchema.safeParse(parsed);
+  if (!result.success) {
+    const issues = result.error.issues
+      .map((i) => `  ${i.path.join(".")}: ${i.message}`)
+      .join("\n");
+    throw new Error(`Invalid convergio.yaml:\n${issues}`);
+  }
+  cached = result.data;
   return cached;
 }
 
@@ -89,7 +67,11 @@ export function loadNavSections(): NavSection[] {
 /** Load a page config by route path from convergio.yaml */
 export function loadPageConfig(route: string): PageConfig | null {
   const raw = loadRaw();
-  const page = raw.pages?.[route];
+  const pages = raw.pages;
+  if (!pages) return null;
+  const page = pages[route] as
+    | { title: string; description?: string; rows: { columns: number; blocks: Record<string, unknown>[] }[] }
+    | undefined;
   if (!page) return null;
   return {
     title: page.title,

@@ -40,7 +40,8 @@ export default function RootLayout({
     <html
       lang="en"
       data-theme={appConfig.defaultTheme}
-      className={`${inter.variable} ${outfit.variable} ${barlowCondensed.variable} h-full antialiased dark`}
+      suppressHydrationWarning
+      className={`${inter.variable} ${outfit.variable} ${barlowCondensed.variable} h-full antialiased ${appConfig.defaultTheme !== "light" ? "dark" : ""}`}
     >
       <head>
         <ThemeScript />
