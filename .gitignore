@@ -42,3 +42,5 @@ next-env.d.ts
 
 # Tauri
 src-tauri/target/
+playwright-report/
+test-results/
