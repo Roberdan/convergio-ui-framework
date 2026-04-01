@@ -86,3 +86,38 @@ export { MnPipelineRanking } from "./mn-pipeline-ranking";
 export type { MnPipelineRankingProps, PipelineStage } from "./mn-pipeline-ranking";
 export { MnActivityFeed } from "./mn-activity-feed";
 export type { MnActivityFeedProps, ActivityItem } from "./mn-activity-feed";
+
+/* W3 — Network & Infrastructure */
+export { MnMeshNetwork } from "./mn-mesh-network";
+export type { MnMeshNetworkProps, MeshNode, MeshEdge } from "./mn-mesh-network";
+
+export { MnHubSpoke } from "./mn-hub-spoke";
+export type { MnHubSpokeProps, HubSpokeHub, HubSpokeSpoke } from "./mn-hub-spoke";
+
+export { MnDeploymentTable } from "./mn-deployment-table";
+export type { MnDeploymentTableProps, Deployment } from "./mn-deployment-table";
+
+export { MnAuditLog } from "./mn-audit-log";
+export type { MnAuditLogProps, AuditEntry } from "./mn-audit-log";
+
+export { MnActiveMissions } from "./mn-active-missions";
+export type { MnActiveMissionsProps, Mission } from "./mn-active-missions";
+
+export { MnNightJobs } from "./mn-night-jobs";
+export type { MnNightJobsProps, NightJob } from "./mn-night-jobs";
+
+/* W4 — Agentic & Intelligence */
+export { MnAugmentedBrain } from "./mn-augmented-brain";
+export type { MnAugmentedBrainProps, BrainNode, BrainConnection } from "./mn-augmented-brain";
+
+export { MnBinnacle } from "./mn-binnacle";
+export type { MnBinnacleProps, BinnacleEntry } from "./mn-binnacle";
+
+export { MnDashboardStrip } from "./mn-dashboard-strip";
+export type { MnDashboardStripProps, StripMetric } from "./mn-dashboard-strip";
+
+export { MnInstrumentBinnacle } from "./mn-instrument-binnacle";
+export type { MnInstrumentBinnacleProps } from "./mn-instrument-binnacle";
+
+export { MnOrgChart } from "./mn-org-chart";
+export type { MnOrgChartProps, OrgNode } from "./mn-org-chart";
