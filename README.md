@@ -115,6 +115,7 @@ src/
     not-found.tsx
   components/
     blocks/                 # page blocks: kpi-card, data-table, ai-chat-panel…
+    maranello/              # Maranello design system — 36 React components (see below)
     page-renderer.tsx       # interprets convergio.yaml pages → block grid
     shell/                  # app-shell, sidebar, header, command-menu
     theme/                  # theme-provider, theme-switcher, theme-script
@@ -128,6 +129,57 @@ src/
   types/                    # shared TypeScript types
 src-tauri/                  # optional — Tauri desktop scaffold (see below)
 ```
+
+## Maranello Design System
+
+The Maranello component library (`src/components/maranello/`) is a set of 36 React components migrated from the original Web Components implementation to React + Tailwind CSS v4 + CVA (class-variance-authority). All components follow the `Mn` prefix convention, support all 4 themes, and are accessible (WCAG 2.2 AA).
+
+```tsx
+import { MnBadge, MnChart, MnDataTable } from "@/components/maranello"
+```
+
+Browse the live showcase at [`/preview`](/preview).
+
+### Component catalogue
+
+| # | Component | Primary export | Category | Description |
+|---|---|---|---|---|
+| 1 | Badge | `MnBadge` | Simple | Status/label badge with theme-aware variants |
+| 2 | Avatar | `MnAvatar`, `MnAvatarGroup` | Simple | User avatar with image fallback and group stacking |
+| 3 | Breadcrumb | `MnBreadcrumb` | Simple | Navigation breadcrumb trail |
+| 4 | Form Field | `MnFormField` | Simple | Form field wrapper with label, hint, and error slots |
+| 5 | State Scaffold | `MnStateScaffold` | Simple | Empty/loading/error state placeholder |
+| 6 | Toast | `MnToast`, `toast()` | Simple | Notification toasts with imperative `toast()` API |
+| 7 | Tabs | `MnTabs`, `MnTab`, `MnTabPanel` | Simple | Accessible tabbed interface |
+| 8 | Modal | `MnModal` | Simple | Accessible modal dialog with focus trap |
+| 9 | Customer Journey | `MnCustomerJourney` | Simple | Horizontal step/funnel journey visualization |
+| 10 | Dashboard | `MnDashboard` | Simple | Responsive grid dashboard layout container |
+| 11 | Command Palette | `MnCommandPalette` | Shell / Navigation | Cmd-K fuzzy command search overlay |
+| 12 | Header Shell | `MnHeaderShell` | Shell / Navigation | Top-level app header bar |
+| 13 | Section Nav | `MnSectionNav` | Shell / Navigation | Sidebar or horizontal section navigation |
+| 14 | Theme Toggle | `MnThemeToggle` | Shell / Navigation | Light/dark theme toggle button |
+| 15 | Theme Rotary | `MnThemeRotary` | Shell / Navigation | Rotary dial for cycling all 4 themes |
+| 16 | Async Select | `MnAsyncSelect` | Shell / Navigation | Searchable select with async data loading |
+| 17 | Date Picker | `MnDatePicker` | Shell / Navigation | Calendar date picker with range support |
+| 18 | Profile | `MnProfile` | Shell / Navigation | User profile card with editable sections |
+| 19 | Accessibility | `MnA11y` | Shell / Navigation | Accessibility preferences panel |
+| 20 | Data Table | `MnDataTable` | Data | Sortable, filterable, paginated data table |
+| 21 | Detail Panel | `MnDetailPanel` | Data | Slide-over detail view with field sections |
+| 22 | Entity Workbench | `MnEntityWorkbench` | Data | Master-detail entity editor with tab groups |
+| 23 | Facet Workbench | `MnFacetWorkbench` | Data | Faceted search and filter workbench |
+| 24 | Chat | `MnChat` | Data | AI chat panel with message history and quick actions |
+| 25 | OKR | `MnOkr` | Data | Objectives & Key Results tracker |
+| 26 | System Status | `MnSystemStatus` | Data | Service health dashboard with incident timeline |
+| 27 | Chart | `MnChart` | Canvas / Visual | Multi-series chart (line, bar, area, pie) via Recharts |
+| 28 | Gauge | `MnGauge` | Canvas / Visual | Radial gauge with threshold zones |
+| 29 | Speedometer | `MnSpeedometer` | Canvas / Visual | Ferrari-style speedometer dial |
+| 30 | Funnel | `MnFunnel` | Canvas / Visual | Conversion funnel visualization |
+| 31 | Horizontal Bar | `MnHbar` | Canvas / Visual | Horizontal stacked/grouped bar chart |
+| 32 | Gantt | `MnGantt` | Canvas / Visual | Gantt chart for project timelines |
+| 33 | Kanban Board | `MnKanbanBoard` | Canvas / Visual | Drag-and-drop kanban columns and cards |
+| 34 | Map | `MnMap` | Canvas / Visual | Leaflet-based interactive map with markers |
+| 35 | Mapbox | `MnMapbox` | Canvas / Visual | Mapbox GL JS map with markers |
+| 36 | Ferrari Controls | `MnManettino`, `MnCruiseLever`, `MnToggleLever`, `MnSteppedRotary` | Controls | Ferrari-inspired rotary and lever control widgets |
 
 ## Tauri (optional — desktop builds)
 
