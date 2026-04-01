@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+### W0: Maranello Design System Migration — Foundation
+
+- Ported 329 `--mn-*` CSS custom properties from convergio-design into `globals.css`
+- Added semantic token definitions for all 4 themes: navy (default), light/avorio, dark/nero, colorblind
+- Token categories: color primitives (Ferrari palette, status, Okabe-Ito), spacing, typography, shadow, transition, z-index
+- Bridged shadcn CSS variables to reference `--mn-*` tokens where applicable
+- Created `src/components/maranello/` directory with barrel `index.ts` for upcoming component migration
+- No new npm dependencies added — all token values inlined
+
 ### W1: Runtime source of truth
 
 - Changed: app metadata, nav, themes, AI registry, and dashboard page config now load from `convergio.yaml` via `src/lib/config-loader.ts`
