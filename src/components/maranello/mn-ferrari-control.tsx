@@ -62,11 +62,45 @@ function MnCruiseLever({ positions = ["OFF", "SET", "RES", "ACC"], value: contro
   const count = positions.length
   const { idx, go, onKey } = useStep(controlled, defaultValue, count - 1, positions, onChange)
   const pct = count > 1 ? (idx / (count - 1)) * 100 : 0
+  const railRef = React.useRef<HTMLDivElement>(null)
+  const [dragging, setDragging] = React.useState(false)
+
+  const resolveIndex = React.useCallback((clientY: number) => {
+    const rail = railRef.current
+    if (!rail) return
+    const { top, height } = rail.getBoundingClientRect()
+    const ratio = Math.max(0, Math.min(1, (clientY - top) / height))
+    go(Math.round(ratio * (count - 1)))
+  }, [count, go])
+
+  React.useEffect(() => {
+    if (!dragging) return
+    function onMove(e: MouseEvent) { resolveIndex(e.clientY) }
+    function onUp() { setDragging(false) }
+    function onTouchMove(e: TouchEvent) { resolveIndex(e.touches[0].clientY) }
+    function onTouchEnd() { setDragging(false) }
+    document.addEventListener("mousemove", onMove)
+    document.addEventListener("mouseup", onUp)
+    document.addEventListener("touchmove", onTouchMove, { passive: true })
+    document.addEventListener("touchend", onTouchEnd)
+    return () => {
+      document.removeEventListener("mousemove", onMove)
+      document.removeEventListener("mouseup", onUp)
+      document.removeEventListener("touchmove", onTouchMove)
+      document.removeEventListener("touchend", onTouchEnd)
+    }
+  }, [dragging, resolveIndex])
+
+  function onPointerStart(e: React.MouseEvent | React.TouchEvent) {
+    e.preventDefault()
+    setDragging(true)
+  }
+
   return (
     <div className={cn(controlBase({ size }), className)}>
       {label && <span className={LBL}>{label}</span>}
       <div className="relative flex items-center gap-3">
-        <div className="relative h-28 w-3 rounded-full border border-[var(--mn-border)] bg-[linear-gradient(180deg,var(--mn-surface-raised),var(--mn-surface-sunken))]">
+        <div ref={railRef} className="relative h-28 w-3 rounded-full border border-[var(--mn-border)] bg-[linear-gradient(180deg,var(--mn-surface-raised),var(--mn-surface-sunken))]">
           {positions.map((_, i) => (
             <button key={i} aria-label={positions[i]}
               className="absolute left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[var(--mn-text-muted)] opacity-40"
@@ -74,7 +108,11 @@ function MnCruiseLever({ positions = ["OFF", "SET", "RES", "ACC"], value: contro
           ))}
           <div role="slider" tabIndex={0} aria-label={label ?? "Cruise lever"} aria-valuemin={0}
             aria-valuemax={count - 1} aria-valuenow={idx} aria-valuetext={positions[idx]} onKeyDown={onKey}
-            className="absolute left-1/2 h-4 w-5 -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded border border-[var(--mn-border)] bg-[var(--mn-surface-raised)] shadow-[0_1px_4px_rgba(0,0,0,.35)] transition-[top] duration-150"
+            onMouseDown={onPointerStart} onTouchStart={onPointerStart}
+            className={cn(
+              "absolute left-1/2 h-4 w-5 -translate-x-1/2 -translate-y-1/2 rounded border border-[var(--mn-border)] bg-[var(--mn-surface-raised)] shadow-[0_1px_4px_rgba(0,0,0,.35)]",
+              dragging ? "cursor-grabbing scale-110" : "cursor-grab transition-[top] duration-150",
+            )}
             style={{ top: `${pct}%` }} />
         </div>
         <div className="flex h-28 flex-col justify-between">

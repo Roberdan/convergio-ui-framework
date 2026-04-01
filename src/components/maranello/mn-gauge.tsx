@@ -4,7 +4,7 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
-const SIZE_PX = { sm: 120, md: 220, lg: 320 } as const
+const SIZE_PX = { sm: 120, md: 180, lg: 240 } as const
 type GaugeSize = keyof typeof SIZE_PX | "fluid"
 
 const gaugeWrap = cva("relative inline-block", {

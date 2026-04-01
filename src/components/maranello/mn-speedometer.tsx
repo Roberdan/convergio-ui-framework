@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 const FONT = "'Barlow Condensed', 'Outfit', sans-serif"
 const SWEEP = Math.PI * 1.5
 const START = Math.PI * 0.75
-const SIZES: Record<string, number> = { sm: 120, md: 220, lg: 320 }
+const SIZES: Record<string, number> = { sm: 120, md: 180, lg: 240 }
 const ANIM_MS = 800
 
 function easeOut(t: number) { return 1 - (1 - t) ** 3 }
@@ -213,7 +213,7 @@ export function MnSpeedometer({
       {...props}
       className={cn(mnSpeedometerVariants({ size }), className)}
     >
-      <canvas ref={canvasRef} style={{ display: "block" }} />
+      <canvas ref={canvasRef} style={{ display: "block", width: dim, height: dim }} />
     </div>
   )
 }

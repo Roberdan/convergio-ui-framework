@@ -47,7 +47,6 @@ import {
   MnGantt,
   MnKanbanBoard,
   MnMap,
-  MnMapbox,
   MnManettino,
   MnCruiseLever,
   MnToggleLever,
@@ -870,27 +869,27 @@ export default function MaranelloShowcase() {
         {/* Gauge + Speedometer */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <ShowcaseCard title="MnGauge">
-            <div className="w-full aspect-square max-w-md mx-auto">
+            <div className="flex justify-center">
               <MnGauge
                 value={73}
                 min={0}
                 max={100}
                 unit="%"
                 label="System Health"
-                size="fluid"
+                size="md"
                 arcBar={{ value: 73, max: 100, labelCenter: "73%", labelLeft: "0", labelRight: "100" }}
               />
             </div>
           </ShowcaseCard>
 
           <ShowcaseCard title="MnSpeedometer">
-            <div className="w-full aspect-square max-w-md mx-auto">
+            <div className="flex justify-center">
               <MnSpeedometer
                 value={185}
                 min={0}
                 max={320}
                 unit="km/h"
-                size="lg"
+                size="md"
               />
             </div>
           </ShowcaseCard>
@@ -938,11 +937,22 @@ export default function MaranelloShowcase() {
           <div className="w-full overflow-x-auto">
             <MnGantt
               tasks={[
-                { id: "design", title: "Design Phase", start: "2025-01-06", end: "2025-01-24", status: "completed", progress: 100 },
-                { id: "frontend", title: "Frontend Dev", start: "2025-01-20", end: "2025-02-21", status: "active", progress: 65, dependencies: ["design"] },
-                { id: "backend", title: "Backend API", start: "2025-01-20", end: "2025-02-14", status: "active", progress: 80, dependencies: ["design"] },
+                {
+                  id: "design", title: "Design Phase", start: "2025-01-06", end: "2025-01-24", status: "completed",
+                  children: [
+                    { id: "wireframes", title: "Wireframes", start: "2025-01-06", end: "2025-01-14", status: "completed", progress: 100 },
+                    { id: "mockups", title: "Visual Mockups", start: "2025-01-12", end: "2025-01-24", status: "completed", progress: 100 },
+                  ],
+                },
+                {
+                  id: "development", title: "Development", start: "2025-01-20", end: "2025-02-21", status: "active",
+                  children: [
+                    { id: "frontend", title: "Frontend Dev", start: "2025-01-20", end: "2025-02-21", status: "active", progress: 65, dependencies: ["design"] },
+                    { id: "backend", title: "Backend API", start: "2025-01-20", end: "2025-02-14", status: "active", progress: 80, dependencies: ["design"] },
+                  ],
+                },
                 { id: "integration", title: "Integration", start: "2025-02-10", end: "2025-02-28", status: "planned", progress: 0, dependencies: ["frontend", "backend"] },
-                { id: "testing", title: "QA Testing", start: "2025-02-24", end: "2025-03-14", status: "planned", progress: 0, dependencies: ["integration"] },
+                { id: "testing", title: "QA Testing", start: "2025-02-24", end: "2025-03-14", status: "on-hold", progress: 0, dependencies: ["integration"] },
                 { id: "launch", title: "🚀 Launch", start: "2025-03-14", end: "2025-03-14", status: "planned", milestone: true, dependencies: ["testing"] },
               ]}
               showToday
@@ -980,31 +990,6 @@ export default function MaranelloShowcase() {
               zoom={1}
               enableZoom
               enablePan
-              onMarkerClick={(m) => toast.info(`${m.label}: ${m.detail ?? ""}`)}
-              className="w-full h-full"
-            />
-          </div>
-        </ShowcaseCard>
-
-        {/* Mapbox */}
-        <ShowcaseCard title="MnMapbox">
-          <div className="w-full h-[400px]">
-            <MnMapbox
-              accessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? ""}
-              center={[12.0, 42.5]}
-              zoom={3}
-              projection="globe"
-              markers={[
-                { id: 1, lat: 44.5, lon: 11.35, label: "Maranello", detail: "Ferrari HQ", stage: "hq", count: 1 },
-                { id: 2, lat: 45.62, lon: 9.28, label: "Monza", detail: "Circuit", stage: "circuit" },
-                { id: 3, lat: 43.32, lon: 11.33, label: "Siena", detail: "Office", stage: "office" },
-              ]}
-              stages={[
-                { id: "hq", label: "Headquarters", color: "#DC2626" },
-                { id: "circuit", label: "Circuit", color: "#F59E0B" },
-                { id: "office", label: "Office", color: "#3B82F6" },
-              ]}
-              showLegend
               onMarkerClick={(m) => toast.info(`${m.label}: ${m.detail ?? ""}`)}
               className="w-full h-full"
             />
