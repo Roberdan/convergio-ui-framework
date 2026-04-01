@@ -618,3 +618,32 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── MnA11yFab: accessibility preference classes ── */
+html.mn-font-large { font-size: 118.75%; }
+html.mn-font-xl { font-size: 137.5%; }
+
+html.mn-dyslexic,
+html.mn-dyslexic body,
+html.mn-dyslexic input,
+html.mn-dyslexic textarea,
+html.mn-dyslexic select,
+html.mn-dyslexic button {
+  font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif !important;
+}
+
+html.mn-high-contrast {
+  --foreground: #ffffff;
+  --background: #000000;
+  --muted-foreground: #e0e0e0;
+  --border: #ffffff;
+}
+
+html.mn-reduced-motion,
+html.mn-reduced-motion *,
+html.mn-reduced-motion *::before,
+html.mn-reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}

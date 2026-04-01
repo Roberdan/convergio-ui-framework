@@ -44,3 +44,45 @@ export { MnKanbanBoard, type MnKanbanBoardProps, type KanbanColumn, type KanbanC
 export { MnMap, type MnMapProps, type MapMarker } from "./mn-map"
 export { MnManettino, MnCruiseLever, MnToggleLever, MnSteppedRotary } from "./mn-ferrari-control"
 export type { MnManettinoProps, MnCruiseLeverProps, MnToggleLeverProps, MnSteppedRotaryProps } from "./mn-ferrari-control"
+
+// Phase 2 — W0: Pre-existing
+export { MnBudgetTreemap } from "./mn-budget-treemap";
+export type { MnBudgetTreemapProps, TreemapItem } from "./mn-budget-treemap";
+export { MnHeatmap } from "./mn-heatmap";
+export type { MnHeatmapProps } from "./mn-heatmap";
+
+// Phase 2 — W1: Accessibility + Utilities
+export { MnA11yFab } from "./mn-a11y-fab";
+export type { A11yPrefs } from "./mn-a11y-fab";
+export { MnSpinner } from "./mn-spinner";
+export type { MnSpinnerProps } from "./mn-spinner";
+export { MnStepper } from "./mn-stepper";
+export type { MnStepperProps, Step } from "./mn-stepper";
+export { MnToggleSwitch } from "./mn-toggle-switch";
+export type { MnToggleSwitchProps } from "./mn-toggle-switch";
+export {
+  MnDropdownMenu,
+  MnDropdownItem,
+  MnDropdownSeparator,
+  MnDropdownLabel,
+} from "./mn-dropdown-menu";
+export type {
+  MnDropdownMenuProps,
+  MnDropdownItemProps,
+} from "./mn-dropdown-menu";
+export { MnCalendarRange } from "./mn-calendar-range";
+export type { MnCalendarRangeProps, DateRange } from "./mn-calendar-range";
+
+// Phase 2 — W2: Advanced Data Visualization
+export { MnWaterfall } from "./mn-waterfall";
+export type { MnWaterfallProps, WaterfallStep } from "./mn-waterfall";
+export { MnDecisionMatrix } from "./mn-decision-matrix";
+export type {
+  MnDecisionMatrixProps,
+  DecisionCriterion,
+  DecisionOption,
+} from "./mn-decision-matrix";
+export { MnPipelineRanking } from "./mn-pipeline-ranking";
+export type { MnPipelineRankingProps, PipelineStage } from "./mn-pipeline-ranking";
+export { MnActivityFeed } from "./mn-activity-feed";
+export type { MnActivityFeedProps, ActivityItem } from "./mn-activity-feed";
