@@ -26,18 +26,23 @@ export function Header({ onMenuToggle, onSearchClick, breadcrumb }: HeaderProps)
 
         {breadcrumb.length > 0 && (
           <nav aria-label="Breadcrumb" className="flex items-center text-sm">
-            {breadcrumb.map((segment, i) => (
-              <span key={i} className="flex items-center">
-                {i > 0 && (
-                  <span className="mx-1.5 text-muted-foreground" aria-hidden="true">
-                    &gt;
+            <ol className="flex items-center list-none m-0 p-0">
+              {breadcrumb.map((segment, i) => (
+                <li key={i} className="flex items-center">
+                  {i > 0 && (
+                    <span className="mx-1.5 text-muted-foreground" aria-hidden="true">
+                      &gt;
+                    </span>
+                  )}
+                  <span
+                    className={i === 0 ? "font-heading font-semibold" : "font-sans text-muted-foreground"}
+                    aria-current={i === breadcrumb.length - 1 ? "page" : undefined}
+                  >
+                    {segment}
                   </span>
-                )}
-                <span className={i === 0 ? "font-heading font-semibold" : "font-sans text-muted-foreground"}>
-                  {segment}
-                </span>
-              </span>
-            ))}
+                </li>
+              ))}
+            </ol>
           </nav>
         )}
       </div>

@@ -36,7 +36,7 @@ export function AppShell({ children, sections, brandName }: AppShellProps) {
           onToggle={toggleSidebar}
           brandName={brandName}
         />
-        <main className="flex-1 min-h-[calc(100vh-52px)] overflow-auto">
+        <main id="main-content" className="flex-1 min-h-[calc(100vh-52px)] overflow-auto">
           <div className="p-6">{children}</div>
         </main>
       </div>

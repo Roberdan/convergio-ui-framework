@@ -27,10 +27,10 @@ export default function ActivityPage() {
         {EVENTS.map((event, i) => (
           <div key={i} className="flex items-start gap-3 rounded-md border bg-card p-3 text-card-foreground text-sm">
             <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${
-              event.type === "success" ? "bg-green-500" :
-              event.type === "error" ? "bg-destructive" :
-              event.type === "warning" ? "bg-yellow-500" : "bg-primary"
-            }`} />
+              event.type === "success" ? "bg-status-success" :
+              event.type === "error" ? "bg-status-error" :
+              event.type === "warning" ? "bg-status-warning" : "bg-status-info"
+            }`} aria-hidden="true" />
             <div className="flex-1 min-w-0">
               <p><Badge variant="outline" className="mr-2 font-mono text-[10px]">{event.agent}</Badge>{event.action}</p>
               <p className="text-micro mt-0.5">{event.time}</p>

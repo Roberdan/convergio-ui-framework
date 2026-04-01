@@ -78,7 +78,7 @@ export default function SettingsPage() {
             <p role="alert" className="text-sm text-destructive">{errorMessage}</p>
           )}
           {state?.success && !clientError && (
-            <p role="status" className="text-sm text-green-600">Profile saved.</p>
+            <p role="status" className="text-sm text-status-success">Profile saved.</p>
           )}
           <div>
             <Button size="sm" type="submit" disabled={isPending}>
