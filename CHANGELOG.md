@@ -94,6 +94,15 @@
 - Removed: all Plan 10035, alfa-01, Thor, ws-44bf, header-shell-followups references
 - Changed: convergio.yaml seeded data uses generic deployment/worker examples
 
+### TF: Maranello Design System Migration — Closure
+
+- Full validation: typecheck ✓, build ✓, lint clean (0 new errors)
+- Fixed lint issues: unconditional hooks (modal), ref-in-render (tabs), empty interface (a11y), mutable-in-render (gantt)
+- 36 Web Components successfully migrated to React/Tailwind/CVA
+- Total: ~10,000+ LOC across 36 component files + barrel + showcase + types
+- All components use --mn-* CSS tokens for multi-theme support (navy, light, dark, colorblind)
+- No new npm dependencies added — all implementations are self-contained
+
 ### W6: Server-first data path
 
 - Changed: `src/lib/env.ts` validates API_URL with sensible default
