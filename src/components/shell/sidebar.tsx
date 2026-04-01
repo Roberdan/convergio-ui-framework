@@ -5,8 +5,6 @@ import { cn } from "@/lib/utils";
 import {
   PanelLeftClose,
   PanelLeftOpen,
-  Settings,
-  HelpCircle,
 } from "lucide-react";
 import {
   Sheet,
@@ -27,7 +25,7 @@ export interface NavItem {
   id: string;
   label: string;
   href: string;
-  icon: React.ComponentType<{ className?: string }>;
+  iconName: string;
   badge?: number;
 }
 
@@ -64,8 +62,8 @@ function useIsMobile(breakpoint = 768) {
 const footerSection: NavSection = {
   label: "Support",
   items: [
-    { id: "settings", label: "Settings", href: "/settings", icon: Settings },
-    { id: "help", label: "Help", href: "/help", icon: HelpCircle },
+    { id: "settings", label: "Settings", href: "/settings", iconName: "Settings" },
+    { id: "help", label: "Help", href: "/help", iconName: "HelpCircle" },
   ],
 };
 

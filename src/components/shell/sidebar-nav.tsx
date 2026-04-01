@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { resolveIcon } from "@/lib/icon-map";
 import {
   Tooltip,
   TooltipTrigger,
@@ -19,7 +20,7 @@ function NavItemLink({
   collapsed: boolean;
   isActive: boolean;
 }) {
-  const Icon = item.icon;
+  const Icon = resolveIcon(item.iconName);
 
   const classes = cn(
     "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium",
@@ -36,7 +37,7 @@ function NavItemLink({
         <TooltipTrigger
           render={<Link href={item.href} className={classes} />}
         >
-          <Icon className="size-5 shrink-0" />
+          {Icon ? <Icon className="size-5 shrink-0" /> : <span className="size-5 shrink-0" />}
         </TooltipTrigger>
         <TooltipContent side="right" sideOffset={8}>
           {item.label}
@@ -50,7 +51,7 @@ function NavItemLink({
 
   return (
     <Link href={item.href} className={classes}>
-      <Icon className="size-5 shrink-0" />
+      {Icon ? <Icon className="size-5 shrink-0" /> : <span className="size-5 shrink-0" />}
       <span className="truncate">{item.label}</span>
       {item.badge != null && (
         <span

@@ -3,6 +3,7 @@ import { Inter, Outfit, Barlow_Condensed } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { ThemeScript } from "@/components/theme/theme-script";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { loadAppConfig } from "@/lib/config-loader";
 import "./globals.css";
 
 const inter = Inter({
@@ -23,9 +24,11 @@ const barlowCondensed = Barlow_Condensed({
   weight: ["300", "400", "500", "600", "700"],
 });
 
+const appConfig = loadAppConfig();
+
 export const metadata: Metadata = {
-  title: "Convergio",
-  description: "Convergio Frontend",
+  title: appConfig.name,
+  description: appConfig.description ?? `${appConfig.name} Frontend`,
 };
 
 export default function RootLayout({
@@ -36,14 +39,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      data-theme="navy"
+      data-theme={appConfig.defaultTheme}
       className={`${inter.variable} ${outfit.variable} ${barlowCondensed.variable} h-full antialiased dark`}
     >
       <head>
         <ThemeScript />
       </head>
       <body className="min-h-full">
-        <ThemeProvider defaultTheme="navy">
+        <ThemeProvider defaultTheme={appConfig.defaultTheme}>
           <TooltipProvider>
             {children}
           </TooltipProvider>

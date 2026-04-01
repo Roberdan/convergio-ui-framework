@@ -52,7 +52,9 @@ let cached: RawConfig | null = null;
 
 function loadRaw(): RawConfig {
   if (cached) return cached;
-  const configPath = process.env.CONVERGIO_CONFIG_PATH ?? join(process.cwd(), "convergio.yaml");
+  const configPath =
+    process.env.CONVERGIO_CONFIG_PATH ??
+    join(/* turbopackIgnore: true */ process.cwd(), "convergio.yaml");
   const content = readFileSync(configPath, "utf-8");
   cached = YAML.parse(content) as RawConfig;
   return cached;
@@ -69,8 +71,8 @@ export function loadAppConfig(): AppConfig {
   };
 }
 
-/** Load navigation sections from convergio.yaml (icon names as strings) */
-export function loadNavSections(): { label: string; items: { id: string; label: string; href: string; iconName: string; badge?: number }[] }[] {
+/** Load navigation sections from convergio.yaml */
+export function loadNavSections(): NavSection[] {
   const raw = loadRaw();
   return (raw.navigation?.sections ?? []).map((s) => ({
     label: s.label,

@@ -1,10 +1,12 @@
 import { PageRenderer } from "@/components/page-renderer";
-import { dashboardConfig } from "@/config/pages/dashboard.config";
+import { loadPageConfig } from "@/lib/config-loader";
 
 /**
- * Dashboard page — rendered from config.
- * Edit src/config/pages/dashboard.config.ts to change the content.
+ * Dashboard page — rendered from convergio.yaml.
+ * Edit the `pages["/"]` section in convergio.yaml to change the content.
  */
 export default function DashboardPage() {
-  return <PageRenderer config={dashboardConfig} />;
+  const config = loadPageConfig("/");
+  if (!config) return null;
+  return <PageRenderer config={config} />;
 }

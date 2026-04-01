@@ -1,5 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 
+/* ── Re-export icon resolver for convenience ── */
+
 /* ── App Config ── */
 
 /**
@@ -34,7 +36,7 @@ export interface AppConfig {
  *
  * @example
  * ```ts
- * { id: "dashboard", label: "Dashboard", href: "/", icon: LayoutDashboard }
+ * { id: "dashboard", label: "Dashboard", href: "/", iconName: "LayoutDashboard" }
  * ```
  */
 export interface NavItem {
@@ -44,8 +46,8 @@ export interface NavItem {
   label: string;
   /** Route path. Must match a Next.js page under (dashboard)/. */
   href: string;
-  /** Lucide icon component rendered next to the label. */
-  icon: LucideIcon;
+  /** Lucide icon name resolved at render time via icon-map. */
+  iconName: string;
   /** Optional count badge (e.g. unread notifications). */
   badge?: number;
 }

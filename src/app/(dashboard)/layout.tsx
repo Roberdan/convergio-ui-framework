@@ -1,12 +1,12 @@
-"use client";
-
 import { AppShell } from "@/components/shell/app-shell";
-import { defaultNavSections } from "@/config/navigation";
-import { appConfig } from "@/config/app";
+import { loadAppConfig, loadNavSections } from "@/lib/config-loader";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const appConfig = loadAppConfig();
+  const sections = loadNavSections();
+
   return (
-    <AppShell sections={defaultNavSections} brandName={appConfig.name}>
+    <AppShell sections={sections} brandName={appConfig.name}>
       {children}
     </AppShell>
   );

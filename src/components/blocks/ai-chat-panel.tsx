@@ -5,28 +5,22 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
-import { aiConfig } from "@/config/ai.config";
+import type { AIConfig } from "@/types";
 import { cn } from "@/lib/utils";
 
 /**
  * AI Chat Panel — streaming chat interface powered by Vercel AI SDK v6.
  *
- * Use for: agent interaction, command execution, Q&A, platform operations.
+ * Receives agent configuration from the server via props (sourced from convergio.yaml).
  * Connects to /api/chat (or custom route) via DefaultChatTransport.
- *
- * Features:
- * - Agent selector (switch between configured agents)
- * - Streaming responses with text parts
- * - Message history
- * - Keyboard: Enter to send
  *
  * @example
  * ```tsx
- * <AIChatPanel />
- * <AIChatPanel defaultAgentId="nasra" />
+ * <AIChatPanel aiConfig={aiConfig} />
+ * <AIChatPanel aiConfig={aiConfig} defaultAgentId="nasra" />
  * ```
  */
-export function AIChatPanel({ defaultAgentId }: { defaultAgentId?: string }) {
+export function AIChatPanel({ defaultAgentId, aiConfig }: { defaultAgentId?: string; aiConfig: AIConfig }) {
   const [agentId, setAgentId] = useState(defaultAgentId ?? aiConfig.defaultAgentId);
   const agent = aiConfig.agents.find((a) => a.id === agentId) ?? aiConfig.agents[0];
   const [inputValue, setInputValue] = useState("");

@@ -1,4 +1,5 @@
 import type { PageConfig, PageBlock } from "@/types";
+import { loadAIConfig } from "@/lib/config-loader";
 import { KpiCard, DataTable, ActivityFeed, StatList, EmptyState, AIChatPanel } from "@/components/blocks";
 
 /**
@@ -11,10 +12,12 @@ import { KpiCard, DataTable, ActivityFeed, StatList, EmptyState, AIChatPanel } f
  * Usage in a Next.js page:
  * ```tsx
  * import { PageRenderer } from "@/components/page-renderer";
- * import { dashboardConfig } from "@/config/pages/dashboard.config";
+ * import { loadPageConfig } from "@/lib/config-loader";
  *
  * export default function DashboardPage() {
- *   return <PageRenderer config={dashboardConfig} />;
+ *   const config = loadPageConfig("/");
+ *   if (!config) return null;
+ *   return <PageRenderer config={config} />;
  * }
  * ```
  *
@@ -58,7 +61,7 @@ function BlockRenderer({ block }: { block: PageBlock }) {
     case "empty-state":
       return <EmptyState {...block} />;
     case "ai-chat":
-      return <AIChatPanel defaultAgentId={block.agentId} />;
+      return <AIChatPanel defaultAgentId={block.agentId} aiConfig={loadAIConfig()} />;
     default:
       return null;
   }

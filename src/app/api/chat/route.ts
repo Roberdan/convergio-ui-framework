@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai";
 import { streamText } from "ai";
-import { aiConfig } from "@/config/ai.config";
+import { loadAIConfig } from "@/lib/config-loader";
 
 /**
  * POST /api/chat — streaming chat completions via Vercel AI SDK.
@@ -15,6 +15,7 @@ import { aiConfig } from "@/config/ai.config";
  * Environment: requires OPENAI_API_KEY (or ANTHROPIC_API_KEY for anthropic agents).
  */
 export async function POST(req: Request) {
+  const aiConfig = loadAIConfig();
   const { messages, agentId } = await req.json();
 
   const agent = aiConfig.agents.find((a) => a.id === (agentId ?? aiConfig.defaultAgentId))
