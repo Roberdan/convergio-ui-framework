@@ -38,3 +38,10 @@
 - Changed: `src/app/(auth)/login/page.tsx` wired with server action (demo: admin/admin)
 - Added: logout server action + sign-out button in dashboard layout
 - Changed: `e2e/shell.spec.ts` injects session cookie for test bypass
+
+### W6: Starter productization
+
+- Changed: README.md fully rewritten to match actual starter state (155 lines)
+- Fixed: Next.js version 15 → 16 in docs
+- Added: convergio.yaml, server-first data, auth boundary, AI routing sections to README
+- Kept: Tauri section clearly marked as optional

@@ -29,3 +29,9 @@
 - Decision: simple cookie-based auth for starter; clearly marked as demo-only
 - Issue: E2E tests need auth bypass → solved with `context.addCookies` in beforeEach
 - Pattern: server actions for both login and logout; no client-side auth state
+
+## W6: Starter productization
+
+- Decision: README is the primary starter guide — rewritten from scratch rather than patched
+- Pattern: each major feature gets its own section with quick-start instructions
+- Kept Tauri but positioned as clearly optional with separate install step
