@@ -18,6 +18,7 @@
  * - StatList: vertical label-value pairs with status
  * - EmptyState: placeholder for empty sections
  * - AIChatPanel: streaming AI agent chat interface
+ * - A2UIStream: live A2UI activity feed/timeline
  */
 export { KpiCard } from "./kpi-card";
 export { DataTable } from "./data-table";
@@ -27,3 +28,5 @@ export { EmptyState } from "./empty-state";
 export { AIChatPanel } from "./ai-chat-panel";
 export { BlockWrapper } from "./block-wrapper";
 export type { BlockWrapperProps } from "./block-wrapper";
+export { A2UIStream } from "./a2ui-stream";
+export type { A2UIStreamProps } from "./a2ui-stream";
