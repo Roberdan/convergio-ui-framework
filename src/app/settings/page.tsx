@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
@@ -17,11 +16,20 @@ export default function SettingsPage() {
         <div className="grid gap-4 rounded-lg border bg-card p-5 text-card-foreground">
           <div className="grid gap-1.5">
             <Label htmlFor="name">Display Name</Label>
-            <Input id="name" defaultValue="Roberto D'Angelo" className="bg-background" />
+            <input
+              id="name"
+              defaultValue="Roberto D'Angelo"
+              className="h-9 w-full rounded-md border border-border bg-background px-3 text-sm text-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/50"
+            />
           </div>
           <div className="grid gap-1.5">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" defaultValue="roberto@convergio.dev" className="bg-background" />
+            <input
+              id="email"
+              type="email"
+              defaultValue="roberto@convergio.dev"
+              className="h-9 w-full rounded-md border border-border bg-background px-3 text-sm text-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/50"
+            />
           </div>
           <div className="flex justify-end">
             <Button>Save Changes</Button>

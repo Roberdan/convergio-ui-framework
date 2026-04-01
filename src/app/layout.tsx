@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Outfit, Barlow_Condensed } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { ThemeScript } from "@/components/theme/theme-script";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ShellWrapper } from "@/components/shell/shell-wrapper";
 import "./globals.css";
@@ -36,8 +37,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${outfit.variable} ${barlowCondensed.variable} h-full antialiased`}
+      data-theme="navy"
+      className={`${inter.variable} ${outfit.variable} ${barlowCondensed.variable} h-full antialiased dark`}
     >
+      <head>
+        <ThemeScript />
+      </head>
       <body className="min-h-full">
         <ThemeProvider defaultTheme="navy">
           <TooltipProvider>
