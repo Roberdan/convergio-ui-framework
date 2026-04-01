@@ -1,6 +1,33 @@
 # Changelog
 
-## [Unreleased]
+## [0.2.0] - 01 Aprile 2026
+
+### Phase 2: Expert Review Hardening + Maranello Components
+
+Plan 10050 | 60 tasks | 16 waves | Thor validated
+
+#### Added
+- A2UI protocol frontend consumer: SSE client, block store, renderer, dashboard widget (W0)
+- WCAG 2.2 AA accessibility: focus-visible, skip links, semantic HTML, ARIA, status tokens (WA)
+- Block loading/error/empty states, chat UX improvements, design token system (WQ)
+- Test foundation: 51 unit tests with vitest + RTL + happy-dom (WT)
+- 23 Maranello components across 6 waves:
+  - W1: Accessibility + utilities (StatusBadge, SkipLink, FocusRing, ThemeSelector, ErrorBoundary)
+  - W2: Advanced data visualization (SparklineChart, MetricsGrid, HeatmapGrid, ProgressRing)
+  - W3: Network and infrastructure (NetworkTopology, NodeCard, LatencyIndicator, ConnectionStatus)
+  - W5: Strategy and business frameworks (StrategyMatrix, ObjectiveTracker, RiskRadar, DecisionLog)
+- Showcase page at /showcase with all Maranello components (WS)
+- Wave documentation in docs/waves/ for all 9 waves
+- Phase 2 summary documentation
+
+#### Changed
+- Foundation hardening: theme hydration, error boundaries, Zod validation, responsive layouts (WF)
+
+#### Fixed
+- Theme hydration flash on initial load
+- Missing error boundaries causing white screens
+
+## [0.1.0] - Unreleased
 
 ### W0: Maranello Design System Migration — Foundation
 
