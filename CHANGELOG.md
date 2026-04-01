@@ -28,7 +28,22 @@
 - 1,961 LOC total, all files under 250-line limit
 - Barrel exports consolidated in index.ts
 
-### W2: Runtime source of truth
+### W2: Maranello Design System Migration — Wave 2: Shell & Navigation
+
+- Ported 9 shell/navigation components (9 files) as React/Tailwind/CVA:
+  - `MnCommandPalette` — fuzzy search, Cmd+K hotkey, keyboard nav, portal overlay
+  - `MnHeaderShell` — config-driven app header with actions and filter groups
+  - `MnSectionNav` — page-level nav with active highlighting and prev/next
+  - `MnThemeToggle` — cycle button integrating with ThemeProvider
+  - `MnThemeRotary` — rotary dial for theme selection with animation
+  - `MnAsyncSelect` — debounced async search with ARIA combobox pattern
+  - `MnDatePicker` — calendar grid with keyboard nav, locale-aware
+  - `MnProfile` — avatar dropdown with sections, badge, keyboard nav
+  - `MnA11y` — accessibility FAB with font/spacing scaling, reduced motion
+- All integrate with existing ThemeProvider and --mn-* token system
+- 1,915 LOC total, all files under 250-line limit
+
+### W3: Runtime source of truth
 
 - Changed: app metadata, nav, themes, AI registry, and dashboard page config now load from `convergio.yaml` via `src/lib/config-loader.ts`
 - Changed: `src/config/app.ts`, `navigation.ts`, `ai.config.ts`, `pages/dashboard.config.ts` are now deprecated re-exports
@@ -37,13 +52,13 @@
 - Added: `vitest.config.ts` for kernel gate compatibility
 - Learnings: kernel evidence gate runs `npx vitest run` — projects without Vitest need a config with `passWithNoTests: true`
 
-### W3: Starter baseline neutralization
+### W4: Starter baseline neutralization
 
 - Changed: activity feed, agent table, and notifications now use generic internal-tools copy
 - Removed: all Plan 10035, alfa-01, Thor, ws-44bf, header-shell-followups references
 - Changed: convergio.yaml seeded data uses generic deployment/worker examples
 
-### W4: Server-first data path
+### W5: Server-first data path
 
 - Changed: `src/lib/env.ts` validates API_URL with sensible default
 - Changed: `src/lib/api/client.ts` uses validated env for baseUrl
@@ -52,20 +67,20 @@
 - Changed: `src/app/api/health/route.ts` includes version from package.json
 - Pattern: server actions catch network errors gracefully for starter mode (no backend)
 
-### W5: AI routing hardening
+### W6: AI routing hardening
 
 - Changed: `src/app/api/chat/route.ts` uses `resolveModel()` with provider switching (openai/anthropic/custom)
 - Added: exhaustive compile-time provider check prevents silent fallback
 - Added: anthropic and custom providers return 501 with setup guidance
 
-### W6: Auth boundary wiring
+### W7: Auth boundary wiring
 
 - Changed: `src/proxy.ts` now enforces session cookie check on protected routes
 - Changed: `src/app/(auth)/login/page.tsx` wired with server action (demo: admin/admin)
 - Added: logout server action + sign-out button in dashboard layout
 - Changed: `e2e/shell.spec.ts` injects session cookie for test bypass
 
-### W7: Starter productization
+### W8: Starter productization
 
 - Changed: README.md fully rewritten to match actual starter state (155 lines)
 - Fixed: Next.js version 15 → 16 in docs

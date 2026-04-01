@@ -23,3 +23,12 @@ export { MnAsyncSelect, type MnAsyncSelectProps, type AsyncSelectItem } from "./
 export { MnDatePicker, type MnDatePickerProps } from "./mn-date-picker"
 export { MnProfile, type ProfileSection, type ProfileSectionItem } from "./mn-profile"
 export { MnA11y, type MnA11yProps } from "./mn-a11y"
+
+// W3: Data-heavy components
+export { MnDataTable, type MnDataTableProps, type DataTableColumn } from "./mn-data-table"
+export { MnDetailPanel, type MnDetailPanelProps, type DetailField, type DetailSection } from "./mn-detail-panel"
+export { MnEntityWorkbench, type MnEntityWorkbenchProps, type EntityTab } from "./mn-entity-workbench"
+export { MnFacetWorkbench, type MnFacetWorkbenchProps, type FacetGroup, type FacetFilters } from "./mn-facet-workbench"
+export { MnChat, type MnChatProps, type ChatMessage, type QuickAction } from "./mn-chat"
+export { MnOkr, type MnOkrProps, type Objective, type KeyResult } from "./mn-okr"
+export { MnSystemStatus, type MnSystemStatusProps, type Service, type Incident } from "./mn-system-status"
