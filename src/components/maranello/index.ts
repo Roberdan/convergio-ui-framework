@@ -32,3 +32,16 @@ export { MnFacetWorkbench, type MnFacetWorkbenchProps, type FacetGroup, type Fac
 export { MnChat, type MnChatProps, type ChatMessage, type QuickAction } from "./mn-chat"
 export { MnOkr, type MnOkrProps, type Objective, type KeyResult } from "./mn-okr"
 export { MnSystemStatus, type MnSystemStatusProps, type Service, type Incident } from "./mn-system-status"
+
+// W4: Canvas/visual components
+export { MnChart, type MnChartProps, type ChartSeries, type ChartType } from "./mn-chart"
+export { MnGauge, type MnGaugeProps } from "./mn-gauge"
+export { MnSpeedometer, type MnSpeedometerProps } from "./mn-speedometer"
+export { MnFunnel, type MnFunnelProps, type FunnelStage } from "./mn-funnel"
+export { MnHbar, type MnHbarProps, type HBarItem } from "./mn-hbar"
+export { MnGantt, type MnGanttProps, type GanttTask } from "./mn-gantt"
+export { MnKanbanBoard, type MnKanbanBoardProps, type KanbanColumn, type KanbanCard } from "./mn-kanban-board"
+export { MnMap, type MnMapProps, type MapMarker } from "./mn-map"
+export { MnMapbox, type MnMapboxProps, type MapboxMarker } from "./mn-mapbox"
+export { MnManettino, MnCruiseLever, MnToggleLever, MnSteppedRotary } from "./mn-ferrari-control"
+export type { MnManettinoProps, MnCruiseLeverProps, MnToggleLeverProps, MnSteppedRotaryProps } from "./mn-ferrari-control"

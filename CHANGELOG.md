@@ -43,7 +43,19 @@
 - All integrate with existing ThemeProvider and --mn-* token system
 - 1,915 LOC total, all files under 250-line limit
 
-### W3: Runtime source of truth
+### W3: Maranello Design System Migration — Wave 3: Data-Heavy Components
+
+- Ported 7 data-heavy components (7 files) as React/Tailwind/CVA:
+  - `MnDataTable` — sortable, filterable, groupable, paginated data grid with ARIA
+  - `MnDetailPanel` — slide-out panel with view/edit modes and field renderers
+  - `MnEntityWorkbench` — multi-tab entity editor with dirty state tracking
+  - `MnFacetWorkbench` — facet/filter panel with checkbox/radio selection
+  - `MnChat` — streaming chat bubbles, code blocks, quick actions, voice input
+  - `MnOkr` — objectives and key results with progress bars and status
+  - `MnSystemStatus` — service health dashboard with polling and incidents
+- 1,568 LOC total, all files under 250-line limit
+
+### W4: Runtime source of truth
 
 - Changed: app metadata, nav, themes, AI registry, and dashboard page config now load from `convergio.yaml` via `src/lib/config-loader.ts`
 - Changed: `src/config/app.ts`, `navigation.ts`, `ai.config.ts`, `pages/dashboard.config.ts` are now deprecated re-exports
@@ -52,13 +64,13 @@
 - Added: `vitest.config.ts` for kernel gate compatibility
 - Learnings: kernel evidence gate runs `npx vitest run` — projects without Vitest need a config with `passWithNoTests: true`
 
-### W4: Starter baseline neutralization
+### W5: Starter baseline neutralization
 
 - Changed: activity feed, agent table, and notifications now use generic internal-tools copy
 - Removed: all Plan 10035, alfa-01, Thor, ws-44bf, header-shell-followups references
 - Changed: convergio.yaml seeded data uses generic deployment/worker examples
 
-### W5: Server-first data path
+### W6: Server-first data path
 
 - Changed: `src/lib/env.ts` validates API_URL with sensible default
 - Changed: `src/lib/api/client.ts` uses validated env for baseUrl
@@ -67,20 +79,20 @@
 - Changed: `src/app/api/health/route.ts` includes version from package.json
 - Pattern: server actions catch network errors gracefully for starter mode (no backend)
 
-### W6: AI routing hardening
+### W7: AI routing hardening
 
 - Changed: `src/app/api/chat/route.ts` uses `resolveModel()` with provider switching (openai/anthropic/custom)
 - Added: exhaustive compile-time provider check prevents silent fallback
 - Added: anthropic and custom providers return 501 with setup guidance
 
-### W7: Auth boundary wiring
+### W8: Auth boundary wiring
 
 - Changed: `src/proxy.ts` now enforces session cookie check on protected routes
 - Changed: `src/app/(auth)/login/page.tsx` wired with server action (demo: admin/admin)
 - Added: logout server action + sign-out button in dashboard layout
 - Changed: `e2e/shell.spec.ts` injects session cookie for test bypass
 
-### W8: Starter productization
+### W9: Starter productization
 
 - Changed: README.md fully rewritten to match actual starter state (155 lines)
 - Fixed: Next.js version 15 → 16 in docs
