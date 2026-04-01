@@ -69,7 +69,7 @@ function ToggleRow({ label, checked, onChange }: { label: string; checked: boole
   )
 }
 
-export interface MnA11yProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type MnA11yProps = React.HTMLAttributes<HTMLDivElement>
 
 /** Accessibility FAB with settings panel. Persists to localStorage. */
 export function MnA11y({ className, ...props }: MnA11yProps) {

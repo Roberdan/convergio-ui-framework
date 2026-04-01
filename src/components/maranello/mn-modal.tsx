@@ -89,8 +89,10 @@ function MnModal({
   const modalRef = React.useRef<HTMLDivElement>(null)
   const previousFocusRef = React.useRef<HTMLElement | null>(null)
 
-  const titleId = titleIdProp ?? React.useId()
-  const bodyId = bodyIdProp ?? React.useId()
+  const fallbackTitleId = React.useId()
+  const fallbackBodyId = React.useId()
+  const titleId = titleIdProp ?? fallbackTitleId
+  const bodyId = bodyIdProp ?? fallbackBodyId
 
   // Save & restore focus on open/close
   React.useEffect(() => {

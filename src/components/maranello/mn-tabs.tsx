@@ -39,7 +39,7 @@ function MnTabs({
   ...props
 }: MnTabsProps) {
   const [internal, setInternal] = React.useState(defaultValue ?? "")
-  const tabsRef = React.useRef<string[]>([])
+  const [tabs, setTabs] = React.useState<string[]>([])
 
   const isControlled = value !== undefined
   const activeValue = isControlled ? value : internal
@@ -53,12 +53,12 @@ function MnTabs({
   )
 
   const registerTab = React.useCallback((v: string) => {
-    tabsRef.current = [...new Set([...tabsRef.current, v])]
+    setTabs((prev) => prev.includes(v) ? prev : [...prev, v])
   }, [])
 
   const ctx = React.useMemo<TabsContextValue>(
-    () => ({ activeValue, onSelect, registerTab, tabs: tabsRef.current }),
-    [activeValue, onSelect, registerTab],
+    () => ({ activeValue, onSelect, registerTab, tabs }),
+    [activeValue, onSelect, registerTab, tabs],
   )
 
   return (

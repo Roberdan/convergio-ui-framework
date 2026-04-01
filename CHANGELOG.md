@@ -80,6 +80,14 @@
 - Added: `vitest.config.ts` for kernel gate compatibility
 - Learnings: kernel evidence gate runs `npx vitest run` — projects without Vitest need a config with `passWithNoTests: true`
 
+### Maranello Design System Migration — Wave 5: Integration
+
+- Wired 11 Maranello block types into page-renderer system
+- Added block type interfaces to src/types/config.ts (gauge, chart, gantt, kanban, funnel, hbar, speedometer, map, okr, system-status, data-table-maranello)
+- Added example Maranello blocks to convergio.yaml dashboard page
+- Created comprehensive component showcase at /preview with all 36 components
+- Updated README.md with full Maranello Design System component catalog
+
 ### W5: Starter baseline neutralization
 
 - Changed: activity feed, agent table, and notifications now use generic internal-tools copy

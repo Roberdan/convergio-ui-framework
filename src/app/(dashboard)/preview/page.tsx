@@ -753,8 +753,8 @@ export default function MaranelloShowcase() {
               { id: "queue", name: "Message Queue", status: "operational", uptime: 99.97, latencyMs: 5 },
             ]}
             incidents={[
-              { id: "inc-1", title: "ML Pipeline latency spike", severity: "degraded", date: new Date().toISOString() },
-              { id: "inc-2", title: "CDN cache purge completed", severity: "operational", date: new Date(Date.now() - 86400000).toISOString(), resolved: true },
+              { id: "inc-1", title: "ML Pipeline latency spike", severity: "degraded", date: "2026-04-01T18:00:00Z" },
+              { id: "inc-2", title: "CDN cache purge completed", severity: "operational", date: "2026-03-31T12:00:00Z", resolved: true },
             ]}
             version="2.4.1"
             environment="production"

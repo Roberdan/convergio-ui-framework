@@ -71,12 +71,12 @@ const ganttRoot = cva(
 function TimelineHeader({ months, ppd }: {
   months: { date: Date; label: string; year: number }[]; ppd: number
 }) {
-  let prevY = -1
   return (
     <div className="flex h-12 border-b border-[var(--mn-border,theme(colors.border))] bg-[var(--mn-surface-raised,theme(colors.muted))]">
       {months.map((m, i) => {
         const w = days(m.date, i < months.length - 1 ? months[i + 1].date : addM(m.date, 1)) * ppd
-        const sy = m.year !== prevY; prevY = m.year
+        const prevMonth = i > 0 ? months[i - 1] : null
+        const sy = !prevMonth || m.year !== prevMonth.year
         return (
           <div key={i} className="shrink-0 border-r border-[var(--mn-border,theme(colors.border))] flex flex-col justify-center items-center text-[10px] leading-tight" style={{ width: w }}>
             {sy && <span className="font-bold text-[var(--mn-text,theme(colors.foreground))]">{m.year}</span>}
