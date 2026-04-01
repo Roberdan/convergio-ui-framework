@@ -1,5 +1,19 @@
 import { test, expect } from "@playwright/test";
 
+// Set the session cookie so every test can access protected dashboard routes.
+test.beforeEach(async ({ context }) => {
+  await context.addCookies([
+    {
+      name: "session",
+      value: "authenticated",
+      domain: "127.0.0.1",
+      path: "/",
+      httpOnly: true,
+      sameSite: "Lax",
+    },
+  ]);
+});
+
 test.describe("App Shell", () => {
   test("renders dashboard with header and sidebar", async ({ page }) => {
     await page.goto("/");

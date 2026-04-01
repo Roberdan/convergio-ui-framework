@@ -17,11 +17,10 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // TODO: check auth token/session here
-  // const token = request.cookies.get("session")?.value;
-  // if (!token) {
-  //   return NextResponse.redirect(new URL("/login", request.url));
-  // }
+  const session = request.cookies.get("session")?.value;
+  if (!session) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
 
   return NextResponse.next();
 }
