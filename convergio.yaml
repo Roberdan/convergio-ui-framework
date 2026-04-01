@@ -109,9 +109,18 @@ navigation:
           href: /docs
           icon: FileText
 
+    - label: Design System
+      items:
+        - id: preview
+          label: Component Showcase
+          href: /preview
+          icon: Palette
+
 # ── Pages ──
 # Each page is defined by its route and a list of block rows.
-# Available block types: kpi-card, data-table, activity-feed, stat-list, empty-state, ai-chat
+# Available block types: kpi-card, data-table, activity-feed, stat-list, empty-state, ai-chat,
+#   gauge-block, chart-block, gantt-block, kanban-block, funnel-block, hbar-block,
+#   speedometer-block, map-block, okr-block, system-status-block, data-table-maranello
 pages:
   /:
     title: Dashboard
@@ -194,3 +203,76 @@ pages:
         blocks:
           - type: ai-chat
             agentId: jervis
+
+      # ── Maranello visual blocks ──
+      - columns: 3
+        blocks:
+          - type: gauge-block
+            value: 73
+            min: 0
+            max: 100
+            unit: "%"
+            label: CPU Load
+            animate: true
+            size: md
+
+          - type: chart-block
+            chartType: bar
+            labels: [Mon, Tue, Wed, Thu, Fri]
+            series:
+              - label: Deployments
+                data: [4, 7, 3, 8, 5]
+                color: "var(--mn-accent)"
+              - label: Rollbacks
+                data: [1, 0, 2, 1, 0]
+                color: "var(--mn-danger)"
+            showLegend: true
+            animate: true
+
+          - type: funnel-block
+            data:
+              pipeline:
+                - label: Leads
+                  count: 1200
+                - label: Qualified
+                  count: 640
+                - label: Proposal
+                  count: 310
+                - label: Closed
+                  count: 120
+              total: 1200
+            animate: true
+            size: md
+
+      - columns: 1
+        blocks:
+          - type: system-status-block
+            services:
+              - id: api
+                name: API Gateway
+                status: operational
+                uptime: 99.98
+                latencyMs: 42
+              - id: db
+                name: Primary Database
+                status: operational
+                uptime: 99.95
+                latencyMs: 8
+              - id: queue
+                name: Task Queue
+                status: degraded
+                uptime: 98.7
+                latencyMs: 230
+              - id: cdn
+                name: CDN / Static Assets
+                status: operational
+                uptime: 100
+                latencyMs: 12
+            incidents:
+              - id: inc-01
+                title: Task queue elevated latency
+                date: "2025-07-14T09:22:00Z"
+                severity: degraded
+                resolved: false
+            version: 2.4.1
+            environment: production

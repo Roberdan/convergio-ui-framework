@@ -1,6 +1,19 @@
 import type { PageConfig, PageBlock } from "@/types";
 import { loadAIConfig } from "@/lib/config-loader";
 import { KpiCard, DataTable, ActivityFeed, StatList, EmptyState, AIChatPanel } from "@/components/blocks";
+import {
+  MnGauge,
+  MnChart,
+  MnGantt,
+  MnKanbanBoard,
+  MnFunnel,
+  MnHbar,
+  MnSpeedometer,
+  MnMap,
+  MnOkr,
+  MnSystemStatus,
+  MnDataTable,
+} from "@/components/maranello";
 
 /**
  * Page Renderer — transforms a PageConfig into rendered UI.
@@ -62,6 +75,30 @@ function BlockRenderer({ block }: { block: PageBlock }) {
       return <EmptyState {...block} />;
     case "ai-chat":
       return <AIChatPanel defaultAgentId={block.agentId} aiConfig={loadAIConfig()} />;
+    case "gauge-block":
+      return <MnGauge {...block} />;
+    case "chart-block": {
+      const { type: _, chartType, ...rest } = block;
+      return <MnChart type={chartType} {...rest} />;
+    }
+    case "gantt-block":
+      return <MnGantt {...block} />;
+    case "kanban-block":
+      return <MnKanbanBoard {...block} />;
+    case "funnel-block":
+      return <MnFunnel {...block} />;
+    case "hbar-block":
+      return <MnHbar {...block} />;
+    case "speedometer-block":
+      return <MnSpeedometer {...block} />;
+    case "map-block":
+      return <MnMap {...block} />;
+    case "okr-block":
+      return <MnOkr {...block} />;
+    case "system-status-block":
+      return <MnSystemStatus {...block} />;
+    case "data-table-maranello":
+      return <MnDataTable {...block} />;
     default:
       return null;
   }

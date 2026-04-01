@@ -55,6 +55,22 @@
   - `MnSystemStatus` — service health dashboard with polling and incidents
 - 1,568 LOC total, all files under 250-line limit
 
+### Maranello Design System Migration — Wave 4: Canvas & Visual Components
+
+- Ported 10 canvas/visual components (10 files) as React/Tailwind/CVA:
+  - `MnChart` — 6 chart types (sparkline, donut, area, bar, radar, bubble) via Canvas 2D
+  - `MnGauge` — Ferrari-style animated canvas gauge with color zones and complications
+  - `MnSpeedometer` — animated canvas speedometer with tick marks
+  - `MnFunnel` — SVG funnel with conversion rates and exit tracking
+  - `MnHbar` — DOM horizontal bar chart with animation
+  - `MnGantt` — timeline with task bars, dependencies, milestones, today marker
+  - `MnKanbanBoard` — drag & drop board with HTML5 DnD API
+  - `MnMap` — canvas world map with zoom/pan and markers
+  - `MnMapbox` — Mapbox GL JS wrapper with dynamic import fallback
+  - `MnFerrariControl` — manettino rotary, cruise lever, toggle lever, stepped rotary
+- All canvas components use ResizeObserver for responsive sizing
+- 2,176 LOC total, all files under 250-line limit (except mn-mapbox at 254)
+
 ### W4: Runtime source of truth
 
 - Changed: app metadata, nav, themes, AI registry, and dashboard page config now load from `convergio.yaml` via `src/lib/config-loader.ts`
