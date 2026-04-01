@@ -1,6 +1,6 @@
 # Convergio Frontend
 
-Product-grade operational shell with Maranello visual language. Built on Next.js, shadcn/ui, Tailwind CSS.
+Product-grade operational shell with Maranello visual language. Built on Next.js 16 App Router, shadcn/ui, Tailwind CSS v4.
 
 ## Quick Start
 
@@ -12,20 +12,81 @@ pnpm lint         # ESLint
 pnpm typecheck    # TypeScript --noEmit
 ```
 
+Web dev works standalone — no backend, no Rust, no Tauri required.
+
 ## Stack
 
 | Layer | Tool |
 |---|---|
-| Framework | Next.js 15 App Router |
+| Framework | Next.js 16 App Router |
 | UI Primitives | shadcn/ui + Base UI + Tailwind CSS v4 |
 | Typography | Outfit (headings), Inter (body), Barlow Condensed (mono/data) |
 | Themes | 4: Navy, Dark, Light, Colorblind |
 | Icons | Lucide (no emoji) |
-| Desktop | Tauri-ready (src-tauri/) |
+| AI | Vercel AI SDK v4 — multi-provider routing via convergio.yaml |
+| Desktop | Tauri (optional, src-tauri/) |
+
+## convergio.yaml — single config source
+
+Everything about the app — branding, nav, pages, AI agents, API endpoint — lives in `convergio.yaml` at the root.  
+Edit this file and restart the dev server to rebrand, add pages, or swap AI providers without touching source code.
+
+```yaml
+app:
+  name: Convergio          # app title shown in header + browser tab
+
+theme:
+  default: navy            # light | dark | navy | colorblind
+
+api:
+  baseUrl: http://localhost:8420   # backend base URL; leave as-is for demo mode
+
+ai:
+  defaultAgent: jervis
+  agents:
+    - id: jervis
+      provider: openai     # openai | anthropic | …
+      model: gpt-4o
+      apiRoute: /api/chat
+```
+
+`src/lib/config-loader.ts` reads the YAML at build time and validates it with Zod.  
+`src/config/` re-exports typed config slices (navigation, pages, AI agents).
+
+## Server-first data pattern
+
+Data fetching follows a **server-first** pattern: **server actions** (`src/lib/actions/`) backed by a typed API client (`src/lib/api/client.ts`).  
+If the backend is unreachable the action catches `ApiError` and returns a graceful fallback — the UI renders in demo mode with static data from `convergio.yaml`.
+
+```
+Request → Server Action → ApiClient.get/post/put/delete → backend
+                                       ↓ ApiError caught
+                              graceful fallback / demo data
+```
+
+No client-side `useEffect` fetch loops. Data flows server → RSC → client components only for interactivity.
+
+## Auth boundary
+
+The login page (`src/app/(auth)/login/page.tsx`) uses a server action with **demo credentials: `admin` / `admin`**.  
+On success it sets an `httpOnly` session cookie; all dashboard routes sit behind `src/app/(dashboard)/layout.tsx` which checks it.
+
+To replace with real auth:
+1. Swap the credential check in `login/page.tsx` for your identity provider.
+2. Replace the cookie logic with a signed JWT or session token as needed.
+3. Protect API routes in `src/app/api/` with the same session check.
+
+## AI chat & provider routing
+
+Each AI agent in `convergio.yaml` declares its `provider`, `model`, and `systemPrompt`.  
+`src/app/api/chat/route.ts` reads the agent config and streams responses via Vercel AI SDK.  
+`src/components/blocks/ai-chat-panel.tsx` renders the chat UI using `useChat`.
+
+To add a provider: add the `@ai-sdk/<provider>` package and reference it in the agent config.
 
 ## Themes
 
-Switch themes via the dropdown in the header or the command palette (Cmd-K).
+Switch via the header dropdown or command palette (Cmd-K).
 
 | Theme | Background | Accent | Use case |
 |---|---|---|---|
@@ -39,52 +100,49 @@ All themes pass WCAG 2.2 AA contrast requirements.
 ## Architecture
 
 ```
+convergio.yaml              # single config source — edit to customise
 src/
-  app/                    # Next.js App Router pages
-    layout.tsx            # Root layout with providers + shell
-    page.tsx              # Dashboard
-    settings/page.tsx     # Settings form
-    projects/page.tsx     # Empty state example
-    loading.tsx           # Skeleton loading
-    error.tsx             # Error boundary
-    not-found.tsx         # 404
+  app/
+    (auth)/login/           # auth boundary — demo: admin / admin
+    (dashboard)/            # protected shell; layout checks session cookie
+      page.tsx              # dashboard (driven by convergio.yaml pages config)
+      settings/             # settings form (server action + graceful fallback)
+      agents/ activity/ …   # other nav pages
+    api/
+      chat/route.ts         # AI streaming endpoint (Vercel AI SDK)
+      health/route.ts       # liveness probe
+    layout.tsx              # root layout — fonts, theme script
+    not-found.tsx
   components/
-    shell/                # App shell components
-      app-shell.tsx       # Layout compositor
-      sidebar.tsx         # Collapsible nav sidebar
-      header.tsx          # Fixed top header
-      command-menu.tsx    # Cmd-K command palette
-      shell-wrapper.tsx   # Client-side shell wrapper
-    theme/                # Theme system
-      theme-provider.tsx  # React context + localStorage
-      theme-switcher.tsx  # Dropdown theme picker
-    ui/                   # shadcn/ui components (source-first)
-  config/
-    navigation.ts         # Default nav sections
+    blocks/                 # page blocks: kpi-card, data-table, ai-chat-panel…
+    page-renderer.tsx       # interprets convergio.yaml pages → block grid
+    shell/                  # app-shell, sidebar, header, command-menu
+    theme/                  # theme-provider, theme-switcher, theme-script
+    ui/                     # shadcn/ui source components
+  config/                   # typed config slices read from convergio.yaml
   lib/
-    utils.ts              # cn() utility
-src-tauri/                # Tauri desktop scaffold
-  tauri.conf.json
-  src/main.rs
-  Cargo.toml
+    api/client.ts           # typed ApiClient + ApiError
+    actions/profile.ts      # server actions with graceful fallback
+    config-loader.ts        # YAML parser + Zod validation
+    env.ts                  # typed env vars (API_URL, …)
+  types/                    # shared TypeScript types
+src-tauri/                  # optional — Tauri desktop scaffold (see below)
 ```
 
-## Tauri (Desktop)
+## Tauri (optional — desktop builds)
 
-The project includes a Tauri scaffold for desktop builds. To use:
+The project ships a Tauri scaffold for packaging as a native desktop app.  
+Web development does **not** require Rust or Tauri to be installed.
 
 ```bash
-# Install Tauri CLI globally
+# Prerequisites: Rust + Tauri CLI
 cargo install tauri-cli
 
-# Development
-pnpm tauri:dev
-
-# Production build
-pnpm tauri:build
+pnpm tauri:dev    # desktop dev (wraps the Next.js dev server)
+pnpm tauri:build  # native binary + installer
 ```
 
-Web builds work independently — Tauri is not required for web development.
+Tauri reads `src-tauri/tauri.conf.json`. The web bundle is embedded at build time.
 
 ## Design Principles
 
