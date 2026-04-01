@@ -25,3 +25,5 @@ export { ActivityFeed } from "./activity-feed";
 export { StatList } from "./stat-list";
 export { EmptyState } from "./empty-state";
 export { AIChatPanel } from "./ai-chat-panel";
+export { BlockWrapper } from "./block-wrapper";
+export type { BlockWrapperProps } from "./block-wrapper";

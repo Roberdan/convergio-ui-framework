@@ -23,6 +23,10 @@
   --color-chart-3: var(--chart-3);
   --color-chart-2: var(--chart-2);
   --color-chart-1: var(--chart-1);
+  --color-status-success: var(--status-success);
+  --color-status-warning: var(--status-warning);
+  --color-status-error: var(--status-error);
+  --color-status-info: var(--status-info);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -213,6 +217,10 @@
   --border: var(--mn-border);
   --input: var(--mn-surface-input);
   --ring: var(--mn-accent);
+  --status-success: #4ade80;
+  --status-warning: #fbbf24;
+  --status-error: #ff8272;
+  --status-info: #FFC72C;
   --chart-1: #FFC72C;
   --chart-2: #a5d5fe;
   --chart-3: #b4fa72;
@@ -290,6 +298,10 @@
   --border: var(--mn-border);
   --input: var(--mn-surface-input);
   --ring: var(--mn-accent);
+  --status-success: #4ade80;
+  --status-warning: #fbbf24;
+  --status-error: #ff8272;
+  --status-info: #FFC72C;
   --chart-1: #DC0000;
   --chart-2: #0072B2;
   --chart-3: #008844;
@@ -367,6 +379,10 @@
   --border: var(--mn-border);
   --input: var(--mn-surface-input);
   --ring: var(--mn-accent);
+  --status-success: #4ade80;
+  --status-warning: #fbbf24;
+  --status-error: #ff8272;
+  --status-info: #FFC72C;
   --chart-1: #FFC72C;
   --chart-2: #DC0000;
   --chart-3: #00A651;
@@ -443,6 +459,10 @@
   --border: var(--mn-border);
   --input: var(--mn-surface-input);
   --ring: var(--mn-accent);
+  --status-success: #4ade80;
+  --status-warning: #fbbf24;
+  --status-error: #ff8272;
+  --status-info: #FFC72C;
   --chart-1: #0072B2;
   --chart-2: #E69F00;
   --chart-3: #009E73;
@@ -519,6 +539,10 @@
   --border: var(--mn-border);
   --input: var(--mn-surface-input);
   --ring: var(--mn-accent);
+  --status-success: #4ade80;
+  --status-warning: #fbbf24;
+  --status-error: #ff8272;
+  --status-info: #FFC72C;
   --chart-1: #FFC72C;
   --chart-2: #a5d5fe;
   --chart-3: #b4fa72;
