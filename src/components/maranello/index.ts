@@ -121,3 +121,24 @@ export type { MnInstrumentBinnacleProps } from "./mn-instrument-binnacle";
 
 export { MnOrgChart } from "./mn-org-chart";
 export type { MnOrgChartProps, OrgNode } from "./mn-org-chart";
+
+/* W5 — Strategy & Business Frameworks */
+export { MnStrategyCanvas } from "./mn-strategy-canvas";
+export type { MnStrategyCanvasProps, CanvasSegment } from "./mn-strategy-canvas";
+
+export { MnSwot } from "./mn-swot";
+export type { MnSwotProps } from "./mn-swot";
+
+export { MnPorterFiveForces } from "./mn-porter-five-forces";
+export type { MnPorterFiveForcesProps, Force, ForceLevel } from "./mn-porter-five-forces";
+
+export { MnFinOps } from "./mn-finops";
+export type { MnFinOpsProps, FinOpsMetric, TrendDirection } from "./mn-finops";
+
+export { MnCustomerJourneyMap } from "./mn-customer-journey-map";
+export type {
+  MnCustomerJourneyMapProps,
+  JourneyStage,
+  Touchpoint,
+  Sentiment,
+} from "./mn-customer-journey-map";
