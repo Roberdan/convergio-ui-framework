@@ -8,8 +8,35 @@ import type {
   TriageResult,
 } from "./types";
 
+interface AgentsResponse {
+  recent?: AgentSummary[];
+  running?: AgentSummary[];
+  stats?: Record<string, unknown>;
+}
+
 export async function listAgents(): Promise<AgentSummary[]> {
-  return api.get<AgentSummary[]>("/api/agents");
+  const data = await api.get<AgentsResponse>("/api/agents");
+  const running = Array.isArray(data?.running) ? data.running : [];
+  const recent = Array.isArray(data?.recent) ? data.recent : [];
+  // Merge running + recent, deduplicate by id
+  const seen = new Set<string>();
+  const merged: AgentSummary[] = [];
+  for (const a of [...running, ...recent]) {
+    const raw = a as unknown as Record<string, unknown>;
+    const id = (raw.agent_id as string) ?? a.id;
+    if (!seen.has(id)) {
+      seen.add(id);
+      merged.push({
+        id,
+        name: a.name ?? id,
+        type: a.type ?? 'unknown',
+        status: (raw.status as AgentSummary['status']) ?? 'idle',
+        model: a.model ?? 'unknown',
+        taskCount: a.taskCount ?? 0,
+      });
+    }
+  }
+  return merged;
 }
 
 export async function getAgentCatalog(): Promise<AgentCatalogEntry[]> {

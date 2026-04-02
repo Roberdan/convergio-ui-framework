@@ -41,7 +41,8 @@ interface NodePos {
 }
 
 /** Compute radial positions: core at center, layers radiating outward. */
-function computeLayout(nodes: BrainNode[], size: number): NodePos[] {
+function computeLayout(nodes: BrainNode[] | undefined, size: number): NodePos[] {
+  if (!nodes || !nodes.length) return [];
   const cx = size / 2;
   const cy = size / 2;
   const positions: NodePos[] = [];
@@ -107,7 +108,7 @@ export function MnAugmentedBrain({
     [handleClick],
   );
 
-  const selectedNode = nodes.find((n) => n.id === selected);
+  const selectedNode = nodes?.find((n) => n.id === selected) ?? null;
 
   return (
     <div className={cn('relative', className)} aria-label={ariaLabel}>
@@ -127,7 +128,7 @@ export function MnAugmentedBrain({
         </defs>
 
         {/* connections */}
-        {connections.map((conn) => {
+        {(connections ?? []).map((conn) => {
           const from = posMap.get(conn.from);
           const to = posMap.get(conn.to);
           if (!from || !to) return null;
@@ -225,7 +226,7 @@ export function MnAugmentedBrain({
             Type: {selectedNode.type} | Status: {selectedNode.active ? 'Active' : 'Inactive'}
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
-            Connections: {connections.filter(
+            Connections: {(connections ?? []).filter(
               (c) => c.from === selectedNode.id || c.to === selectedNode.id,
             ).length}
           </p>

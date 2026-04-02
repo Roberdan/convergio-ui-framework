@@ -12,9 +12,10 @@ export interface AppShellProps {
   children: React.ReactNode;
   sections: NavSection[];
   brandName?: string;
+  brandLogo?: string;
 }
 
-export function AppShell({ children, sections, brandName }: AppShellProps) {
+export function AppShell({ children, sections, brandName, brandLogo }: AppShellProps) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [commandOpen, setCommandOpen] = useState(false);
@@ -37,6 +38,7 @@ export function AppShell({ children, sections, brandName }: AppShellProps) {
           collapsed={collapsed}
           onToggle={toggleSidebar}
           brandName={brandName}
+          brandLogo={brandLogo}
         />
         <main id="main-content" className="flex-1 min-h-[calc(100vh-52px)] overflow-auto">
           <div className="p-6">

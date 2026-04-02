@@ -10,9 +10,11 @@ import YAML from "yaml";
 
 function mockFs(yamlContent: string) {
   const readFileSync = () => yamlContent;
+  const watch = () => ({ close: () => {} });
   vi.doMock("fs", () => ({
-    default: { readFileSync },
+    default: { readFileSync, watch },
     readFileSync,
+    watch,
   }));
 }
 
@@ -101,7 +103,7 @@ describe("config-loader functions", () => {
           description: "Platform performance metrics.",
           rows: [
             { columns: 4, blocks: [{ type: "kpi-card", label: "Requests", value: "14,200" }] },
-            { columns: 2, blocks: [{ type: "data-table" }] },
+            { columns: 2, blocks: [{ type: "data-table", columns: [{ key: "name", label: "Name" }], rows: [{ name: "Acme Corp" }] }] },
           ],
         },
       },

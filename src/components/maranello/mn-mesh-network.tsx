@@ -67,6 +67,7 @@ export function MnMeshNetwork({
   const layoutR = size * 0.35;
 
   const positions = useMemo(() => {
+    if (!nodes?.length) return new Map<string, { x: number; y: number }>();
     const pts = circleLayout(nodes.length, cx, cy, layoutR);
     const map = new Map<string, { x: number; y: number }>();
     nodes.forEach((n, i) => map.set(n.id, pts[i]));
@@ -91,10 +92,10 @@ export function MnMeshNetwork({
     [handleSelect],
   );
 
-  const hoveredNode = nodes.find((n) => n.id === hovered);
+  const hoveredNode = nodes?.find((n) => n.id === hovered);
   const hoveredPos = hovered ? positions.get(hovered) : null;
 
-  if (!nodes.length) {
+  if (!nodes?.length) {
     return (
       <div className={cn('rounded-lg border bg-card p-6 text-center text-sm text-muted-foreground', className)}>
         No mesh nodes to display.

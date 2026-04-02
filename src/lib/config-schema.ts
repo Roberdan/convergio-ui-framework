@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { blockSchema } from "./config-block-schemas";
 
 /**
  * Zod schemas for convergio.yaml config validation.
@@ -29,8 +30,6 @@ const navSectionSchema = z.object({
   label: z.string().min(1),
   items: z.array(navItemSchema),
 });
-
-const blockSchema = z.record(z.string(), z.unknown());
 
 const pageRowSchema = z.object({
   columns: z.number().int().min(1).max(12),

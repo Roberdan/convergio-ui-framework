@@ -11,7 +11,7 @@ interface DashboardChartsProps {
 export function DashboardCharts({ tokenUsage, taskDist }: DashboardChartsProps) {
   return (
     <div className="space-y-6">
-      {tokenUsage && tokenUsage.length > 0 && (
+      {Array.isArray(tokenUsage) && tokenUsage.length > 0 && (
         <div className="rounded-lg border border-border bg-card p-4">
           <h2 className="text-sm font-heading uppercase tracking-wider text-muted-foreground mb-4">
             Token Usage (Daily)
@@ -37,7 +37,7 @@ export function DashboardCharts({ tokenUsage, taskDist }: DashboardChartsProps) 
         </div>
       )}
 
-      {taskDist && taskDist.length > 0 && (
+      {Array.isArray(taskDist) && taskDist.length > 0 && (
         <div className="rounded-lg border border-border bg-card p-4">
           <h2 className="text-sm font-heading uppercase tracking-wider text-muted-foreground mb-4">
             Task Distribution
@@ -54,7 +54,7 @@ export function DashboardCharts({ tokenUsage, taskDist }: DashboardChartsProps) 
         </div>
       )}
 
-      {(!tokenUsage || tokenUsage.length === 0) && (!taskDist || taskDist.length === 0) && (
+      {(!Array.isArray(tokenUsage) || tokenUsage.length === 0) && (!Array.isArray(taskDist) || taskDist.length === 0) && (
         <div className="rounded-lg border border-border bg-card p-6">
           <MnGauge
             value={0}

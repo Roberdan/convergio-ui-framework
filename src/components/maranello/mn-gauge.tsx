@@ -131,13 +131,13 @@ function render(
     circ(ctx, cx, cy, cr * 0.2); ctx.fillStyle = P.capCenter; ctx.fill()
   }
 
-  // Center text (when no ticks / pure value display)
-  if (!tk) {
-    const fs = Math.max(20, px * 0.22)
+  // Center text — always render value prominently
+  {
+    const fs = tk ? Math.max(16, px * 0.16) : Math.max(20, px * 0.22)
+    const valY = tk ? cy + r * 0.15 : cy
     ctx.font = `700 ${fs}px 'Barlow Condensed','Outfit',sans-serif`; ctx.fillStyle = P.centerValue; ctx.textAlign = "center"; ctx.textBaseline = "middle"
-    ctx.fillText(String(Math.round(norm * prog + mn)), cx, cy)
-    if (unit) { ctx.font = `500 ${Math.max(8, px * 0.055)}px 'Barlow Condensed','Outfit',sans-serif`; ctx.fillStyle = P.centerUnit; ctx.fillText(unit, cx, cy + fs * 0.55) }
-    if (lbl) { ctx.font = `600 ${Math.max(7, px * 0.045)}px 'Barlow Condensed','Outfit',sans-serif`; ctx.fillStyle = P.centerLabel; ctx.fillText(lbl, cx, cy - fs * 0.65) }
+    ctx.fillText(`${Math.round(norm * prog + mn)}${unit ?? ''}`, cx, valY)
+    if (lbl) { ctx.font = `600 ${Math.max(7, px * 0.045)}px 'Barlow Condensed','Outfit',sans-serif`; ctx.fillStyle = P.centerLabel; ctx.fillText(lbl, cx, valY - fs * 0.75) }
   }
 
   // Sub-dials

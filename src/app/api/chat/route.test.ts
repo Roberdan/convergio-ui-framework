@@ -8,6 +8,16 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
  * The streamText call is mocked to avoid hitting real LLM APIs.
  */
 
+vi.mock("next/headers", () => ({
+  cookies: vi.fn(() => ({
+    get: () => ({ value: "authenticated.validsig" }),
+  })),
+}));
+
+vi.mock("@/lib/session", () => ({
+  verifyValue: vi.fn(() => Promise.resolve("authenticated")),
+}));
+
 vi.mock("@ai-sdk/openai", () => ({
   openai: vi.fn(() => ({ modelId: "gpt-4o" })),
 }));

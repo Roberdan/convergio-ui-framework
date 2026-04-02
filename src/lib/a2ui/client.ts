@@ -19,6 +19,7 @@ import {
 import type { A2UIBlock, A2UIBlocksResponse } from "./types";
 
 const DAEMON_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8420";
+const AUTH_TOKEN = process.env.NEXT_PUBLIC_API_TOKEN ?? "dev-local";
 const INITIAL_RETRY_MS = 1000;
 const MAX_RETRY_MS = 30000;
 const BACKOFF_FACTOR = 2;
@@ -29,7 +30,9 @@ const BACKOFF_FACTOR = 2;
  */
 async function hydrateBlocks(): Promise<A2UIBlock[]> {
   try {
-    const res = await fetch(`${DAEMON_URL}/api/a2ui/blocks`);
+    const res = await fetch(`${DAEMON_URL}/api/a2ui/blocks`, {
+      headers: { Authorization: `Bearer ${AUTH_TOKEN}` },
+    });
     if (!res.ok) {
       console.error(`[a2ui] hydration failed: ${res.status}`);
       return [];
@@ -64,7 +67,9 @@ export function useA2UIClient() {
 
     function connect() {
       if (cancelled) return;
-      es = new EventSource(`${DAEMON_URL}/api/a2ui/stream`);
+      es = new EventSource(
+        `${DAEMON_URL}/api/a2ui/stream?token=${encodeURIComponent(AUTH_TOKEN)}`,
+      );
 
       es.addEventListener("block_pushed", (ev) => {
         const block: A2UIBlock = JSON.parse(ev.data);

@@ -1,12 +1,15 @@
+import { cookies } from "next/headers";
 import { openai } from "@ai-sdk/openai";
 import { streamText } from "ai";
 import { z } from "zod";
 import { loadAIConfig } from "@/lib/config-loader";
+import { verifyValue } from "@/lib/session";
 import type { AgentConfig } from "@/types/ai";
 
 /**
  * POST /api/chat — streaming chat completions via Vercel AI SDK.
  *
+ * Requires authenticated session cookie.
  * Accepts: { messages, agentId? }
  * Input is validated with Zod before processing.
  * Provider routing is config-driven via convergio.yaml.
@@ -40,6 +43,23 @@ function resolveModel(agent: AgentConfig) {
 }
 
 export async function POST(req: Request) {
+  /* Auth gate: verify signed session cookie */
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get("session");
+  if (!sessionCookie?.value) {
+    return Response.json(
+      { error: { code: "UNAUTHORIZED", message: "Authentication required" } },
+      { status: 401 },
+    );
+  }
+  const sessionValue = await verifyValue(sessionCookie.value);
+  if (!sessionValue) {
+    return Response.json(
+      { error: { code: "UNAUTHORIZED", message: "Invalid session" } },
+      { status: 401 },
+    );
+  }
+
   let body: unknown;
   try {
     body = await req.json();

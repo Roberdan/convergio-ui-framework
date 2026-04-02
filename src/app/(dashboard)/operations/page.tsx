@@ -1,6 +1,8 @@
 import { operationsApi } from "@/lib/api";
 import { OperationsClient } from "./operations-client";
 
+export const dynamic = 'force-dynamic';
+
 export default async function OperationsPage() {
   let jobs = null;
   let runs = null;

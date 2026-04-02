@@ -89,7 +89,7 @@ export function IdeasClient({ initialIdeas }: IdeasClientProps) {
     id: i.id,
     columnId: i.status,
     title: i.title,
-    description: i.description.slice(0, 100),
+    description: (i.description ?? '').slice(0, 100),
     assignee: i.author,
     tags: i.tags,
   }));

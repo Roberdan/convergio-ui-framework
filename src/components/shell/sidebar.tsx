@@ -39,6 +39,7 @@ export interface SidebarProps {
   collapsed: boolean;
   onToggle: () => void;
   brandName?: string;
+  brandLogo?: string;
 }
 
 /* ── Media query hook ── */
@@ -73,23 +74,31 @@ function SidebarInner({
   sections,
   collapsed,
   brandName,
+  brandLogo,
 }: {
   sections: NavSection[];
   collapsed: boolean;
   brandName: string;
+  brandLogo?: string;
 }) {
   return (
     <>
       <div
         className={cn(
-          "flex h-14 shrink-0 items-center border-b border-sidebar-border px-4",
+          "flex h-14 shrink-0 items-center border-b border-sidebar-border px-4 gap-2",
           collapsed && "justify-center px-2"
         )}
       >
+        {brandLogo && (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img src={brandLogo} alt="" aria-hidden="true" className="h-7 w-7 shrink-0 object-contain" />
+        )}
         {collapsed ? (
-          <span className="font-heading text-lg font-bold text-sidebar-primary">
-            {brandName.charAt(0)}
-          </span>
+          !brandLogo && (
+            <span className="font-heading text-lg font-bold text-sidebar-primary">
+              {brandName.charAt(0)}
+            </span>
+          )
         ) : (
           <span className="font-heading text-lg font-semibold tracking-tight text-sidebar-foreground">
             {brandName}
@@ -164,6 +173,7 @@ export function Sidebar({
   collapsed,
   onToggle,
   brandName = "Convergio",
+  brandLogo,
 }: SidebarProps) {
   const isMobile = useIsMobile();
 
@@ -184,6 +194,7 @@ export function Sidebar({
           sections={sections}
           collapsed={collapsed}
           brandName={brandName}
+          brandLogo={brandLogo}
         />
         <div
           className={cn(
