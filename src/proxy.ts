@@ -1,16 +1,16 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { verifyValue } from "@/lib/session";
 
-const PUBLIC_PATHS = ["/login", "/api/health", "/api/chat"];
+const PUBLIC_PATHS = ["/login", "/api/health"];
 
 /**
- * Request proxy — runs on every request.
+ * Request proxy -- runs on every request.
  *
- * Use for: auth guards, redirects, headers, rate limiting.
- * Public paths bypass the proxy. All others can be guarded.
- *
- * To enable auth: uncomment the token check below.
+ * Verifies HMAC-signed session cookies for authenticated routes.
+ * Public paths bypass the proxy. Invalid or missing sessions
+ * redirect to /login (with cookie cleared on tampered sessions).
  */
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) {
@@ -20,6 +20,13 @@ export function proxy(request: NextRequest) {
   const session = request.cookies.get("session")?.value;
   if (!session) {
     return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  const value = await verifyValue(session);
+  if (!value) {
+    const response = NextResponse.redirect(new URL("/login", request.url));
+    response.cookies.delete("session");
+    return response;
   }
 
   return NextResponse.next();

@@ -65,7 +65,7 @@ class ApiClient {
       headers: { ...this.authHeaders(), ...init?.headers },
     });
     if (!res.ok) throw new ApiError(res.status, await res.text());
-    return res.json();
+    return this.unwrap<T>(await res.json());
   }
 
   async delete<T>(path: string, opts?: RequestOptions): Promise<T> {
@@ -76,7 +76,7 @@ class ApiClient {
       headers: { ...this.authHeaders(), ...init?.headers },
     });
     if (!res.ok) throw new ApiError(res.status, await res.text());
-    return res.json();
+    return this.unwrap<T>(await res.json());
   }
 }
 

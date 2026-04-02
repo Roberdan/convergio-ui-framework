@@ -21,6 +21,13 @@ export function getChatStreamUrl(sessionId: string): string {
   return `${base}/api/chat/stream/${sessionId}`;
 }
 
+interface InferenceStatusResponse {
+  providers?: InferenceProvider[];
+  default_model?: string;
+  fallback_chains?: unknown;
+}
+
 export async function getInferenceProviders(): Promise<InferenceProvider[]> {
-  return api.get<InferenceProvider[]>("/api/inference/status");
+  const data = await api.get<InferenceStatusResponse>("/api/inference/status");
+  return Array.isArray(data?.providers) ? data.providers : [];
 }

@@ -13,5 +13,10 @@ export default defineConfig({
     environment: "happy-dom",
     setupFiles: ["src/test-setup.ts"],
     passWithNoTests: true,
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "lcov"],
+      thresholds: { statements: 40 },
+    },
   },
 });

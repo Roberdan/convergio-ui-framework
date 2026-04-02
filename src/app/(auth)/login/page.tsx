@@ -1,7 +1,7 @@
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { setSessionCookie } from "@/lib/session";
 
 export default function LoginPage() {
   async function handleLogin(formData: FormData) {
@@ -9,15 +9,11 @@ export default function LoginPage() {
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
 
-    // TODO: replace with real auth — demo credentials only (admin / admin)
-    if (username === "admin" && password === "admin") {
-      const cookieStore = await cookies();
-      cookieStore.set("session", "authenticated", {
-        httpOnly: true,
-        path: "/",
-        sameSite: "lax",
-        secure: process.env.NODE_ENV === "production",
-      });
+    const expectedUser = process.env.ADMIN_USERNAME ?? "admin";
+    const expectedPass = process.env.ADMIN_PASSWORD ?? "admin";
+
+    if (username === expectedUser && password === expectedPass) {
+      await setSessionCookie("authenticated");
       redirect("/");
     }
   }

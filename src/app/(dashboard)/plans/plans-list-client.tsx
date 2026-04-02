@@ -65,14 +65,23 @@ export function PlansListClient({ initialPlans }: PlansListClientProps) {
     );
   }
 
-  const rows: PlanRow[] = (planList ?? []).map((p) => ({
-    id: p.id,
-    title: p.title,
-    status: p.status,
-    taskCount: p.taskCount,
-    progress: p.progress,
-    updatedAt: new Date(p.updatedAt).toLocaleDateString(),
-  }));
+  const rows: PlanRow[] = (planList ?? []).map((p) => {
+    const raw = p as unknown as Record<string, unknown>;
+    const title = (raw.name as string) ?? p.title ?? '(untitled)';
+    const tasksDone = (raw.tasks_done as number) ?? 0;
+    const tasksTotal = (raw.tasks_total as number) ?? p.taskCount ?? 0;
+    const progress = tasksTotal > 0 ? Math.round((tasksDone / tasksTotal) * 100) : (p.progress ?? 0);
+    const dateStr = (raw.created_at as string) ?? p.updatedAt ?? p.createdAt;
+    const date = dateStr ? new Date(dateStr) : null;
+    return {
+      id: String(raw.id ?? p.id),
+      title,
+      status: p.status ?? String(raw.status ?? 'pending'),
+      taskCount: tasksTotal,
+      progress,
+      updatedAt: date && !isNaN(date.getTime()) ? date.toLocaleDateString() : '-',
+    };
+  });
 
   const pipelineStages = [
     { name: "Pending", count: rows.filter((r) => r.status === "pending").length },

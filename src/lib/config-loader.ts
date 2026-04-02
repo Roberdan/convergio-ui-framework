@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync, watch } from "fs";
 import { join } from "path";
 import YAML from "yaml";
 import type { AppConfig, NavSection, PageConfig, PageRow } from "@/types";
@@ -14,17 +14,41 @@ import { rawConfigSchema, type ValidatedConfig } from "./config-schema";
  * This runs at build time (in server components / generateStaticParams).
  * The YAML is parsed once and cached for the lifetime of the build.
  * Config is validated against a Zod schema at load time.
+ * In dev mode, a file watcher invalidates the cache on changes.
  *
  * To override: set CONVERGIO_CONFIG_PATH env var to a custom path.
  */
 
 let cached: ValidatedConfig | null = null;
+let watcherInitialized = false;
+
+function getConfigPath(): string {
+  return (
+    process.env.CONVERGIO_CONFIG_PATH ??
+    join(/* turbopackIgnore: true */ process.cwd(), "convergio.yaml")
+  );
+}
+
+/** In dev mode, watch convergio.yaml and invalidate cache on change. */
+function initDevWatcher(): void {
+  if (watcherInitialized || process.env.NODE_ENV !== "development") return;
+  watcherInitialized = true;
+  try {
+    const configPath = getConfigPath();
+    watch(configPath, { persistent: false }, (eventType) => {
+      if (eventType === "change") {
+        cached = null;
+      }
+    });
+  } catch {
+    /* fs.watch may not be available in all runtimes */
+  }
+}
 
 function loadRaw(): ValidatedConfig {
+  initDevWatcher();
   if (cached) return cached;
-  const configPath =
-    process.env.CONVERGIO_CONFIG_PATH ??
-    join(/* turbopackIgnore: true */ process.cwd(), "convergio.yaml");
+  const configPath = getConfigPath();
   const content = readFileSync(configPath, "utf-8");
   const parsed: unknown = YAML.parse(content);
   const result = rawConfigSchema.safeParse(parsed);

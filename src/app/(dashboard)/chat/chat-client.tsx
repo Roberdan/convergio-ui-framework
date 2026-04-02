@@ -122,7 +122,7 @@ export function ChatClient() {
           <p className="text-caption mt-1">Interact with platform AI agents</p>
         </div>
         <div className="flex items-center gap-2">
-          {providers?.map((p) => (
+          {(Array.isArray(providers) ? providers : []).map((p) => (
             <MnBadge
               key={p.id}
               label={p.name}
