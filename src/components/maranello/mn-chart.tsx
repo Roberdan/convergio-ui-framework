@@ -169,7 +169,7 @@ export function MnChart({
 
   return (
     <div className={cn("relative h-48 w-full", className)} role="img" aria-label={`${type} chart`} {...props}>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         {renderChart()!}
       </ResponsiveContainer>
     </div>

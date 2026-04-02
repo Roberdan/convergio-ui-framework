@@ -31,7 +31,17 @@ class ApiClient {
       headers: { ...this.authHeaders(), ...init?.headers },
     });
     if (!res.ok) throw new ApiError(res.status, await res.text());
-    return res.json();
+    return this.unwrap<T>(await res.json());
+  }
+
+  /** Daemon wraps responses as {ok, plans: [...]} or {ok, orgs: [...]}.
+   *  If the response has exactly one data key besides "ok", unwrap it. */
+  private unwrap<T>(data: unknown): T {
+    if (typeof data !== "object" || data === null || Array.isArray(data)) return data as T;
+    const obj = data as Record<string, unknown>;
+    const keys = Object.keys(obj).filter((k) => k !== "ok");
+    if (keys.length === 1) return obj[keys[0]] as T;
+    return data as T;
   }
 
   async post<T>(path: string, body?: unknown, opts?: RequestOptions): Promise<T> {
@@ -43,7 +53,7 @@ class ApiClient {
       headers: { ...this.authHeaders(), ...init?.headers },
     });
     if (!res.ok) throw new ApiError(res.status, await res.text());
-    return res.json();
+    return this.unwrap<T>(await res.json());
   }
 
   async put<T>(path: string, body?: unknown, opts?: RequestOptions): Promise<T> {

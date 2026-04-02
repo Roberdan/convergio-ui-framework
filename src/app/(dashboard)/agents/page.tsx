@@ -1,6 +1,8 @@
 import { agentsApi } from "@/lib/api";
 import { AgentsClient } from "./agents-client";
 
+export const dynamic = 'force-dynamic';
+
 export default async function AgentsPage() {
   let agents = null;
   let catalog = null;

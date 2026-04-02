@@ -59,7 +59,7 @@ export function SettingsSystem() {
         </div>
       )}
 
-      {readiness && readiness.length > 0 && (
+      {Array.isArray(readiness) && readiness.length > 0 && (
         <div className="rounded-lg border border-border bg-card p-4">
           <h2 className="text-sm font-heading uppercase tracking-wider text-muted-foreground mb-4">
             Readiness Checks

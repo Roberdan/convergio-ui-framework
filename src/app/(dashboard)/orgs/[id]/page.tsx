@@ -1,6 +1,8 @@
 import { orgsApi } from "@/lib/api";
 import { OrgDetailClient } from "./org-detail-client";
 
+export const dynamic = 'force-dynamic';
+
 export default async function OrgDetailPage({
   params,
 }: {
