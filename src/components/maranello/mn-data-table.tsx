@@ -184,7 +184,10 @@ function MnDataTable<T extends Record<string, unknown>>({
     setSortKey(key); setSortDir(nd); onSort?.(key, nd === 1 ? "asc" : "desc")
   }
   const doFilter = (key: string, v: string) => setFilters((p) => {
-    const n = { ...p }; v ? (n[key] = v) : delete n[key]; onFilter?.(n); return n
+    const n = { ...p }
+    if (v) { n[key] = v } else { delete n[key] }
+    onFilter?.(n)
+    return n
   })
   const notify = React.useCallback((s: Set<number>) => onSelectionChange?.(Array.from(s).map((i) => data[i]).filter(Boolean)), [data, onSelectionChange])
   const toggleSelect = React.useCallback((idx: number) => setSelected((prev) => {

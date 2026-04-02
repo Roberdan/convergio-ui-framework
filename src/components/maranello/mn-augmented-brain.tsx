@@ -221,8 +221,8 @@ export function MnAugmentedBrain({
       const c = safe.filter((n) => n.type === t).length
       return c > 0 ? `${c} ${t}` : null
     }).filter(Boolean)
-    return `Brain visualization: ${safe.length} nodes (${counts.join(", ")})`
-  }, [nodes])
+    return ariaLabel ?? `Brain visualization: ${safe.length} nodes (${counts.join(", ")})`
+  }, [nodes, ariaLabel])
 
   return (
     <div ref={wrap} className={cn(brainWrap({ size }), className)} {...rest}>

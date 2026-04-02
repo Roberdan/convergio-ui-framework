@@ -124,17 +124,17 @@ export function MnStreamingText({
   variant,
   className,
 }: MnStreamingTextProps) {
-  const [displayLen, setDisplayLen] = useState(speed != null ? 0 : text.length)
+  const prevTextLen = useRef(text.length)
   const prevStreamingRef = useRef(streaming)
   const prevAnnouncedRef = useRef("")
   const [srAnnouncement, setSrAnnouncement] = useState("")
 
+  const initialLen = speed != null ? 0 : text.length
+  const [displayLen, setDisplayLen] = useState(initialLen)
+
   /* Typewriter: step through characters when speed is set */
   useEffect(() => {
-    if (speed == null) {
-      setDisplayLen(text.length)
-      return
-    }
+    if (speed == null) return
     if (displayLen >= text.length) return
 
     const timer = setTimeout(() => {
@@ -143,10 +143,14 @@ export function MnStreamingText({
     return () => clearTimeout(timer)
   }, [text.length, speed, displayLen])
 
-  /* Reset animation when text is cleared */
+  /* Sync displayLen when text changes without speed or resets */
   useEffect(() => {
-    if (speed != null && text.length === 0) {
-      setDisplayLen(0)
+    const prev = prevTextLen.current
+    prevTextLen.current = text.length
+    if (speed == null && text.length !== prev) {
+      requestAnimationFrame(() => setDisplayLen(text.length))
+    } else if (speed != null && text.length === 0 && prev > 0) {
+      requestAnimationFrame(() => setDisplayLen(0))
     }
   }, [text.length, speed])
 

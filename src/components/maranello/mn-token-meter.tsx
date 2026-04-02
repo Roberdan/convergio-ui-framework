@@ -88,16 +88,17 @@ function MnTokenMeter({
   const completionWidth = pct(data.completion, max)
   const cachedWidth = data.cached ? pct(data.cached, data.prompt) : 0
 
-  const rows: BreakdownRow[] = React.useMemo(() => {
-    const r: BreakdownRow[] = [
-      { kind: "prompt", label: "Prompt", value: data.prompt },
-      { kind: "completion", label: "Completion", value: data.completion },
-    ]
-    if (data.cached !== undefined && data.cached > 0) {
-      r.push({ kind: "cached", label: "Cached", value: data.cached })
-    }
-    return r
-  }, [data.prompt, data.completion, data.cached])
+  const prompt = data.prompt
+  const completion = data.completion
+  const cached = data.cached
+
+  const rows: BreakdownRow[] = [
+    { kind: "prompt", label: "Prompt", value: prompt },
+    { kind: "completion", label: "Completion", value: completion },
+    ...(cached !== undefined && cached > 0
+      ? [{ kind: "cached" as const, label: "Cached", value: cached }]
+      : []),
+  ]
 
   const barLabel = `Token usage: ${NUM_FMT.format(total)} of ${NUM_FMT.format(max)}`
   const transitionStyle = animate

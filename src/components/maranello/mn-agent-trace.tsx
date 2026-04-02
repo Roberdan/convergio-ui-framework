@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 import { useCallback, useRef, useState } from 'react';
 
 export type TraceStepStatus = 'pending' | 'running' | 'done' | 'error';

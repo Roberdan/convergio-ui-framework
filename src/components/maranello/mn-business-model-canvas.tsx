@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
+import { cva } from "class-variance-authority"
 import {
   Users, Zap, Package, Heart, MessageSquare, Truck, Target,
   DollarSign, TrendingUp, Plus, X,

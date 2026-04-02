@@ -120,51 +120,51 @@ function MnSocialGraph({
 }: MnSocialGraphProps) {
   const wrapRef = React.useRef<HTMLDivElement>(null)
   const cvsRef = React.useRef<HTMLCanvasElement>(null)
-  const sim = React.useRef<SimState>({
+  const simRef = React.useRef<SimState>({
     nodes: [], edges: [], nodeMap: new Map(), linked: new Map(),
     raf: 0, frame: 0, running: false, hoveredId: null,
     dragging: null, dragMoved: false, w: 0, h: 0, loop: () => {},
-  }).current
+  })
   const [tip, setTip] = React.useState<{ label: string; detail?: string; x: number; y: number } | null>(null)
 
   const redraw = React.useCallback(() => {
     const ctx = cvsRef.current?.getContext("2d")
-    if (ctx && wrapRef.current) drawGraph(ctx, sim, groups, showLabels, wrapRef.current)
-  }, [groups, showLabels, sim])
+    if (ctx && wrapRef.current) drawGraph(ctx, simRef.current, groups, showLabels, wrapRef.current)
+  }, [groups, showLabels])
 
   const resize = React.useCallback(() => {
     const wrap = wrapRef.current, cvs = cvsRef.current
     if (!wrap || !cvs) return
     const r = wrap.getBoundingClientRect(), dpr = window.devicePixelRatio || 1
-    sim.w = Math.max(320, Math.round(r.width)); sim.h = Math.max(240, Math.round(r.height))
-    cvs.width = Math.round(sim.w * dpr); cvs.height = Math.round(sim.h * dpr)
-    cvs.style.width = `${sim.w}px`; cvs.style.height = `${sim.h}px`
-  }, [sim])
+    simRef.current.w = Math.max(320, Math.round(r.width)); simRef.current.h = Math.max(240, Math.round(r.height))
+    cvs.width = Math.round(simRef.current.w * dpr); cvs.height = Math.round(simRef.current.h * dpr)
+    cvs.style.width = `${simRef.current.w}px`; cvs.style.height = `${simRef.current.h}px`
+  }, [])
 
   React.useEffect(() => {
     resize()
-    const prev = sim.nodeMap
-    sim.nodes = inputNodes.map((n, i) => {
+    const prev = simRef.current.nodeMap
+    simRef.current.nodes = inputNodes.map((n, i) => {
       const old = prev.get(n.id), a = (i / Math.max(inputNodes.length, 1)) * Math.PI * 2
-      const rad = Math.min(sim.w || 640, sim.h || 420) * 0.28
-      return { ...n, x: old?.x ?? (sim.w || 640) / 2 + Math.cos(a) * rad * (0.55 + Math.random() * 0.45),
-        y: old?.y ?? (sim.h || 420) / 2 + Math.sin(a) * rad * (0.55 + Math.random() * 0.45),
+      const rad = Math.min(simRef.current.w || 640, simRef.current.h || 420) * 0.28
+      return { ...n, x: old?.x ?? (simRef.current.w || 640) / 2 + Math.cos(a) * rad * (0.55 + Math.random() * 0.45),
+        y: old?.y ?? (simRef.current.h || 420) / 2 + Math.sin(a) * rad * (0.55 + Math.random() * 0.45),
         vx: old?.vx ?? 0, vy: old?.vy ?? 0, fx: 0, fy: 0 }
     })
-    sim.nodeMap = new Map(sim.nodes.map((n) => [n.id, n]))
-    sim.edges = inputEdges.filter((e) => sim.nodeMap.has(e.source) && sim.nodeMap.has(e.target))
-    sim.linked = new Map(sim.nodes.map((n) => [n.id, new Set<string>()]))
-    for (const e of sim.edges) { sim.linked.get(e.source)?.add(e.target); sim.linked.get(e.target)?.add(e.source) }
-    sim.frame = 0; sim.running = animate && sim.nodes.length > 1
+    simRef.current.nodeMap = new Map(simRef.current.nodes.map((n) => [n.id, n]))
+    simRef.current.edges = inputEdges.filter((e) => simRef.current.nodeMap.has(e.source) && simRef.current.nodeMap.has(e.target))
+    simRef.current.linked = new Map(simRef.current.nodes.map((n) => [n.id, new Set<string>()]))
+    for (const e of simRef.current.edges) { simRef.current.linked.get(e.source)?.add(e.target); simRef.current.linked.get(e.target)?.add(e.source) }
+    simRef.current.frame = 0; simRef.current.running = animate && simRef.current.nodes.length > 1
     const tick = () => {
-      sim.raf = 0
-      if (sim.running && sim.frame < 200) { forceStep(sim); sim.frame++; if (sim.frame >= 200) sim.running = false }
-      redraw(); if (sim.running) sim.loop()
+      simRef.current.raf = 0
+      if (simRef.current.running && simRef.current.frame < 200) { forceStep(simRef.current); simRef.current.frame++; if (simRef.current.frame >= 200) simRef.current.running = false }
+      redraw(); if (simRef.current.running) simRef.current.loop()
     }
-    sim.loop = () => { if (!sim.raf && sim.running) sim.raf = requestAnimationFrame(tick) }
-    redraw(); sim.loop()
-    return () => { if (sim.raf) { cancelAnimationFrame(sim.raf); sim.raf = 0 } }
-  }, [inputNodes, inputEdges, animate, resize, redraw, sim])
+    simRef.current.loop = () => { if (!simRef.current.raf && simRef.current.running) simRef.current.raf = requestAnimationFrame(tick) }
+    redraw(); simRef.current.loop()
+    return () => { if (simRef.current.raf) { cancelAnimationFrame(simRef.current.raf); simRef.current.raf = 0 } }
+  }, [inputNodes, inputEdges, animate, resize, redraw])
 
   React.useEffect(() => {
     if (typeof ResizeObserver === "undefined" || !wrapRef.current) return
@@ -178,26 +178,26 @@ function MnSocialGraph({
     if (!cvs) return
     const pt = (e: MouseEvent) => { const r = cvs.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top } }
     const onDown = (e: MouseEvent) => {
-      const p = pt(e), n = hitTest(sim.nodes, p.x, p.y)
+      const p = pt(e), n = hitTest(simRef.current.nodes, p.x, p.y)
       if (!n) return
-      sim.dragging = n; sim.dragMoved = false; sim.hoveredId = n.id
+      simRef.current.dragging = n; simRef.current.dragMoved = false; simRef.current.hoveredId = n.id
       onNodeHover?.(n); setTip({ label: n.label, detail: n.detail, x: p.x, y: p.y }); redraw()
     }
     const onMove = (e: MouseEvent) => {
       const p = pt(e)
-      if (sim.dragging) {
-        sim.dragMoved = true; sim.dragging.x = p.x; sim.dragging.y = p.y
-        sim.frame = Math.min(sim.frame, 140); sim.running = true; sim.loop()
-        redraw(); setTip({ label: sim.dragging.label, detail: sim.dragging.detail, x: p.x, y: p.y }); return
+      if (simRef.current.dragging) {
+        simRef.current.dragMoved = true; simRef.current.dragging.x = p.x; simRef.current.dragging.y = p.y
+        simRef.current.frame = Math.min(simRef.current.frame, 140); simRef.current.running = true; simRef.current.loop()
+        redraw(); setTip({ label: simRef.current.dragging.label, detail: simRef.current.dragging.detail, x: p.x, y: p.y }); return
       }
-      const n = hitTest(sim.nodes, p.x, p.y)
-      if (n?.id !== sim.hoveredId) { sim.hoveredId = n?.id ?? null; onNodeHover?.(n ?? null); redraw() }
+      const n = hitTest(simRef.current.nodes, p.x, p.y)
+      if (n?.id !== simRef.current.hoveredId) { simRef.current.hoveredId = n?.id ?? null; onNodeHover?.(n ?? null); redraw() }
       if (n) { cvs.style.cursor = "pointer"; setTip({ label: n.label, detail: n.detail, x: p.x, y: p.y }) }
       else { cvs.style.cursor = "default"; setTip(null) }
     }
-    const onUp = () => { sim.dragging = null; cvs.style.cursor = sim.hoveredId ? "pointer" : "default" }
-    const onLeave = () => { if (!sim.dragging) { sim.hoveredId = null; onNodeHover?.(null); setTip(null); redraw() } }
-    const onClick = (e: MouseEvent) => { if (sim.dragMoved) return; const p = pt(e), n = hitTest(sim.nodes, p.x, p.y); if (n) onNodeClick?.(n) }
+    const onUp = () => { simRef.current.dragging = null; cvs.style.cursor = simRef.current.hoveredId ? "pointer" : "default" }
+    const onLeave = () => { if (!simRef.current.dragging) { simRef.current.hoveredId = null; onNodeHover?.(null); setTip(null); redraw() } }
+    const onClick = (e: MouseEvent) => { if (simRef.current.dragMoved) return; const p = pt(e), n = hitTest(simRef.current.nodes, p.x, p.y); if (n) onNodeClick?.(n) }
     cvs.addEventListener("mousedown", onDown); cvs.addEventListener("mousemove", onMove)
     cvs.addEventListener("mouseleave", onLeave); cvs.addEventListener("click", onClick)
     document.addEventListener("mouseup", onUp)
@@ -206,7 +206,7 @@ function MnSocialGraph({
       cvs.removeEventListener("mouseleave", onLeave); cvs.removeEventListener("click", onClick)
       document.removeEventListener("mouseup", onUp)
     }
-  }, [onNodeClick, onNodeHover, redraw, sim])
+  }, [onNodeClick, onNodeHover, redraw])
 
   return (
     <div ref={wrapRef} className={cn(socialGraphWrap({ size: size as SocialGraphSize }), className)} {...rest}>

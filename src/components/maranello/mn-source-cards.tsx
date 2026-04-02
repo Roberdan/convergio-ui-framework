@@ -103,7 +103,8 @@ function SourceCardItem({
   onSelect?: (card: SourceCard) => void
   isList: boolean
 }) {
-  const Icon = sourceIcon(card.badge)
+  const iconKey = card.badge?.toLowerCase() ?? ''
+  const IconComponent = SOURCE_ICONS[iconKey] ?? FileText
   const ariaLabel = [
     card.title,
     card.score !== undefined ? `relevance ${formatScore(card.score)}` : null,
@@ -139,7 +140,7 @@ function SourceCardItem({
     >
       {/* header: icon + badge + score */}
       <div className="flex items-center gap-2">
-        <Icon
+        <IconComponent
           className="h-4 w-4 shrink-0 text-muted-foreground"
           aria-hidden="true"
         />

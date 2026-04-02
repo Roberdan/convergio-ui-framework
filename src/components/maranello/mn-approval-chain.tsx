@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 import { Check, X, Clock, User, SkipForward } from "lucide-react";
 
 export type ApprovalStatus = "pending" | "approved" | "rejected" | "skipped" | "current";

@@ -223,7 +223,7 @@ function MnGantt({ tasks, dependencies, labelWidth = 240, rowHeight = 38, showTo
 
   if (!tasks.length) return null
 
-  const toggle = (id: string) => setCollapsed((prev) => { const s = new Set(prev); s.has(id) ? s.delete(id) : s.add(id); return s })
+  const toggle = (id: string) => setCollapsed((prev) => { const s = new Set(prev); if (s.has(id)) { s.delete(id) } else { s.add(id) } return s })
   const rows = flattenVisible(tasks, collapsed)
   const range = buildRange(tasks)
   const allDeps = dependencies ?? buildDeps(tasks)
