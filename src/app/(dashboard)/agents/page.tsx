@@ -13,9 +13,9 @@ const AGENTS = [
 ];
 
 const STATUS_COLOR: Record<string, string> = {
-  active: "bg-green-500",
-  idle: "bg-yellow-500",
-  error: "bg-destructive",
+  active: "bg-status-success",
+  idle: "bg-status-warning",
+  error: "bg-status-error",
 };
 
 export default function AgentsPage() {
@@ -33,11 +33,11 @@ export default function AgentsPage() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b text-left text-muted-foreground">
-              <th className="p-3 font-medium">Agent</th>
-              <th className="p-3 font-medium">Status</th>
-              <th className="p-3 font-medium">Model</th>
-              <th className="p-3 font-medium text-right">Tasks</th>
-              <th className="p-3 font-medium text-right">Uptime</th>
+              <th scope="col" className="p-3 font-medium">Agent</th>
+              <th scope="col" className="p-3 font-medium">Status</th>
+              <th scope="col" className="p-3 font-medium">Model</th>
+              <th scope="col" className="p-3 font-medium text-right">Tasks</th>
+              <th scope="col" className="p-3 font-medium text-right">Uptime</th>
             </tr>
           </thead>
           <tbody>
@@ -46,7 +46,7 @@ export default function AgentsPage() {
                 <td className="p-3 font-mono">{agent.id}</td>
                 <td className="p-3">
                   <div className="flex items-center gap-2">
-                    <span className={`h-2 w-2 rounded-full ${STATUS_COLOR[agent.status]}`} />
+                    <span className={`h-2 w-2 rounded-full ${STATUS_COLOR[agent.status]}`} aria-hidden="true" />
                     {agent.status}
                   </div>
                 </td>

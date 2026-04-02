@@ -116,6 +116,12 @@ navigation:
           href: /preview
           icon: Palette
 
+        - id: showcase
+          label: Phase 2 Showcase
+          href: /showcase
+          icon: Palette
+
+
 # ── Pages ──
 # Each page is defined by its route and a list of block rows.
 # Available block types: kpi-card, data-table, activity-feed, stat-list, empty-state, ai-chat,

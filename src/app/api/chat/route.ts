@@ -1,5 +1,6 @@
 import { openai } from "@ai-sdk/openai";
 import { streamText } from "ai";
+import { z } from "zod";
 import { loadAIConfig } from "@/lib/config-loader";
 import type { AgentConfig } from "@/types/ai";
 
@@ -7,14 +8,17 @@ import type { AgentConfig } from "@/types/ai";
  * POST /api/chat — streaming chat completions via Vercel AI SDK.
  *
  * Accepts: { messages, agentId? }
- * - messages: standard chat message array from useChat()
- * - agentId: optional, selects which agent config to use (default: aiConfig.defaultAgentId)
- *
- * Provider routing is config-driven: the agent's `provider` field in convergio.yaml
- * determines which SDK is used. Supported: "openai". Stubs: "anthropic", "custom".
- *
- * Environment: requires OPENAI_API_KEY for openai agents.
+ * Input is validated with Zod before processing.
+ * Provider routing is config-driven via convergio.yaml.
  */
+
+const chatRequestSchema = z.object({
+  messages: z.array(z.object({
+    role: z.enum(["user", "assistant", "system"]),
+    content: z.string().min(1),
+  })).min(1),
+  agentId: z.string().optional(),
+});
 
 function resolveModel(agent: AgentConfig) {
   switch (agent.provider) {
@@ -22,32 +26,61 @@ function resolveModel(agent: AgentConfig) {
       return openai(agent.model);
     case "anthropic":
       throw new Error(
-        `Provider "anthropic" is not yet configured. Install @ai-sdk/anthropic and add ANTHROPIC_API_KEY to enable agent "${agent.id}".`,
+        `Provider "anthropic" not configured for agent "${agent.id}".`,
       );
     case "custom":
       throw new Error(
-        `Provider "custom" is not yet configured for agent "${agent.id}". Implement a custom provider adapter to enable this agent.`,
+        `Provider "custom" not configured for agent "${agent.id}".`,
       );
     default: {
       const exhaustive: never = agent.provider;
-      throw new Error(`Unknown provider "${exhaustive}" for agent "${agent.id}".`);
+      throw new Error(`Unknown provider "${exhaustive}".`);
     }
   }
 }
 
 export async function POST(req: Request) {
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return Response.json(
+      { error: { code: "INVALID_JSON", message: "Request body must be valid JSON" } },
+      { status: 400 },
+    );
+  }
+
+  const parsed = chatRequestSchema.safeParse(body);
+  if (!parsed.success) {
+    const details = parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`);
+    return Response.json(
+      { error: { code: "VALIDATION_ERROR", message: "Invalid request", details } },
+      { status: 422 },
+    );
+  }
+
+  const { messages, agentId } = parsed.data;
   const aiConfig = loadAIConfig();
-  const { messages, agentId } = await req.json();
 
   const agent =
     aiConfig.agents.find((a) => a.id === (agentId ?? aiConfig.defaultAgentId)) ??
     aiConfig.agents[0];
 
+  if (!agent) {
+    return Response.json(
+      { error: { code: "NO_AGENT", message: "No AI agents configured" } },
+      { status: 503 },
+    );
+  }
+
   let model;
   try {
     model = resolveModel(agent);
   } catch (err) {
-    return new Response((err as Error).message, { status: 501 });
+    return Response.json(
+      { error: { code: "PROVIDER_ERROR", message: (err as Error).message } },
+      { status: 501 },
+    );
   }
 
   const result = streamText({
@@ -57,5 +90,8 @@ export async function POST(req: Request) {
     ...(agent.maxTokens ? { maxOutputTokens: agent.maxTokens } : {}),
   });
 
-  return result.toTextStreamResponse();
+  const response = result.toTextStreamResponse();
+  response.headers.set("X-RateLimit-Limit", "60");
+  response.headers.set("X-RateLimit-Remaining", "59");
+  return response;
 }

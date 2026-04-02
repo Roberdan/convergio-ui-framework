@@ -40,12 +40,19 @@ export default function RootLayout({
     <html
       lang="en"
       data-theme={appConfig.defaultTheme}
-      className={`${inter.variable} ${outfit.variable} ${barlowCondensed.variable} h-full antialiased dark`}
+      suppressHydrationWarning
+      className={`${inter.variable} ${outfit.variable} ${barlowCondensed.variable} h-full antialiased ${appConfig.defaultTheme !== "light" ? "dark" : ""}`}
     >
       <head>
         <ThemeScript />
       </head>
       <body className="min-h-full">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:text-sm focus:font-medium focus:shadow-lg"
+        >
+          Skip to main content
+        </a>
         <ThemeProvider defaultTheme={appConfig.defaultTheme}>
           <TooltipProvider>
             {children}
