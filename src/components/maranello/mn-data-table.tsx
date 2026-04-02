@@ -4,12 +4,97 @@ import * as React from "react"
 import { cva } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
+/* ── V2 Cell Renderer Types ──────────────────────────────── */
+
+interface StatusBadgeMeta { cls: string; symbol: string }
+const STATUS_MAP: Record<string, StatusBadgeMeta> = {
+  active: { cls: "bg-[var(--mn-success-bg,rgba(34,197,94,.15))] text-[var(--mn-success,#22c55e)]", symbol: "\u25CF" },
+  completed: { cls: "bg-[var(--mn-success-bg,rgba(34,197,94,.15))] text-[var(--mn-success,#22c55e)]", symbol: "\u2713" },
+  "at risk": { cls: "bg-[var(--mn-warning-bg,rgba(245,158,11,.15))] text-[var(--mn-warning,#f59e0b)]", symbol: "\u25B2" },
+  warning: { cls: "bg-[var(--mn-warning-bg,rgba(245,158,11,.15))] text-[var(--mn-warning,#f59e0b)]", symbol: "\u25B2" },
+  blocked: { cls: "bg-[var(--mn-error-bg,rgba(239,68,68,.15))] text-[var(--mn-error,#ef4444)]", symbol: "\u25CF" },
+  "on hold": { cls: "bg-[var(--mn-error-bg,rgba(239,68,68,.15))] text-[var(--mn-error,#ef4444)]", symbol: "\u25A0" },
+  planned: { cls: "bg-[var(--mn-info-bg,rgba(59,130,246,.15))] text-[var(--mn-info,#3b82f6)]", symbol: "\u25CB" },
+  info: { cls: "bg-[var(--mn-info-bg,rgba(59,130,246,.15))] text-[var(--mn-info,#3b82f6)]", symbol: "\u25CF" },
+}
+interface MetricValue { value: number; trend: "up" | "down" | "flat"; delta?: string }
+interface PersonValue { name: string; avatar?: string; email?: string }
+interface ProgressValue { value: number; max?: number; label?: string }
+interface ActionDef { label: string; id: string }
+interface ActionValue { actions: ActionDef[] }
+interface LinkValue { text: string; href: string; external?: boolean }
+
+function toInitials(name: string): string { return name.split(/\s+/).filter(Boolean).map((w) => w[0]).join("").slice(0, 2).toUpperCase() }
+function clampPct(v: number, max: number): number { return Math.max(0, Math.min(100, (v / Math.max(1, max)) * 100)) }
+
+/* ── Built-in V2 Cell Renderers ──────────────────────────── */
+
+function StatusBadgeCell({ value }: { value: unknown }) {
+  const meta = STATUS_MAP[String(value ?? "").toLowerCase()] ?? STATUS_MAP.info
+  return <span className={cn("inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[0.7rem] font-semibold leading-tight", meta.cls)}><span aria-hidden="true">{meta.symbol}</span>{String(value ?? "")}</span>
+}
+
+function ProgressBarCell({ value }: { value: unknown }) {
+  const p = (typeof value === "object" && value !== null ? value : { value: Number(value) || 0, max: 100 }) as ProgressValue
+  const pct = clampPct(p.value, p.max ?? 100)
+  return (
+    <div className="flex items-center gap-2">
+      <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--mn-surface-sunken,var(--mn-border))]">
+        <div className="h-full rounded-full bg-[var(--mn-accent)] transition-[width] duration-300 ease-out" style={{ width: `${pct}%` }} />
+      </div>
+      <span className="shrink-0 text-[0.65rem] tabular-nums text-[var(--mn-text-muted)]">{p.label ?? `${Math.round(pct)}%`}</span>
+    </div>
+  )
+}
+
+function SparklineCell({ value }: { value: unknown }) {
+  const data = Array.isArray(value) ? (value as number[]) : []
+  if (data.length < 2) return <span className="text-[var(--mn-text-muted)]">{"\u2014"}</span>
+  const lo = Math.min(...data), hi = Math.max(...data), range = hi - lo || 1, h = 20, w = 60
+  const pts = data.map((v, i) => `${(i / (data.length - 1)) * w},${h - ((v - lo) / range) * h}`).join(" ")
+  return <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} className="inline-block align-middle" aria-hidden="true"><polyline points={pts} fill="none" stroke="var(--mn-accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+}
+
+function AvatarCell({ value }: { value: unknown }) {
+  const p = (typeof value === "object" && value !== null ? value : { name: String(value ?? "") }) as PersonValue
+  return (
+    <div className="flex items-center gap-2">
+      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--mn-primary-bg,var(--mn-surface-raised))] text-[0.6rem] font-bold text-[var(--mn-primary,var(--mn-accent))]">
+        {p.avatar ? <img src={p.avatar} alt={p.name} className="h-full w-full rounded-full object-cover" /> : toInitials(p.name)}
+      </span>
+      <span className="flex flex-col leading-tight">
+        <span className="text-sm text-[var(--mn-text)]">{p.name}</span>
+        {p.email && <span className="text-[0.65rem] text-[var(--mn-text-muted)]">{p.email}</span>}
+      </span>
+    </div>
+  )
+}
+
+function ActionButtonsCell({ value, row, onAction }: { value: unknown; row: Record<string, unknown>; onAction?: (id: string, row: Record<string, unknown>) => void }) {
+  const actions = ((value as ActionValue)?.actions ?? []) as ActionDef[]
+  if (!actions.length) return <span className="text-[var(--mn-text-muted)]">{"\u2014"}</span>
+  return (
+    <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+      {actions.map((a) => <button key={a.id} type="button" aria-label={a.label} className="rounded px-2 py-0.5 text-[0.7rem] font-medium text-[var(--mn-accent)] transition-colors hover:bg-[var(--mn-primary-bg,var(--mn-surface-raised))]" onClick={() => onAction?.(a.id, row)}>{a.label}</button>)}
+    </div>
+  )
+}
+
+function LinkCell({ value }: { value: unknown }) {
+  const l = (typeof value === "object" && value !== null ? value : { text: String(value ?? ""), href: "#" }) as LinkValue
+  const ext = l.external ? { target: "_blank" as const, rel: "noopener noreferrer" } : {}
+  return <a href={l.href} className="text-[var(--mn-accent)] underline-offset-2 hover:underline" {...ext}>{l.text}{l.external && <span className="ml-0.5 text-[0.6rem]" aria-hidden="true">{"\u2197"}</span>}</a>
+}
+
 /* ── Types ───────────────────────────────────────────────── */
+
+type CellType = "status" | "progress" | "sparkline" | "avatar" | "action" | "link"
 
 export interface DataTableColumn<T = Record<string, unknown>> {
   key: string; label?: string; sortable?: boolean; filterable?: boolean
   align?: "left" | "center" | "right"; width?: string | number
   render?: (value: unknown, row: T) => React.ReactNode
+  type?: CellType
 }
 
 type SortDir = "asc" | "desc"
@@ -24,6 +109,7 @@ export interface MnDataTableProps<T extends Record<string, unknown>>
   onSort?: (key: string, direction: SortDir) => void
   onFilter?: (filters: Record<string, string>) => void
   onSelectionChange?: (selected: T[]) => void
+  onAction?: (actionId: string, row: T) => void
 }
 
 /* ── Helpers ──────────────────────────────────────────────── */
@@ -61,11 +147,23 @@ const rowBase = "border-b border-[var(--mn-border)] transition-colors hover:bg-[
 const alignCls = (a?: string) => a === "right" ? "text-right" : a === "center" ? "text-center" : undefined
 const widthStyle = (w?: string | number) => w ? { width: typeof w === "number" ? `${w}px` : w } : undefined
 
+function renderV2Cell<T extends Record<string, unknown>>(col: DataTableColumn<T>, value: unknown, row: T, onAction?: (id: string, row: T) => void): React.ReactNode {
+  switch (col.type) {
+    case "status": return <StatusBadgeCell value={value} />
+    case "progress": return <ProgressBarCell value={value} />
+    case "sparkline": return <SparklineCell value={value} />
+    case "avatar": return <AvatarCell value={value} />
+    case "action": return <ActionButtonsCell value={value} row={row} onAction={onAction as ((id: string, row: Record<string, unknown>) => void) | undefined} />
+    case "link": return <LinkCell value={value} />
+    default: return undefined
+  }
+}
+
 /* ── Component ───────────────────────────────────────────── */
 
 function MnDataTable<T extends Record<string, unknown>>({
   columns, data, pageSize = 0, groupBy, selectable, compact = false, loading = false,
-  emptyMessage = "No data found", onRowClick, onSort, onFilter, onSelectionChange, className, ...rest
+  emptyMessage = "No data found", onRowClick, onSort, onFilter, onSelectionChange, onAction, className, ...rest
 }: MnDataTableProps<T>) {
   const [sortKey, setSortKey] = React.useState<string | null>(null)
   const [sortDir, setSortDir] = React.useState(1)
@@ -114,17 +212,21 @@ function MnDataTable<T extends Record<string, unknown>>({
               onChange={() => toggleSelect(ri)} onClick={(e) => e.stopPropagation()} />
           </td>
         )}
-        {columns.map((col) => (
-          <td key={col.key} role="gridcell" className={cn(tdBase, alignCls(col.align))} style={widthStyle(col.width)}>
-            {col.render ? col.render(row[col.key], row) : String(row[col.key] ?? "")}
-          </td>
-        ))}
+        {columns.map((col) => {
+          const raw = row[col.key]
+          const v2 = col.type ? renderV2Cell(col, raw, row, onAction) : undefined
+          return (
+            <td key={col.key} role="gridcell" className={cn(tdBase, alignCls(col.align))} style={widthStyle(col.width)}>
+              {v2 ?? (col.render ? col.render(raw, row) : String(raw ?? ""))}
+            </td>
+          )
+        })}
       </tr>
     )
   }
 
   function renderBody() {
-    if (loading) return <tr><td colSpan={colSpan} className="py-8 text-center text-[var(--mn-text-muted)]">Loading…</td></tr>
+    if (loading) return <tr><td colSpan={colSpan} className="py-8 text-center text-[var(--mn-text-muted)]">Loading...</td></tr>
     if (sorted.length === 0) return <tr><td colSpan={colSpan} className="py-8 text-center text-[var(--mn-text-muted)]">{emptyMessage}</td></tr>
     if (groupBy) return groupRows(sorted, groupBy).flatMap((g) => {
       const hide = collapsed.has(g.name)
@@ -133,7 +235,7 @@ function MnDataTable<T extends Record<string, unknown>>({
           className="cursor-pointer bg-[var(--mn-surface-raised)] font-medium"
           onClick={() => toggleGroup(g.name)} onKeyDown={(e) => onActivate(e, () => toggleGroup(g.name))}>
           <td colSpan={colSpan} className="px-3 py-2">
-            <span className={cn("mr-1 inline-block transition-transform", !hide && "rotate-90")}>▸</span>
+            <span className={cn("mr-1 inline-block transition-transform", !hide && "rotate-90")}>{"\u25B8"}</span>
             {g.name} <span className="ml-1 text-[var(--mn-text-muted)]">({g.rows.length})</span>
           </td>
         </tr>,
@@ -162,7 +264,7 @@ function MnDataTable<T extends Record<string, unknown>>({
                 onClick={col.sortable ? () => doSort(col.key) : undefined}
                 onKeyDown={col.sortable ? (e) => onActivate(e, () => doSort(col.key)) : undefined}>
                 {col.label ?? col.key}
-                {col.sortable && <span className="ml-1 inline-block" aria-hidden="true">{sortKey === col.key ? (sortDir === 1 ? "▲" : "▼") : "⇅"}</span>}
+                {col.sortable && <span className="ml-1 inline-block" aria-hidden="true">{sortKey === col.key ? (sortDir === 1 ? "\u25B2" : "\u25BC") : "\u21C5"}</span>}
               </th>
             ))}
           </tr>
@@ -170,7 +272,7 @@ function MnDataTable<T extends Record<string, unknown>>({
             {selectable && <th />}
             {columns.map((col) => (
               <th key={`f-${col.key}`} className="px-3 pb-2">
-                {col.filterable && <input type="text" placeholder="Filter…" aria-label={`Filter ${col.label ?? col.key}`}
+                {col.filterable && <input type="text" placeholder="Filter..." aria-label={`Filter ${col.label ?? col.key}`}
                   className="w-full rounded border border-[var(--mn-border)] bg-[var(--mn-surface)] px-2 py-1 text-xs text-[var(--mn-text)]"
                   onChange={(e) => doFilter(col.key, e.target.value)} />}
               </th>
@@ -181,13 +283,13 @@ function MnDataTable<T extends Record<string, unknown>>({
       </table>
       {pageSize > 0 && totalPages > 1 && (
         <nav aria-label="Table pagination" className="flex items-center justify-center gap-1 border-t border-[var(--mn-border)] px-3 py-2">
-          <button disabled={page === 0} aria-label="Previous page" className="rounded px-2 py-1 text-sm disabled:opacity-40" onClick={() => setPage((p) => p - 1)}>←</button>
+          <button disabled={page === 0} aria-label="Previous page" className="rounded px-2 py-1 text-sm disabled:opacity-40" onClick={() => setPage((p) => p - 1)}>{"\u2190"}</button>
           {Array.from({ length: totalPages }, (_, i) => (
             <button key={i} aria-label={`Page ${i + 1}`} aria-current={i === page ? "page" : undefined} disabled={i === page}
               className={cn("rounded px-2 py-1 text-sm", i === page ? "bg-[var(--mn-primary)] text-[var(--mn-on-primary)] font-semibold" : "hover:bg-[var(--mn-surface-raised)]")}
               onClick={() => setPage(i)}>{i + 1}</button>
           ))}
-          <button disabled={page >= totalPages - 1} aria-label="Next page" className="rounded px-2 py-1 text-sm disabled:opacity-40" onClick={() => setPage((p) => p + 1)}>→</button>
+          <button disabled={page >= totalPages - 1} aria-label="Next page" className="rounded px-2 py-1 text-sm disabled:opacity-40" onClick={() => setPage((p) => p + 1)}>{"\u2192"}</button>
         </nav>
       )}
       <div role="status" aria-live="polite" className="sr-only">
@@ -197,4 +299,5 @@ function MnDataTable<T extends Record<string, unknown>>({
   )
 }
 
-export { MnDataTable }
+export { MnDataTable, StatusBadgeCell, ProgressBarCell, SparklineCell, AvatarCell, ActionButtonsCell, LinkCell }
+export type { CellType, MetricValue, PersonValue, ProgressValue, ActionValue, ActionDef, LinkValue }

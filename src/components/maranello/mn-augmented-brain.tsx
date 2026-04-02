@@ -1,237 +1,249 @@
-'use client';
+"use client"
 
-import { cn } from '@/lib/utils';
-import { useCallback, useId, useMemo, useState } from 'react';
+import * as React from "react"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/utils"
 
+/* ── Types ─────────────────────────────────────────────────── */
 export interface BrainNode {
-  id: string;
-  label: string;
-  type: 'core' | 'memory' | 'skill' | 'sense';
-  active?: boolean;
+  id: string
+  label: string
+  type: "core" | "memory" | "skill" | "sense"
+  active?: boolean
 }
 
 export interface BrainConnection {
-  from: string;
-  to: string;
-  strength: number;
+  from: string
+  to: string
+  strength: number
 }
 
-export interface MnAugmentedBrainProps {
-  nodes: BrainNode[];
-  connections: BrainConnection[];
-  /** Called when a node is clicked */
-  onNodeClick?: (node: BrainNode) => void;
-  ariaLabel?: string;
-  className?: string;
+/* ── CVA ───────────────────────────────────────────────────── */
+const brainWrap = cva("relative block", {
+  variants: {
+    size: {
+      sm: "max-w-xs",
+      md: "max-w-md",
+      lg: "max-w-xl",
+      fluid: "w-full",
+    },
+  },
+  defaultVariants: { size: "md" },
+})
+
+/* ── Props ─────────────────────────────────────────────────── */
+export interface MnAugmentedBrainProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "children">,
+    VariantProps<typeof brainWrap> {
+  nodes: BrainNode[]
+  connections: BrainConnection[]
+  onNodeClick?: (node: BrainNode) => void
+  ariaLabel?: string
+  height?: number
 }
 
-const NODE_COLORS: Record<BrainNode['type'], string> = {
-  core: 'var(--primary)',
-  memory: 'var(--chart-2, hsl(160 60% 45%))',
-  skill: 'var(--chart-3, hsl(30 80% 55%))',
-  sense: 'var(--chart-4, hsl(280 65% 60%))',
-};
+/* ── Constants & helpers ───────────────────────────────────── */
+const LAYER_ORDER: BrainNode["type"][] = ["core", "memory", "skill", "sense"]
 
-const LAYER_ORDER: BrainNode['type'][] = ['core', 'memory', 'skill', 'sense'];
-
-interface NodePos {
-  node: BrainNode;
-  x: number;
-  y: number;
+const NODE_TOKENS: Record<BrainNode["type"], [string, string]> = {
+  core: ["--primary", "#6366f1"],
+  memory: ["--chart-2", "#22c55e"],
+  skill: ["--chart-3", "#f59e0b"],
+  sense: ["--chart-4", "#8b5cf6"],
 }
 
-/** Compute radial positions: core at center, layers radiating outward. */
-function computeLayout(nodes: BrainNode[] | undefined, size: number): NodePos[] {
-  if (!nodes || !nodes.length) return [];
-  const cx = size / 2;
-  const cy = size / 2;
-  const positions: NodePos[] = [];
+const FONT = "10px Inter, system-ui, sans-serif"
+
+interface NodePos { node: BrainNode; x: number; y: number; r: number }
+
+function resolveColor(el: Element, token: string, fallback: string): string {
+  const v = getComputedStyle(el).getPropertyValue(token).trim()
+  if (!v) return fallback
+  return v.startsWith("#") || v.startsWith("rgb") || v.startsWith("hsl") ? v : `hsl(${v})`
+}
+
+function computeLayout(nodes: BrainNode[], w: number, h: number): NodePos[] {
+  if (!nodes.length) return []
+  const cx = w / 2, cy = h / 2, base = Math.min(w, h)
+  const out: NodePos[] = []
   for (const layer of LAYER_ORDER) {
-    const layerNodes = nodes.filter((n) => n.type === layer);
-    if (!layerNodes.length) continue;
-    if (layer === 'core') {
-      const spacing = layerNodes.length > 1 ? (2 * Math.PI) / layerNodes.length : 0;
-      const r = layerNodes.length > 1 ? size * 0.08 : 0;
-      for (let i = 0; i < layerNodes.length; i++) {
-        const a = spacing * i - Math.PI / 2;
-        positions.push({ node: layerNodes[i], x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) });
+    const ln = nodes.filter((n) => n.type === layer)
+    if (!ln.length) continue
+    if (layer === "core") {
+      const gap = ln.length > 1 ? (2 * Math.PI) / ln.length : 0
+      const rad = ln.length > 1 ? base * 0.06 : 0
+      for (let i = 0; i < ln.length; i++) {
+        const a = gap * i - Math.PI / 2
+        out.push({ node: ln[i], x: cx + rad * Math.cos(a), y: cy + rad * Math.sin(a), r: base * 0.045 })
       }
     } else {
-      const layerIdx = LAYER_ORDER.indexOf(layer);
-      const radius = size * (0.18 + layerIdx * 0.12);
-      const angleStep = (2 * Math.PI) / layerNodes.length;
-      const offset = layerIdx * 0.4;
-      for (let i = 0; i < layerNodes.length; i++) {
-        const angle = angleStep * i - Math.PI / 2 + offset;
-        positions.push({ node: layerNodes[i], x: cx + radius * Math.cos(angle), y: cy + radius * Math.sin(angle) });
+      const li = LAYER_ORDER.indexOf(layer)
+      const radius = base * (0.15 + li * 0.12)
+      const step = (2 * Math.PI) / ln.length, off = li * 0.4
+      for (let i = 0; i < ln.length; i++) {
+        const a = step * i - Math.PI / 2 + off
+        out.push({ node: ln[i], x: cx + radius * Math.cos(a), y: cy + radius * Math.sin(a), r: base * 0.032 })
       }
     }
   }
-  return positions;
+  return out
 }
 
-/** AI brain visualization with radial layout and animated active nodes. */
+/* ── Canvas drawing ────────────────────────────────────────── */
+function drawFrame(
+  ctx: CanvasRenderingContext2D, w: number, h: number, positions: NodePos[],
+  connections: BrainConnection[], hovId: string | null, pulse: number, el: Element,
+): void {
+  ctx.clearRect(0, 0, w, h)
+  const posMap = new Map(positions.map((p) => [p.node.id, p]))
+  const rc = (t: string, fb: string) => resolveColor(el, t, fb)
+  const fg = rc("--foreground", "#fafafa"), muted = rc("--muted-foreground", "#888")
+  const ringC = rc("--ring", "#888"), cardBg = rc("--card", "#1a1a1a"), borderC = rc("--border", "#3a3a3a")
+
+  for (const conn of connections) {
+    const from = posMap.get(conn.from), to = posMap.get(conn.to)
+    if (!from || !to) continue
+    ctx.beginPath(); ctx.moveTo(from.x, from.y); ctx.lineTo(to.x, to.y)
+    ctx.strokeStyle = muted; ctx.lineWidth = 1 + conn.strength * 2
+    ctx.globalAlpha = 0.15 + conn.strength * 0.4; ctx.stroke(); ctx.globalAlpha = 1
+    if (from.node.active || to.node.active) {
+      const px = from.x + (to.x - from.x) * pulse, py = from.y + (to.y - from.y) * pulse
+      ctx.beginPath(); ctx.arc(px, py, 2 + conn.strength * 2, 0, Math.PI * 2)
+      ctx.fillStyle = rc(NODE_TOKENS[from.node.type][0], NODE_TOKENS[from.node.type][1])
+      ctx.globalAlpha = 0.6; ctx.fill(); ctx.globalAlpha = 1
+    }
+  }
+  for (const pos of positions) {
+    const color = rc(NODE_TOKENS[pos.node.type][0], NODE_TOKENS[pos.node.type][1])
+    if (pos.node.active) {
+      const gr = pos.r + 6 + Math.sin(pulse * Math.PI * 2) * 4
+      ctx.beginPath(); ctx.arc(pos.x, pos.y, gr, 0, Math.PI * 2)
+      ctx.fillStyle = color; ctx.globalAlpha = 0.15; ctx.fill(); ctx.globalAlpha = 1
+    }
+    if (pos.node.id === hovId) {
+      ctx.beginPath(); ctx.arc(pos.x, pos.y, pos.r + 4, 0, Math.PI * 2)
+      ctx.strokeStyle = ringC; ctx.lineWidth = 2; ctx.stroke()
+    }
+    ctx.beginPath(); ctx.arc(pos.x, pos.y, pos.r, 0, Math.PI * 2)
+    ctx.fillStyle = color; ctx.globalAlpha = pos.node.active ? 1 : 0.5
+    ctx.fill(); ctx.globalAlpha = 1
+    ctx.font = FONT; ctx.textAlign = "center"; ctx.fillStyle = fg
+    ctx.fillText(pos.node.label, pos.x, pos.y + pos.r + 14)
+  }
+  const hp = hovId ? posMap.get(hovId) : undefined
+  if (hp) {
+    const lbl = `${hp.node.label} (${hp.node.type}${hp.node.active ? ", active" : ""})`
+    ctx.font = FONT
+    const tw = ctx.measureText(lbl).width + 12
+    const tx = Math.min(Math.max(hp.x - tw / 2, 4), w - tw - 4)
+    const ty = Math.max(hp.y - hp.r - 28, 4)
+    ctx.fillStyle = cardBg; ctx.fillRect(tx, ty, tw, 20)
+    ctx.strokeStyle = borderC; ctx.lineWidth = 1; ctx.strokeRect(tx, ty, tw, 20)
+    ctx.fillStyle = fg; ctx.textAlign = "left"; ctx.fillText(lbl, tx + 6, ty + 14)
+  }
+}
+
+/* ── Component ─────────────────────────────────────────────── */
 export function MnAugmentedBrain({
-  nodes,
-  connections,
-  onNodeClick,
-  ariaLabel = 'AI brain visualization',
-  className,
+  nodes, connections, onNodeClick,
+  ariaLabel = "AI brain visualization",
+  height = 400, size = "md", className, ...rest
 }: MnAugmentedBrainProps) {
-  const id = useId();
-  const SIZE = 400;
-  const [selected, setSelected] = useState<string | null>(null);
+  const cvs = React.useRef<HTMLCanvasElement>(null)
+  const wrap = React.useRef<HTMLDivElement>(null)
+  const raf = React.useRef(0)
+  const hovRef = React.useRef<string | null>(null)
+  const posRef = React.useRef<NodePos[]>([])
 
-  const positions = useMemo(() => computeLayout(nodes, SIZE), [nodes]);
+  React.useEffect(() => {
+    const canvas = cvs.current, host = wrap.current
+    if (!canvas || !host) return
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
 
-  const posMap = useMemo(() => {
-    const m = new Map<string, NodePos>();
-    for (const p of positions) m.set(p.node.id, p);
-    return m;
-  }, [positions]);
+    const setup = () => {
+      const dpr = window.devicePixelRatio || 1
+      const w = Math.max(host.clientWidth || 320, 200)
+      canvas.width = w * dpr; canvas.height = height * dpr
+      canvas.style.width = `${w}px`; canvas.style.height = `${height}px`
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      posRef.current = computeLayout(nodes ?? [], w, height)
+    }
+    setup()
+    const t0 = performance.now()
+    const loop = (now: number) => {
+      const elapsed = (now - t0) / 2000
+      const pulse = elapsed - Math.floor(elapsed)
+      const lw = canvas.clientWidth || 320, lh = canvas.clientHeight || height
+      drawFrame(ctx, lw, lh, posRef.current, connections ?? [], hovRef.current, pulse, host)
+      raf.current = requestAnimationFrame(loop)
+    }
+    raf.current = requestAnimationFrame(loop)
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(setup) : null
+    ro?.observe(host)
+    return () => { cancelAnimationFrame(raf.current); ro?.disconnect() }
+  }, [nodes, connections, height])
 
-  const handleClick = useCallback(
-    (node: BrainNode) => {
-      setSelected((prev) => (prev === node.id ? null : node.id));
-      onNodeClick?.(node);
-    },
-    [onNodeClick],
-  );
+  const hitTest = React.useCallback((mx: number, my: number): BrainNode | null => {
+    for (let i = posRef.current.length - 1; i >= 0; i--) {
+      const p = posRef.current[i]
+      if (Math.hypot(mx - p.x, my - p.y) <= p.r + 3) return p.node
+    }
+    return null
+  }, [])
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent, node: BrainNode) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        handleClick(node);
-      }
-    },
-    [handleClick],
-  );
+  const coords = React.useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+    const r = cvs.current?.getBoundingClientRect()
+    return r ? { x: e.clientX - r.left, y: e.clientY - r.top } : null
+  }, [])
 
-  const selectedNode = nodes?.find((n) => n.id === selected) ?? null;
+  const handleMove = React.useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+    const c = coords(e); if (!c) return
+    const nid = hitTest(c.x, c.y)?.id ?? null
+    if (nid !== hovRef.current) {
+      hovRef.current = nid
+      if (cvs.current) cvs.current.style.cursor = nid ? "pointer" : "default"
+    }
+  }, [hitTest, coords])
+
+  const handleClick = React.useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!onNodeClick) return
+    const c = coords(e); if (!c) return
+    const hit = hitTest(c.x, c.y)
+    if (hit) onNodeClick(hit)
+  }, [onNodeClick, hitTest, coords])
+
+  const handleLeave = React.useCallback(() => { hovRef.current = null }, [])
+
+  const ariaDesc = React.useMemo(() => {
+    const safe = nodes ?? []
+    const counts = LAYER_ORDER.map((t) => {
+      const c = safe.filter((n) => n.type === t).length
+      return c > 0 ? `${c} ${t}` : null
+    }).filter(Boolean)
+    return `Brain visualization: ${safe.length} nodes (${counts.join(", ")})`
+  }, [nodes])
 
   return (
-    <div className={cn('relative', className)} aria-label={ariaLabel}>
-      <svg
-        viewBox={`0 0 ${SIZE} ${SIZE}`}
-        className="h-full w-full"
-        role="img"
-        aria-label={ariaLabel}
-      >
-        <defs>
-          <style>{`
-            @keyframes mn-pulse {
-              0%, 100% { r: 14; opacity: 1; }
-              50% { r: 18; opacity: 0.7; }
-            }
-          `}</style>
-        </defs>
-
-        {/* connections */}
-        {(connections ?? []).map((conn) => {
-          const from = posMap.get(conn.from);
-          const to = posMap.get(conn.to);
-          if (!from || !to) return null;
-          const opacity = 0.15 + conn.strength * 0.6;
-          return (
-            <line
-              key={`${conn.from}-${conn.to}`}
-              x1={from.x}
-              y1={from.y}
-              x2={to.x}
-              y2={to.y}
-              stroke="var(--muted-foreground)"
-              strokeWidth={1 + conn.strength * 2}
-              opacity={opacity}
-            />
-          );
-        })}
-
-        {/* nodes */}
-        {positions.map((pos) => {
-          const isActive = pos.node.active;
-          const isSel = pos.node.id === selected;
-          const color = NODE_COLORS[pos.node.type];
-          const r = pos.node.type === 'core' ? 18 : 14;
-          return (
-            <g
-              key={pos.node.id}
-              tabIndex={0}
-              role="button"
-              aria-label={`${pos.node.label} (${pos.node.type}${isActive ? ', active' : ''})`}
-              onClick={() => handleClick(pos.node)}
-              onKeyDown={(e) => handleKeyDown(e, pos.node)}
-              className="cursor-pointer focus-visible:outline-none"
-            >
-              {/* focus ring */}
-              {isSel && (
-                <circle
-                  cx={pos.x}
-                  cy={pos.y}
-                  r={r + 5}
-                  fill="none"
-                  stroke="var(--ring)"
-                  strokeWidth={2}
-                />
-              )}
-              <circle
-                cx={pos.x}
-                cy={pos.y}
-                r={r}
-                fill={color}
-                opacity={isActive ? 1 : 0.5}
-                style={isActive ? { animation: 'mn-pulse 2s ease-in-out infinite' } : undefined}
-              />
-              <text
-                x={pos.x}
-                y={pos.y + r + 14}
-                textAnchor="middle"
-                fill="var(--foreground)"
-                fontSize={10}
-                className="pointer-events-none select-none"
-              >
-                {pos.node.label}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
-
-      {/* legend */}
-      <div
-        className="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground"
-        aria-label="Node type legend"
-      >
+    <div ref={wrap} className={cn(brainWrap({ size }), className)} {...rest}>
+      <canvas
+        ref={cvs} role="img" aria-label={ariaDesc} className="block w-full"
+        onClick={handleClick} onMouseMove={handleMove} onMouseLeave={handleLeave}
+        tabIndex={0}
+      />
+      <div className="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground" aria-label="Node type legend">
         {LAYER_ORDER.map((type) => (
           <span key={type} className="flex items-center gap-1">
             <span
               className="inline-block h-2.5 w-2.5 rounded-full"
-              style={{ backgroundColor: NODE_COLORS[type] }}
+              style={{ backgroundColor: `hsl(var(${NODE_TOKENS[type][0]}))` }}
             />
             {type.charAt(0).toUpperCase() + type.slice(1)}
           </span>
         ))}
       </div>
-
-      {/* detail panel */}
-      {selectedNode && (
-        <div
-          className="mt-2 rounded-md border bg-card p-3 text-sm"
-          role="region"
-          aria-label={`Details for ${selectedNode.label}`}
-          aria-live="polite"
-        >
-          <p className="font-medium text-card-foreground">{selectedNode.label}</p>
-          <p className="text-xs text-muted-foreground">
-            Type: {selectedNode.type} | Status: {selectedNode.active ? 'Active' : 'Inactive'}
-          </p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Connections: {(connections ?? []).filter(
-              (c) => c.from === selectedNode.id || c.to === selectedNode.id,
-            ).length}
-          </p>
-        </div>
-      )}
     </div>
-  );
+  )
 }
+
+export { brainWrap }

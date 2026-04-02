@@ -142,3 +142,125 @@ export type {
   Touchpoint,
   Sentiment,
 } from "./mn-customer-journey-map";
+
+/* ── Plan 10052 — Design Parity Components ───────────────── */
+
+/* W1: Gauges & Instruments */
+export { MnHalfGauge, halfGaugeWrap } from "./mn-half-gauge";
+export type { MnHalfGaugeProps, HalfGaugeColorStop } from "./mn-half-gauge";
+
+export { MnProgressRing } from "./mn-progress-ring";
+export type { MnProgressRingProps } from "./mn-progress-ring";
+
+export { MnFlipCounter, counterVariants } from "./mn-flip-counter";
+export type { MnFlipCounterProps } from "./mn-flip-counter";
+
+/* W2: Network & Agents */
+export { MnNeuralNodes, neuralNodesWrap } from "./mn-neural-nodes";
+export type { MnNeuralNodesProps, NeuralNodeData, NeuralConnection, NeuralNodesController } from "./mn-neural-nodes";
+
+export { MnNetworkMessages, networkWrap } from "./mn-network-messages";
+export type { MnNetworkMessagesProps, NetNode, NetMessage, NetConnection, NetworkMessagesController } from "./mn-network-messages";
+
+export { MnAgentTrace } from "./mn-agent-trace";
+export type { MnAgentTraceProps, TraceStep, TraceStepStatus, TraceStepKind } from "./mn-agent-trace";
+
+export { MnTokenMeter, tokenMeterWrap } from "./mn-token-meter";
+export type { MnTokenMeterProps, TokenUsage } from "./mn-token-meter";
+
+export { MnStreamingText, streamingTextVariants } from "./mn-streaming-text";
+export type { MnStreamingTextProps } from "./mn-streaming-text";
+
+export { MnSocialGraph, socialGraphWrap } from "./mn-social-graph";
+export type { MnSocialGraphProps, SocialGraphNode, SocialGraphEdge } from "./mn-social-graph";
+
+/* W3: Strategy & Business */
+export { MnBcgMatrix, bcgMatrixWrap } from "./mn-bcg-matrix";
+export type { MnBcgMatrixProps, BCGItem } from "./mn-bcg-matrix";
+
+export { MnNineBoxMatrix } from "./mn-nine-box-matrix";
+export type { MnNineBoxMatrixProps, NineBoxItem } from "./mn-nine-box-matrix";
+
+export { MnRiskMatrix } from "./mn-risk-matrix";
+export type { MnRiskMatrixProps, RiskItem } from "./mn-risk-matrix";
+
+export { MnBusinessModelCanvas, blockVariants, itemVariants } from "./mn-business-model-canvas";
+export type { MnBusinessModelCanvasProps, BmcBlockId, BmcItem, BmcBlock } from "./mn-business-model-canvas";
+
+export { MnApprovalChain } from "./mn-approval-chain";
+export type { MnApprovalChainProps, ApprovalStep, ApprovalStatus } from "./mn-approval-chain";
+
+export { MnKpiScorecard } from "./mn-kpi-scorecard";
+export type { MnKpiScorecardProps, KpiRow, KpiStatus } from "./mn-kpi-scorecard";
+
+export { MnCohortGrid } from "./mn-cohort-grid";
+export type { MnCohortGridProps, CohortRow } from "./mn-cohort-grid";
+
+/* W4: Data Tables & Charts */
+export { MnAgentCostBreakdown } from "./mn-agent-cost-breakdown";
+export type { MnAgentCostBreakdownProps, AgentCostRow } from "./mn-agent-cost-breakdown";
+
+export { MnCostTimeline, costTimelineWrap } from "./mn-cost-timeline";
+export type { MnCostTimelineProps, CostSeries } from "./mn-cost-timeline";
+
+export { MnUserTable } from "./mn-user-table";
+export type { MnUserTableProps, AdminUser, UserRole, UserStatus, UserAction } from "./mn-user-table";
+
+export { MnBulletChart, bulletChartVariants } from "./mn-bullet-chart";
+export type { MnBulletChartProps, BulletRange } from "./mn-bullet-chart";
+
+export { MnConfidenceChart, confidenceChartVariants } from "./mn-confidence-chart";
+export type { MnConfidenceChartProps } from "./mn-confidence-chart";
+
+export { MnSourceCards } from "./mn-source-cards";
+export type { MnSourceCardsProps, SourceCard, SourceCardLayout } from "./mn-source-cards";
+
+/* W5: Controls, Forms & Navigation */
+export { MnNotificationCenter } from "./mn-notification-center";
+export type { MnNotificationCenterProps, MnNotification } from "./mn-notification-center";
+
+export { MnFilterPanel, filterPanelVariants } from "./mn-filter-panel";
+export type { MnFilterPanelProps, FilterSection, FilterOption, ActiveFilters, RangeConfig } from "./mn-filter-panel";
+
+export { MnSearchDrawer } from "./mn-search-drawer";
+export type { MnSearchDrawerProps, SearchDrawerResult, SearchDrawerSection } from "./mn-search-drawer";
+
+export { MnDateRangePicker } from "./mn-date-range-picker";
+export type { MnDateRangePickerProps } from "./mn-date-range-picker";
+
+export { MnSettingsPanel } from "./mn-settings-panel";
+export type { MnSettingsPanelProps, SettingsSection, SettingsItemType } from "./mn-settings-panel";
+
+export { MnAdminShell } from "./mn-admin-shell";
+export type { MnAdminShellProps, AdminShellNavItem, AdminShellBreadcrumb } from "./mn-admin-shell";
+
+export { MnLogin } from "./mn-login";
+export type { MnLoginProps } from "./mn-login";
+
+/* W6: Icons & Design Tokens */
+export { MnIcon, mnIconVariants, mnIconCatalog } from "./mn-icon";
+export type { MnIconProps, MnIconName, MnIconEntry } from "./mn-icon";
+
+export {
+  THEME_COLORS, SPACING, FONT_FAMILY, TEXT_SIZE,
+} from "./mn-design-tokens";
+export type { MnThemeId, MnSemanticColors, MnThemeColors } from "./mn-design-tokens";
+
+/* W7: Utilities & Runtime */
+export { MnVoiceInput, useVoiceInput } from "./mn-voice-input";
+export type { MnVoiceInputProps, VoiceState } from "./mn-voice-input";
+
+export { MnGridLayout, MnGridItem, gridVariants } from "./mn-grid-layout";
+export type { MnGridLayoutProps, MnGridItemProps } from "./mn-grid-layout";
+
+export { MnSectionCard, sectionCardVariants } from "./mn-section-card";
+export type { MnSectionCardProps } from "./mn-section-card";
+
+export { MnDashboardRenderer } from "./mn-dashboard-renderer";
+export type { MnDashboardRendererProps } from "./mn-dashboard-renderer";
+
+export {
+  transition, createLayoutContext, stateForViewport, canToggleSidebar,
+  DEFAULT_BREAKPOINTS,
+} from "./mn-layout-state-machine";
+export type { MnLayoutState, MnLayoutAction, MnLayoutContext } from "./mn-layout-state-machine";
