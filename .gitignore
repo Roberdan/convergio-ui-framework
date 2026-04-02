@@ -44,3 +44,5 @@ next-env.d.ts
 src-tauri/target/
 playwright-report/
 test-results/
+.claude/
+data/

@@ -1,13 +1,24 @@
 'use client';
 
+import { cva } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { useCallback, useId, useMemo } from 'react';
+
+// ── Types ────────────────────────────────────────────────────────
+export interface HeatmapColorScale {
+  /** CSS color or variable for the low end */
+  min: string;
+  /** CSS color or variable for the high end */
+  max: string;
+  /** Optional midpoint for diverging scales */
+  mid?: string;
+}
 
 export interface MnHeatmapProps {
   /** 2D grid of cells: rows x cols */
   data: { label: string; value: number }[][];
-  /** Min/max colors as CSS custom property names or raw values */
-  colorScale?: { min: string; max: string };
+  /** Color scale endpoints (supports CSS variables and raw colors) */
+  colorScale?: HeatmapColorScale;
   /** Show numeric values inside cells */
   showValues?: boolean;
   /** Accessible label for the heatmap */
@@ -15,26 +26,65 @@ export interface MnHeatmapProps {
   className?: string;
 }
 
-/** Interpolate between two colors via CSS opacity on the max color. */
+// ── CVA ──────────────────────────────────────────────────────────
+const cellVariants = cva([
+  'flex items-center justify-center rounded-md p-2 text-xs font-medium',
+  'transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
+]);
+
+const DEFAULT_SCALE: HeatmapColorScale = {
+  min: 'var(--muted)',
+  max: 'var(--primary)',
+};
+
+// ── Color interpolation via oklch color-mix ──────────────────────
+
+/**
+ * Blends between scale colors in the oklch perceptual color space.
+ * Supports a mid-point for diverging palettes (e.g. red-white-green).
+ */
+function interpolateColor(t: number, scale: HeatmapColorScale): string {
+  const clamped = Math.max(0, Math.min(1, t));
+  const pct = Math.round(clamped * 100);
+
+  if (scale.mid) {
+    if (clamped < 0.5) {
+      const subPct = Math.round(clamped * 2 * 100);
+      return `color-mix(in oklch, ${scale.mid} ${subPct}%, ${scale.min})`;
+    }
+    const subPct = Math.round((clamped - 0.5) * 2 * 100);
+    return `color-mix(in oklch, ${scale.max} ${subPct}%, ${scale.mid})`;
+  }
+
+  return `color-mix(in oklch, ${scale.max} ${pct}%, ${scale.min})`;
+}
+
 function cellStyle(
   value: number,
-  min: number,
-  max: number,
-  scale: { min: string; max: string },
+  lo: number,
+  hi: number,
+  scale: HeatmapColorScale,
 ): React.CSSProperties {
-  const range = max - min || 1;
-  const t = Math.max(0, Math.min(1, (value - min) / range));
+  const range = hi - lo || 1;
+  const t = Math.max(0, Math.min(1, (value - lo) / range));
+
   return {
-    backgroundColor: scale.max,
-    opacity: 0.15 + t * 0.85,
-    color: t > 0.5 ? 'var(--foreground)' : 'var(--muted-foreground)',
+    backgroundColor: interpolateColor(t, scale),
+    color:
+      t > 0.55
+        ? 'var(--mn-text, var(--foreground))'
+        : 'var(--mn-text-muted, var(--muted-foreground))',
   };
 }
 
+// ── Main component ───────────────────────────────────────────────
+
 /**
- * Grid-based heatmap with color intensity mapping.
+ * Grid-based heatmap with smooth oklch color interpolation.
  *
- * Uses CSS custom properties for theming. Keyboard navigable
+ * Blends between min/max (or min/mid/max for diverging scales)
+ * using the perceptually uniform oklch color space. Supports
+ * CSS variables for full theme compatibility. Keyboard navigable
  * with arrow keys inside the grid. Each cell has an aria-label.
  */
 export function MnHeatmap({
@@ -46,7 +96,7 @@ export function MnHeatmap({
 }: MnHeatmapProps) {
   const id = useId();
   const scale = useMemo(
-    () => colorScale ?? { min: 'var(--muted)', max: 'var(--primary)' },
+    () => colorScale ?? DEFAULT_SCALE,
     [colorScale],
   );
 
@@ -99,7 +149,7 @@ export function MnHeatmap({
             role="gridcell"
             tabIndex={ri === 0 && ci === 0 ? 0 : -1}
             aria-label={`${cell.label}: ${cell.value}`}
-            className="flex items-center justify-center rounded-md p-2 text-xs font-medium transition-opacity focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            className={cn(cellVariants())}
             style={cellStyle(cell.value, min, max, scale)}
             onKeyDown={(e) => handleKeyDown(e, ri, ci)}
           >
