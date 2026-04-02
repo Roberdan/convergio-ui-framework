@@ -65,37 +65,52 @@ navigation:
       items:
         - id: dashboard
           label: Dashboard
-          href: /
+          href: /dashboard
           icon: LayoutDashboard
 
-        - id: projects
-          label: Projects
-          href: /projects
-          icon: FolderKanban
+        - id: plans
+          label: Plans
+          href: /plans
+          icon: ClipboardList
 
-        - id: activity
-          label: Activity
-          href: /activity
-          icon: Activity
-
-    - label: Operations
-      items:
         - id: agents
           label: Agents
           href: /agents
           icon: Users
-          badge: 12
 
-        - id: security
-          label: Security
-          href: /security
-          icon: Shield
+        - id: ideas
+          label: Ideas
+          href: /ideas
+          icon: Lightbulb
 
-        - id: notifications
-          label: Notifications
-          href: /notifications
-          icon: Bell
-          badge: 3
+    - label: Infrastructure
+      items:
+        - id: orgs
+          label: Organizations
+          href: /orgs
+          icon: Building2
+
+        - id: mesh
+          label: Mesh
+          href: /mesh
+          icon: Network
+
+        - id: operations
+          label: Operations
+          href: /operations
+          icon: Activity
+
+    - label: Intelligence
+      items:
+        - id: chat
+          label: AI Chat
+          href: /chat
+          icon: MessageSquare
+
+        - id: strategy
+          label: Strategy
+          href: /strategy
+          icon: Target
 
     - label: System
       items:

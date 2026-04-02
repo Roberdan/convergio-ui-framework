@@ -15,12 +15,20 @@ class ApiClient {
     return url.toString();
   }
 
+  private authHeaders(): Record<string, string> {
+    const token = env.API_SECRET ?? "dev-local";
+    return {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+  }
+
   async get<T>(path: string, opts?: RequestOptions): Promise<T> {
     const { params, ...init } = opts ?? {};
     const res = await fetch(this.buildUrl(path, params), {
       method: "GET",
       ...init,
-      headers: { "Content-Type": "application/json", ...init?.headers },
+      headers: { ...this.authHeaders(), ...init?.headers },
     });
     if (!res.ok) throw new ApiError(res.status, await res.text());
     return res.json();
@@ -32,7 +40,7 @@ class ApiClient {
       method: "POST",
       body: body ? JSON.stringify(body) : undefined,
       ...init,
-      headers: { "Content-Type": "application/json", ...init?.headers },
+      headers: { ...this.authHeaders(), ...init?.headers },
     });
     if (!res.ok) throw new ApiError(res.status, await res.text());
     return res.json();
@@ -44,7 +52,7 @@ class ApiClient {
       method: "PUT",
       body: body ? JSON.stringify(body) : undefined,
       ...init,
-      headers: { "Content-Type": "application/json", ...init?.headers },
+      headers: { ...this.authHeaders(), ...init?.headers },
     });
     if (!res.ok) throw new ApiError(res.status, await res.text());
     return res.json();
@@ -55,7 +63,7 @@ class ApiClient {
     const res = await fetch(this.buildUrl(path, params), {
       method: "DELETE",
       ...init,
-      headers: { "Content-Type": "application/json", ...init?.headers },
+      headers: { ...this.authHeaders(), ...init?.headers },
     });
     if (!res.ok) throw new ApiError(res.status, await res.text());
     return res.json();
