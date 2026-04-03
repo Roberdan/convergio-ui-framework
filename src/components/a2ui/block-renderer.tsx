@@ -32,7 +32,7 @@ export function A2UIBlockRenderer({ block }: { block: A2UIBlock }) {
   }
 
   return (
-    <div className="relative group" role="status" aria-live="polite">
+    <div className="relative group rounded-lg border border-border bg-card/95 backdrop-blur-sm shadow-lg" role="status" aria-live="polite">
       <button
         type="button"
         onClick={handleDismiss}

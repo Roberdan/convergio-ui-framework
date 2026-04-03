@@ -69,7 +69,7 @@ export function AgentBrain({ tree, agents }: AgentBrainProps) {
 
   if (tree) {
     flattenTree(tree, null, neuralNodes, neuralConns);
-  } else if (agents.length > 0) {
+  } else if (agents && agents.length > 0) {
     const result = agentsToNodes(agents);
     neuralNodes = result.nodes;
     neuralConns = result.connections;
