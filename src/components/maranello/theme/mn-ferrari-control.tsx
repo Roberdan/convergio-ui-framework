@@ -111,10 +111,10 @@ function MnCruiseLever({ positions = ["OFF", "SET", "RES", "ACC"], value: contro
           ))}
         </div>
         <div ref={railRef}
-          className="relative h-[120px] w-3.5 rounded-[7px] bg-[linear-gradient(180deg,var(--mn-surface-raised),var(--mn-text-inverse,var(--mn-surface-sunken)))] shadow-[inset_0_1px_3px_rgba(0,0,0,.6)]">
+          className="relative h-[120px] w-3.5 rounded-[7px] bg-[linear-gradient(180deg,var(--mn-surface-raised),var(--mn-surface-sunken))] shadow-[inset_0_1px_3px_rgba(0,0,0,.6)]">
           {positions.map((_, i) => (
             <button key={i} aria-label={positions[i]}
-              className="absolute left-1/2 h-1 w-3 -translate-x-1/2 rounded-full bg-[var(--mn-text-muted)] opacity-30"
+              className="absolute left-1/2 h-1 w-3 -translate-x-1/2 rounded-full bg-[var(--mn-text-muted)] opacity-50"
               style={{ top: `${(i / (count - 1)) * 100}%` }} onClick={() => go(i)} />
           ))}
           <div role="slider" tabIndex={0} aria-label={label ?? "Cruise lever"} aria-valuemin={0}
@@ -151,7 +151,7 @@ function MnToggleLever({ pressed: controlled, defaultPressed = false, onChange, 
         onClick={toggle} onKeyDown={onKey}
         className={cn(
           "relative h-7 w-[52px] cursor-pointer rounded-full transition-shadow duration-150",
-          "bg-[linear-gradient(180deg,var(--mn-text-inverse,var(--mn-surface-sunken)),var(--mn-surface-raised))]",
+          "bg-[linear-gradient(180deg,var(--mn-surface-sunken),var(--mn-surface-raised))]",
           "shadow-[inset_0_2px_4px_rgba(0,0,0,.6),0_1px_0_rgba(255,255,255,.05)]",
           on && "shadow-[inset_0_2px_4px_rgba(0,0,0,.6),0_0_8px_rgba(255,199,44,.25)]",
         )}>

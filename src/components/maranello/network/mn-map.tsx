@@ -18,7 +18,11 @@ export interface MnMapProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const TAU = Math.PI * 2
 const SIZE_PX: Record<string, number> = { sm: 6, md: 10, lg: 14 }
-const COLORS: Record<MapMarkerColor, string> = { active: "#00A651", warning: "#FFC72C", danger: "#DC0000" }
+const COLOR_TOKENS: Record<MapMarkerColor, [string, string]> = {
+  active: ["--mn-signal-ok", "#00A651"],
+  warning: ["--mn-signal-warn", "#FFC72C"],
+  danger: ["--mn-signal-error", "#DC0000"],
+}
 
 /* Simplified continent outlines for canvas rendering */
 const LAND: [number, number][][] = [
@@ -80,9 +84,16 @@ export function MnMap({
     if (!ctx) return
     ctx.scale(dpr, dpr)
     const s = st.current, pad = 40
+    const cs = getComputedStyle(wrap)
+    const rv = (n: string, fb: string) => cs.getPropertyValue(n).trim() || fb
+    const resolvedColors: Record<MapMarkerColor, string> = {
+      active: rv(COLOR_TOKENS.active[0], COLOR_TOKENS.active[1]),
+      warning: rv(COLOR_TOKENS.warning[0], COLOR_TOKENS.warning[1]),
+      danger: rv(COLOR_TOKENS.danger[0], COLOR_TOKENS.danger[1]),
+    }
 
-    ctx.fillStyle = "#0d0d0d"; ctx.fillRect(0, 0, vw, vh)
-    ctx.fillStyle = "#333330"; ctx.strokeStyle = "#444440"; ctx.lineWidth = 0.8
+    ctx.fillStyle = rv("--mn-surface-sunken", "#0d0d0d"); ctx.fillRect(0, 0, vw, vh)
+    ctx.fillStyle = rv("--mn-surface", "#333330"); ctx.strokeStyle = rv("--mn-border-subtle", "#444440"); ctx.lineWidth = 0.8
     for (const cont of LAND) {
       ctx.beginPath()
       for (let i = 0; i < cont.length; i++) {
@@ -98,12 +109,12 @@ export function MnMap({
       if (p.x < -60 || p.x > vw + 60 || p.y < -60 || p.y > vh + 60) continue
       const rm: RenderedMarker = { ...m, _x: p.x, _y: p.y }
       rendered.push(rm)
-      const r = mRadius(rm), col = COLORS[m.color || "active"]
+      const r = mRadius(rm), col = resolvedColors[m.color || "active"]
       ctx.beginPath(); ctx.arc(p.x, p.y, r * 1.3, 0, TAU); ctx.fillStyle = rgba(col, 0.15); ctx.fill()
       const cr = (m.count && m.count > 1) ? r : r * 0.5
       ctx.beginPath(); ctx.arc(p.x, p.y, cr, 0, TAU); ctx.fillStyle = col; ctx.fill()
       if (m.count && m.count > 1) {
-        ctx.fillStyle = "#fff"; ctx.font = `600 ${Math.max(11, Math.round(cr * 0.85))}px sans-serif`
+        ctx.fillStyle = rv("--mn-text", "#fff"); ctx.font = `600 ${Math.max(11, Math.round(cr * 0.85))}px sans-serif`
         ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(String(m.count), p.x, p.y + 0.5)
       } else {
         ctx.beginPath(); ctx.arc(p.x, p.y, cr * 0.4, 0, TAU); ctx.fillStyle = "rgba(255,255,255,0.6)"; ctx.fill()
@@ -166,7 +177,7 @@ export function MnMap({
       <div className="absolute bottom-2 left-2 flex gap-2 text-[0.65rem]">
         {(["active", "warning", "danger"] as const).map((c) => (
           <span key={c} className="flex items-center gap-1">
-            <span className="inline-block h-2 w-2 rounded-full" style={{ background: COLORS[c] }} />
+            <span className="inline-block h-2 w-2 rounded-full" style={{ background: `var(${COLOR_TOKENS[c][0]}, ${COLOR_TOKENS[c][1]})` }} />
             <span className="capitalize text-[var(--mn-text-muted,#999)]">{c}</span>
           </span>
         ))}

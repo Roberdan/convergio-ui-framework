@@ -20,22 +20,24 @@ function cssv(el: Element, n: string, fb: string) {
 
 function readPalette(el: Element) {
   const g = (n: string, fb: string) => cssv(el, n, fb)
+  const theme = document.documentElement.getAttribute("data-theme") ?? "navy"
+  const lt = theme === "light"
   return {
-    bg: [g("--mn-surface", "#0d0d0d"), g("--mn-surface-raised", "#1a1a1a"), g("--mn-border", "#2c2c2c")],
-    border: g("--mn-border", "#3a3a3a"),
-    minorTick: g("--mn-text-muted", "#444"),
-    majStroke: g("--mn-text-secondary", "#aaa"),
-    majText: g("--mn-text-secondary", "#c8c8c8"),
-    capFill: g("--mn-surface-raised", "#2a2a2a"),
-    capStroke: g("--mn-text-muted", "#555"),
-    value: g("--mn-text", "#fafafa"),
-    unit: g("--mn-text-muted", "#888"),
-    subLabel: g("--mn-text-muted", "#666"),
+    bg: [g("--mn-surface", lt ? "#ffffff" : "#0d0d0d"), g("--mn-surface-raised", lt ? "#faf3e6" : "#1a1a1a"), g("--mn-border", lt ? "#d4c4a8" : "#2c2c2c")],
+    border: g("--mn-border", lt ? "#b8ad9a" : "#3a3a3a"),
+    minorTick: lt ? "#b8ad9a" : g("--mn-text-muted", "#444"),
+    majStroke: lt ? "#8a7e6a" : g("--mn-text-secondary", "#aaa"),
+    majText: lt ? "#4a3d1a" : g("--mn-text-secondary", "#c8c8c8"),
+    capFill: g("--mn-surface-raised", lt ? "#e8dcc8" : "#2a2a2a"),
+    capStroke: lt ? "#b8ad9a" : g("--mn-text-muted", "#555"),
+    value: lt ? "#1a1206" : g("--mn-text", "#fafafa"),
+    unit: lt ? "#5a4a28" : g("--mn-text-muted", "#888"),
+    subLabel: lt ? "#6b5a32" : g("--mn-text-muted", "#666"),
     needle: g("--mn-accent", "#DC0000"),
     arc: g("--mn-accent", "#DC0000"),
-    barBg: g("--mn-surface-raised", "#1a1a1a"),
-    barDim: g("--mn-text-muted", "#666"),
-    barBright: g("--mn-text-secondary", "#aaa"),
+    barBg: g("--mn-surface-raised", lt ? "#e8dcc8" : "#1a1a1a"),
+    barDim: lt ? "#6b5a32" : g("--mn-text-muted", "#666"),
+    barBright: lt ? "#4a3d1a" : g("--mn-text-secondary", "#aaa"),
     barStops: [g("--signal-danger", "#DC0000"), g("--signal-warning", "#FFC72C"), g("--signal-ok", "#00A651")],
   }
 }

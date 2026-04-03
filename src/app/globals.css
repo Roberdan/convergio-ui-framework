@@ -174,6 +174,7 @@
   --mn-surface-hover:   rgba(255, 255, 255, 0.05);
   --mn-text:            #e8eaf6;
   --mn-text-muted:      #8ea4c8;
+  --mn-text-secondary:  #b8c8e0;
   --mn-text-tertiary:   #a0b4d0;
   --mn-text-disabled:   #5a7099;
   --mn-text-inverse:    #0d1f43;
@@ -255,6 +256,7 @@
   --mn-surface-hover:   rgba(0,0,0,0.04);
   --mn-text:            #111111;
   --mn-text-muted:      #6b6b6b;
+  --mn-text-secondary:  #444444;
   --mn-text-tertiary:   #5a5550;
   --mn-text-disabled:   #7b7469;
   --mn-text-inverse:    #ffffff;
@@ -336,6 +338,7 @@
   --mn-surface-hover:   rgba(255,255,255,0.04);
   --mn-text:            #fafafa;
   --mn-text-muted:      #9e9e9e;
+  --mn-text-secondary:  #cccccc;
   --mn-text-tertiary:   #c8c8c8;
   --mn-text-disabled:   #7a7a7a;
   --mn-text-inverse:    #000000;
@@ -416,6 +419,7 @@
   --mn-surface-hover:   rgba(255,255,255,0.04);
   --mn-text:            #fafafa;
   --mn-text-muted:      #9e9e9e;
+  --mn-text-secondary:  #cccccc;
   --mn-text-tertiary:   #c8c8c8;
   --mn-text-disabled:   #7a7a7a;
   --mn-text-inverse:    #000000;
@@ -496,6 +500,7 @@
   --mn-surface-hover:   rgba(255, 255, 255, 0.05);
   --mn-text:            #e8eaf6;
   --mn-text-muted:      #8ea4c8;
+  --mn-text-secondary:  #b8c8e0;
   --mn-text-tertiary:   #a0b4d0;
   --mn-text-disabled:   #5a7099;
   --mn-text-inverse:    #0d1f43;

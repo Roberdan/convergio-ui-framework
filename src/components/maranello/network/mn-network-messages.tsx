@@ -53,8 +53,8 @@ function MnNetworkMessages({
   nodes, connections, width, height,
   particleTrail = true, glowEffect = true,
   onNodeClick, controllerRef,
-  nodeColor = "#4EA8DE", accentColor = "#FFC72C",
-  labelColor = "#f5f1e6", bgOverlay = "rgba(3,7,12,0.36)",
+  nodeColor, accentColor,
+  labelColor, bgOverlay = "rgba(3,7,12,0.36)",
   size = "fluid", className, ...rest
 }: MnNetworkMessagesProps) {
   const cvs = React.useRef<HTMLCanvasElement>(null)
@@ -96,13 +96,18 @@ function MnNetworkMessages({
       setupCanvas(canvas, w, h)
     }
 
+    const cssv = (n: string, fb: string) => getComputedStyle(host).getPropertyValue(n).trim() || fb
+    const rNodeColor = nodeColor || cssv("--mn-info", "#4EA8DE")
+    const rAccentColor = accentColor || cssv("--mn-accent", "#FFC72C")
+    const rLabelColor = labelColor || cssv("--mn-text", "#f5f1e6")
+
     const loop = (now: number) => {
       const dt = Math.min(48, lastTs.current ? now - lastTs.current : 16)
       lastTs.current = now
       drawFrame(
         ctx, canvas.clientWidth || 1, canvas.clientHeight || 1, dt,
         nodes, connections, msgsRef.current, flashesRef.current,
-        { trail: particleTrail, glow: glowEffect, nodeColor, accent: accentColor, label: labelColor, bg: bgOverlay },
+        { trail: particleTrail, glow: glowEffect, nodeColor: rNodeColor, accent: rAccentColor, label: rLabelColor, bg: bgOverlay },
       )
       raf.current = requestAnimationFrame(loop)
     }

@@ -98,8 +98,8 @@ function drawFrame(
   ctx.clearRect(0, 0, w, h)
   const posMap = new Map(positions.map((p) => [p.node.id, p]))
   const rc = (t: string, fb: string) => resolveColor(el, t, fb)
-  const fg = rc("--foreground", "#fafafa"), muted = rc("--muted-foreground", "#888")
-  const ringC = rc("--ring", "#888"), cardBg = rc("--card", "#1a1a1a"), borderC = rc("--border", "#3a3a3a")
+  const fg = rc("--mn-text", "#fafafa"), muted = rc("--mn-text-muted", "#888")
+  const ringC = rc("--mn-accent", "#FFC72C"), cardBg = rc("--mn-surface", "#1a1a1a"), borderC = rc("--mn-border", "#3a3a3a")
 
   for (const conn of connections) {
     const from = posMap.get(conn.from), to = posMap.get(conn.to)

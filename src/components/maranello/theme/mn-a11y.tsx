@@ -118,7 +118,7 @@ export function MnA11y({ className, ...props }: MnA11yProps) {
         className={cn(
           "flex h-[52px] w-[52px] cursor-pointer items-center justify-center rounded-full",
           "border-2 border-white/20 bg-[var(--mn-error)] text-white shadow-[0_4px_16px_rgba(220,0,0,.45),0_2px_8px_rgba(0,0,0,.4)]",
-          "transition-all duration-200 hover:scale-[1.07] hover:bg-[#b00000] hover:shadow-[0_6px_20px_rgba(220,0,0,.55),0_3px_10px_rgba(0,0,0,.4)]",
+          "transition-all duration-200 hover:scale-[1.07] hover:bg-[var(--mn-error-dark,#b00000)] hover:shadow-[0_6px_20px_rgba(220,0,0,.55),0_3px_10px_rgba(0,0,0,.4)]",
           "focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-[var(--mn-accent)]",
         )}
       >

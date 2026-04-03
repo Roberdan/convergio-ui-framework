@@ -85,8 +85,13 @@ function contrastColor(r: number, g: number, b: number): string {
 /*  Formatting                                                         */
 /* ------------------------------------------------------------------ */
 
-const COLOR_HIGH: RGB = parseHex('#00A651');
-const COLOR_LOW: RGB = parseHex('#DC0000');
+const FALLBACK_HIGH = '#00A651';
+const FALLBACK_LOW = '#DC0000';
+
+function resolveSignalHex(varName: string, fb: string): string {
+  if (typeof document === 'undefined') return fb;
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim() || fb;
+}
 
 function formatCell(retention: number, initialSize: number, absolute: boolean): string {
   if (absolute) return formatNumber(Math.round(initialSize * retention));
@@ -120,6 +125,8 @@ export function MnCohortGrid({
 }: MnCohortGridProps) {
   const id = useId();
   const periods = useMemo(() => maxPeriods(rows), [rows]);
+  const colorHigh = useMemo(() => parseHex(resolveSignalHex('--mn-signal-ok', FALLBACK_HIGH)), []);
+  const colorLow = useMemo(() => parseHex(resolveSignalHex('--mn-signal-error', FALLBACK_LOW)), []);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTableCellElement>, ri: number, ci: number) => {
@@ -193,7 +200,7 @@ export function MnCohortGrid({
                   );
                 }
 
-                const [r, g, b] = lerpRgb(COLOR_LOW, COLOR_HIGH, retention);
+                const [r, g, b] = lerpRgb(colorLow, colorHigh, retention);
                 const display = formatCell(retention, row.initialSize, showAbsolute);
 
                 return (

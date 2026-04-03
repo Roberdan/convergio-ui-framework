@@ -14,9 +14,13 @@ const halfGaugeWrap = cva("relative inline-block", {
 })
 
 /* ── Palette (CSS-var aware) ───────────────────────────────── */
+function cssv(name: string, fb: string): string {
+  if (typeof document === "undefined") return fb
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fb
+}
+
 const P = {
   track: "rgba(200,200,200,0.08)",
-  minMax: "#616161",
 }
 
 export interface HalfGaugeColorStop {
@@ -103,7 +107,7 @@ function render(
   }
 
   // Min / max labels
-  ctx.fillStyle = P.minMax
+  ctx.fillStyle = cssv("--mn-text-disabled", "#616161")
   const resolvedFont = typeof document !== "undefined"
     ? getComputedStyle(document.body).getPropertyValue("--font-display").trim() || "Outfit" : "Outfit"
   ctx.font = `500 ${radius * 0.1}px ${resolvedFont}, sans-serif`; ctx.textAlign = "center"
@@ -122,7 +126,7 @@ function render(
   // Label above value
   if (label) {
     ctx.font = `600 ${Math.max(8, radius * 0.12)}px ${resolvedFont}, sans-serif`
-    ctx.fillStyle = "#666"; ctx.fillText(label, cx, cy - radius * 0.55)
+    ctx.fillStyle = cssv("--mn-text-muted", "#666"); ctx.fillText(label, cx, cy - radius * 0.55)
   }
 }
 

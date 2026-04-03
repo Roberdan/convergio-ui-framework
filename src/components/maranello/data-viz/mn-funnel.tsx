@@ -119,7 +119,7 @@ export function MnFunnel({ data, animate = true, size, onStageClick, className, 
   const total = data.total || pipe.reduce((a, s) => a + s.count, 0)
   const reach = cumReach(pipe.map((s) => s.count))
   const svgH = PAD * 2 + rows * BAR_H + (rows - 1) * GAP
-  const hc = resColor(data.onHold?.color, "#ea580c"), wc = resColor(data.withdrawn?.color, "#666666")
+  const hc = resColor(data.onHold?.color, "var(--mn-warning, #ea580c)"), wc = resColor(data.withdrawn?.color, "var(--mn-text-muted, #666666)")
 
   return (
     <div {...props} className={cn(funnelVariants({ size }), className)} role="img" aria-label="Pipeline funnel">
