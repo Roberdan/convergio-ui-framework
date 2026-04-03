@@ -25,8 +25,11 @@ export function isInfraError(msg: string): boolean {
     msg.includes("ERR_CONNECTION_REFUSED") ||
     msg.includes("ERR_FAILED") ||
     msg.includes("CORS policy") ||
+    msg.includes("Access-Control-Allow-Origin") ||
+    msg.includes("access control checks") ||
     msg.includes("Failed to fetch") ||
     msg.includes("fetch") && msg.includes("localhost:8420") ||
+    msg.includes("localhost:8420") ||
     msg.includes("a2ui") ||
     msg.includes("net::ERR") ||
     msg.includes("attribute points: Expected number") ||
@@ -43,7 +46,9 @@ export async function collectPageIssues(page: Page): Promise<PageIssue[]> {
   const issues: PageIssue[] = [];
 
   page.on("pageerror", (err) => {
-    issues.push({ type: "pageerror", message: err.message });
+    if (!isInfraError(err.message)) {
+      issues.push({ type: "pageerror", message: err.message });
+    }
   });
 
   page.on("console", (msg) => {

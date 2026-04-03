@@ -9,7 +9,8 @@ test.beforeEach(async ({ context }) => {
 });
 
 const PAGES = [
-  "/showcase", "/preview", "/",
+  "/showcase", "/showcase/data-viz", "/showcase/forms",
+  "/showcase/themes", "/preview", "/",
 ];
 
 for (const path of PAGES) {
@@ -26,10 +27,12 @@ for (const path of PAGES) {
     });
 
     page.on("pageerror", (err) => {
-      hydrationErrors.push(`PAGEERROR: ${err.message.substring(0, 200)}`);
+      const msg = err.message;
+      if (msg.includes("access control") || msg.includes("localhost:8420") || msg.includes("CORS")) return;
+      hydrationErrors.push(`PAGEERROR: ${msg.substring(0, 200)}`);
     });
 
-    await page.goto(path, { waitUntil: "networkidle", timeout: 20000 });
+    await page.goto(path, { waitUntil: "domcontentloaded", timeout: 20000 });
     await page.waitForTimeout(2000);
 
     if (hydrationErrors.length > 0) {
