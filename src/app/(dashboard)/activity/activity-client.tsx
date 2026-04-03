@@ -11,6 +11,7 @@ import {
   MnSpinner,
 } from "@/components/maranello";
 import type { ActivityItem, StripMetric } from "@/components/maranello";
+import { formatNumber } from "@/components/maranello/mn-format";
 
 interface ActivityClientProps {
   initialEvents: CoordinatorEvent[] | null;
@@ -19,18 +20,13 @@ interface ActivityClientProps {
 
 function toActivityItem(e: CoordinatorEvent): ActivityItem {
   return {
-    agent: e.agent,
-    action: e.action,
-    target: e.target,
-    timestamp: e.timestamp,
-    priority: e.priority,
+    agent: e.source_node ?? "unknown",
+    action: e.event_type ?? "event",
+    target: typeof e.payload === "object" && e.payload !== null
+      ? JSON.stringify(e.payload).slice(0, 80)
+      : String(e.payload ?? ""),
+    timestamp: e.handled_at ?? new Date().toISOString(),
   };
-}
-
-function formatUptime(seconds: number): string {
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  return h > 0 ? `${h}h ${m}m` : `${m}m`;
 }
 
 export function ActivityClient({
@@ -58,14 +54,12 @@ export function ActivityClient({
     if (!coordStatus) return [];
     return [
       {
-        label: "State",
-        value: coordStatus.state,
-        trend: coordStatus.state === "running" ? "up" : "down",
+        label: "Running",
+        value: coordStatus.running ? "Yes" : "No",
+        trend: coordStatus.running ? "up" as const : "down" as const,
       },
-      { label: "Active Agents", value: coordStatus.activeAgents },
-      { label: "Queued", value: coordStatus.queuedTasks },
-      { label: "Completed Today", value: coordStatus.completedToday, trend: "up" },
-      { label: "Uptime", value: formatUptime(coordStatus.uptime) },
+      { label: "PID", value: coordStatus.pid ?? "—" },
+      { label: "Pending Events", value: formatNumber(coordStatus.pending_events ?? 0) },
     ];
   }, [coordStatus]);
 
@@ -81,11 +75,7 @@ export function ActivityClient({
     );
   }
 
-  const stateBadgeTone = coordStatus?.state === "running"
-    ? "success"
-    : coordStatus?.state === "paused"
-      ? "warning"
-      : "danger";
+  const stateBadgeTone = coordStatus?.running ? "success" : "danger";
 
   return (
     <div className="space-y-6">
@@ -98,8 +88,8 @@ export function ActivityClient({
         </div>
         {coordStatus && (
           <MnBadge
-            tone={stateBadgeTone as "success" | "warning" | "danger"}
-            label={coordStatus.state}
+            tone={stateBadgeTone as "success" | "danger"}
+            label={coordStatus.running ? "running" : "stopped"}
           />
         )}
       </div>

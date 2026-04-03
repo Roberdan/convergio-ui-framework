@@ -64,7 +64,7 @@ export type {
 } from "./types-common";
 
 export type {
-  PolicyRule,
+  PolicyEntry,
   PolicyStatus,
   ValidationItem,
   ValidationVerdict,
@@ -85,15 +85,18 @@ export type {
 } from "./types-workspaces";
 
 export type {
-  MeshSyncStatus,
-  MeshDiagnosticEntry,
-  MeshDiagnostics,
-  MeshNodeTraffic,
+  MeshHeartbeat,
+  MeshSyncPeer,
   MeshTraffic,
+  MeshSyncEventCount,
+  MeshSyncLatency,
+  MeshSyncStatus,
+  MeshDiagnostics,
 } from "./types-mesh";
 
 export type {
   Worker,
+  WorkersResponse,
   WorkersStatus,
   RollbackSnapshot,
   RunLogEntry,

@@ -3,19 +3,23 @@
 import { useApiQuery } from "@/hooks";
 import { meshApi } from "@/lib/api";
 import type { MeshSyncStatus } from "@/lib/api";
-import { MnSystemStatus } from "@/components/maranello";
-import type { Service, Incident } from "@/components/maranello";
-
-const SYNC_STATE_LABEL: Record<string, string> = {
-  synced: "Fully Synced",
-  syncing: "Syncing…",
-  diverged: "Diverged",
-  offline: "Offline",
-};
+import { MnSystemStatus, MnDataTable } from "@/components/maranello";
+import type { Service, DataTableColumn } from "@/components/maranello";
+import { formatNumber } from "@/components/maranello/mn-format";
 
 interface MeshSyncSectionProps {
   initial: MeshSyncStatus | null;
 }
+
+type EventRow = Record<string, unknown> & {
+  status: string;
+  count: string;
+};
+
+const eventColumns: DataTableColumn<EventRow>[] = [
+  { key: "status", label: "Status", sortable: true },
+  { key: "count", label: "Count", sortable: true, align: "right" },
+];
 
 export function MeshSyncSection({ initial }: MeshSyncSectionProps) {
   const { data } = useApiQuery(
@@ -26,49 +30,57 @@ export function MeshSyncSection({ initial }: MeshSyncSectionProps) {
   const sync = data ?? initial;
   if (!sync) return null;
 
+  const latency = sync.latency;
+
   const services: Service[] = [
     {
-      id: "crdt-state",
-      name: "CRDT State",
-      status: sync.state === "synced" ? "operational"
-        : sync.state === "syncing" ? "degraded"
+      id: "sync-p50",
+      name: "DB Sync P50",
+      status: (latency?.db_sync_p50_ms ?? 0) < 100 ? "operational"
+        : (latency?.db_sync_p50_ms ?? 0) < 500 ? "degraded"
         : "outage",
-      latencyMs: sync.pendingOps,
+      latencyMs: latency?.db_sync_p50_ms ?? 0,
     },
     {
-      id: "pending-ops",
-      name: "Pending Operations",
-      status: sync.pendingOps === 0 ? "operational"
-        : sync.pendingOps < 10 ? "degraded"
+      id: "sync-p99",
+      name: "DB Sync P99",
+      status: (latency?.db_sync_p99_ms ?? 0) < 500 ? "operational"
+        : (latency?.db_sync_p99_ms ?? 0) < 1000 ? "degraded"
         : "outage",
-    },
-    {
-      id: "conflict-resolution",
-      name: "Conflict Resolution",
-      status: "operational",
+      latencyMs: latency?.db_sync_p99_ms ?? 0,
     },
   ];
 
-  const incidents: Incident[] = sync.state === "diverged"
-    ? [{
-        id: "diverged",
-        title: "CRDT state diverged — manual reconciliation may be needed",
-        date: sync.lastSync,
-        severity: "outage",
-      }]
-    : [];
+  const eventRows: EventRow[] = (sync.events ?? []).map((e) => ({
+    status: e.status,
+    count: formatNumber(e.count ?? 0),
+  }));
 
   return (
-    <div className="rounded-lg border border-border bg-card p-4">
-      <h2 className="text-sm font-heading uppercase tracking-wider text-muted-foreground mb-4">
-        Sync Status — {SYNC_STATE_LABEL[sync.state] ?? sync.state}
-      </h2>
-      <MnSystemStatus
-        services={services}
-        incidents={incidents}
-        version={`${sync.conflictsResolved} conflicts resolved`}
-        environment={`Last sync: ${new Date(sync.lastSync).toLocaleTimeString()}`}
-      />
+    <div className="space-y-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <h2 className="text-sm font-heading uppercase tracking-wider text-muted-foreground mb-4">
+          Sync Latency
+        </h2>
+        <MnSystemStatus
+          services={services}
+          environment={`P50: ${formatNumber(latency?.db_sync_p50_ms ?? 0)}ms · P99: ${formatNumber(latency?.db_sync_p99_ms ?? 0)}ms`}
+        />
+      </div>
+
+      {eventRows.length > 0 && (
+        <div className="rounded-lg border border-border bg-card p-4">
+          <h2 className="text-sm font-heading uppercase tracking-wider text-muted-foreground mb-4">
+            Sync Events
+          </h2>
+          <MnDataTable
+            columns={eventColumns}
+            data={eventRows}
+            compact
+            emptyMessage="No sync events"
+          />
+        </div>
+      )}
     </div>
   );
 }

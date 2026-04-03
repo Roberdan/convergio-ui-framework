@@ -126,7 +126,7 @@ export function MeshClient({
 
       <MeshSyncSection initial={initialSyncStatus} />
 
-      <MeshTrafficSection initialTraffic={initialTraffic} topology={topo} />
+      <MeshTrafficSection initialTraffic={initialTraffic} />
 
       <MeshDiagnosticsSection initial={initialDiagnostics} />
 

@@ -3,6 +3,7 @@
 import type { AgentHistoryEntry } from "@/lib/api";
 import { MnActivityFeed } from "@/components/maranello";
 import type { ActivityItem } from "@/components/maranello";
+import { formatNumber } from "@/components/maranello/mn-format";
 
 interface AgentHistoryProps {
   history: AgentHistoryEntry[] | null;
@@ -27,7 +28,7 @@ function formatAction(entry: AgentHistoryEntry): string {
     parts.push(`(${(entry.durationMs / 1000).toFixed(1)}s)`);
   }
   if (entry.tokensUsed != null) {
-    parts.push(`· ${entry.tokensUsed.toLocaleString()} tokens`);
+    parts.push(`· ${formatNumber(entry.tokensUsed)} tokens`);
   }
   if (entry.cost != null && entry.cost > 0) {
     parts.push(`· $${entry.cost.toFixed(4)}`);

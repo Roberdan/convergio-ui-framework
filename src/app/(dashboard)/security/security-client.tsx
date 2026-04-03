@@ -14,16 +14,12 @@ import {
   MnTabList,
   MnTab,
   MnTabPanel,
-  MnRiskMatrix,
-  MnSystemStatus,
   MnDataTable,
   MnBadge,
   MnAuditLog,
   MnSpinner,
 } from "@/components/maranello";
 import type { DataTableColumn } from "@/components/maranello";
-import type { RiskItem } from "@/components/maranello/mn-risk-matrix";
-import type { Service } from "@/components/maranello/mn-system-status";
 import type { StripMetric } from "@/components/maranello/mn-dashboard-strip";
 import { Shield } from "lucide-react";
 
@@ -102,27 +98,14 @@ export function SecurityClient({
     );
   }
 
+  const policyCount = p?.policies?.length ?? 0;
+
   const metrics: StripMetric[] = [
-    { label: "Compliance", value: `${p?.compliancePercent ?? 0}%` },
-    { label: "Active Rules", value: String(p?.rules?.filter((r) => r.status === "active").length ?? 0) },
+    { label: "Policies", value: String(policyCount) },
+    { label: "Status", value: p?.ok ? "OK" : "—" },
     { label: "Pending Validations", value: String(q?.filter((v) => v.status === "pending").length ?? 0) },
     { label: "Audit Entries", value: String(a?.length ?? 0) },
   ];
-
-  const riskItems: RiskItem[] = (p?.rules ?? []).map((r, i) => ({
-    id: `rule-${i}`,
-    label: r.name,
-    probability: (r.status === "warning" ? 4 : r.status === "standby" ? 2 : 1) as 1 | 2 | 3 | 4 | 5,
-    impact: (r.status === "warning" ? 4 : r.status === "standby" ? 3 : 1) as 1 | 2 | 3 | 4 | 5,
-    color: r.status === "warning" ? "var(--color-danger)" : undefined,
-  }));
-
-  const services: Service[] = (p?.rules ?? []).map((r) => ({
-    id: r.name,
-    name: r.name,
-    status: r.status === "active" ? "operational" as const
-      : r.status === "warning" ? "degraded" as const : "operational" as const,
-  }));
 
   const rows: QueueRow[] = (q ?? []).map((v) => ({
     taskId: v.taskId,
@@ -163,15 +146,17 @@ export function SecurityClient({
         </MnTabList>
 
         <MnTabPanel value="overview">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
-            <div className="rounded-lg border border-border bg-card p-4">
-              <h3 className="mb-3">Risk Assessment</h3>
-              <MnRiskMatrix items={riskItems} ariaLabel="Security risk matrix" />
-            </div>
-            <div className="rounded-lg border border-border bg-card p-4">
-              <h3 className="mb-3">Service Security Status</h3>
-              <MnSystemStatus services={services} />
-            </div>
+          <div className="mt-4 rounded-lg border border-border bg-card p-4">
+            <h3 className="mb-3">Policies</h3>
+            {policyCount > 0 ? (
+              <pre className="text-xs text-muted-foreground overflow-auto max-h-64">
+                {JSON.stringify(p?.policies, null, 2)}
+              </pre>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                No policies configured.
+              </p>
+            )}
           </div>
         </MnTabPanel>
 

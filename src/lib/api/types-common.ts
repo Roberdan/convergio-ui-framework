@@ -216,21 +216,16 @@ export interface CreateIdeaRequest {
 
 export interface CoordinatorEvent {
   id: string;
-  agent: string;
-  action: string;
-  target: string;
-  timestamp: string;
-  priority?: 'low' | 'normal' | 'high' | 'critical';
-  type?: 'success' | 'error' | 'warning' | 'info';
+  event_type: string;
+  source_node: string;
+  payload: Record<string, unknown>;
+  handled_at: string;
 }
 
 export interface CoordinatorStatus {
-  state: 'running' | 'paused' | 'stopped';
-  activeAgents: number;
-  queuedTasks: number;
-  completedToday: number;
-  uptime: number;
-  lastEvent?: string;
+  running: boolean;
+  pid: string;
+  pending_events: number;
 }
 
 /* ── Paginated Response ── */

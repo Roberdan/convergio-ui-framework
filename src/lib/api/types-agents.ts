@@ -13,9 +13,9 @@ export interface AgentCatalogEntry {
   id: string;
   name: string;
   description: string;
-  capabilities: string[];
-  model: string;
-  provider: string;
+  capabilities?: string[];
+  model?: string;
+  provider?: string;
 }
 
 export interface AgentSession {

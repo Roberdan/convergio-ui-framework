@@ -50,8 +50,8 @@ export function AgentCatalog({ catalog }: AgentCatalogProps) {
     id: entry.id,
     name: entry.name,
     description: entry.description,
-    provider: entry.provider,
-    model: entry.model,
+    provider: entry.provider ?? "—",
+    model: entry.model ?? "—",
     capabilities: (entry.capabilities ?? []).join(", "),
   }));
 

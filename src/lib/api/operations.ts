@@ -5,6 +5,7 @@ import type {
   AuditLogEntry,
   Notification,
   Worker,
+  WorkersResponse,
   WorkersStatus,
   RollbackSnapshot,
   RunDetail,
@@ -27,7 +28,11 @@ export async function getNotifications(): Promise<Notification[]> {
 }
 
 export async function getWorkers(): Promise<Worker[]> {
-  return api.get<Worker[]>("/api/workers");
+  const data = await api.get<WorkersResponse | Worker[]>("/api/workers");
+  if (Array.isArray(data)) return data;
+  return Array.isArray((data as WorkersResponse)?.workers)
+    ? (data as WorkersResponse).workers
+    : [];
 }
 
 export async function getWorkersStatus(): Promise<WorkersStatus> {

@@ -2,13 +2,21 @@
 
 export interface Worker {
   id: string;
-  name: string;
-  status: 'active' | 'idle' | 'offline' | 'error';
-  currentTask?: string;
-  uptime: number;
-  cpu: number;
-  memory: number;
-  lastHeartbeat: string;
+  agent_id: string;
+  agent_type: string;
+  host: string;
+  model: string;
+  status: string;
+  started_at: string;
+  plan_id?: string;
+  task_db_id?: string;
+  description?: string;
+}
+
+export interface WorkersResponse {
+  workers: Worker[];
+  count: number;
+  ok: boolean;
 }
 
 export interface WorkersStatus {

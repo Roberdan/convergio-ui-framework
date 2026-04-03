@@ -1,105 +1,99 @@
 "use client";
 
-import { useMemo } from "react";
 import { useApiQuery } from "@/hooks";
 import { meshApi } from "@/lib/api";
-import type { MeshTraffic, MeshTopology } from "@/lib/api";
-import { MnHeatmap, MnDataTable } from "@/components/maranello";
+import type { MeshTraffic } from "@/lib/api";
+import { MnDataTable } from "@/components/maranello";
 import type { DataTableColumn } from "@/components/maranello";
+import { formatNumber } from "@/components/maranello/mn-format";
 
 interface MeshTrafficSectionProps {
   initialTraffic: MeshTraffic | null;
-  topology: MeshTopology | null;
 }
 
-type TrafficRow = Record<string, unknown> & {
-  nodeId: string;
-  label: string;
-  bytesIn: string;
-  bytesOut: string;
-  latencyMs: number;
-  connections: number;
+type HeartbeatRow = Record<string, unknown> & {
+  peer: string;
+  lastSeen: string;
 };
 
-const trafficColumns: DataTableColumn<TrafficRow>[] = [
-  { key: "label", label: "Node", sortable: true },
-  { key: "bytesIn", label: "In", sortable: true, align: "right" },
-  { key: "bytesOut", label: "Out", sortable: true, align: "right" },
-  { key: "latencyMs", label: "Latency (ms)", sortable: true, align: "right" },
-  { key: "connections", label: "Conns", sortable: true, align: "right" },
+type SyncPeerRow = Record<string, unknown> & {
+  peer: string;
+  active: string;
+  lastSync: string;
+  latencyMs: string;
+  totalSent: string;
+  totalReceived: string;
+  totalApplied: string;
+};
+
+const heartbeatColumns: DataTableColumn<HeartbeatRow>[] = [
+  { key: "peer", label: "Peer", sortable: true },
+  { key: "lastSeen", label: "Last Seen", sortable: true, align: "right" },
 ];
 
-function formatBytes(b: number): string {
-  if (b < 1024) return `${b} B`;
-  if (b < 1024 * 1024) return `${(b / 1024).toFixed(1)} KB`;
-  return `${(b / (1024 * 1024)).toFixed(1)} MB`;
+const syncPeerColumns: DataTableColumn<SyncPeerRow>[] = [
+  { key: "peer", label: "Peer", sortable: true },
+  { key: "active", label: "Active", sortable: true },
+  { key: "lastSync", label: "Last Sync", sortable: true, align: "right" },
+  { key: "latencyMs", label: "Latency (ms)", sortable: true, align: "right" },
+  { key: "totalSent", label: "Sent", sortable: true, align: "right" },
+  { key: "totalReceived", label: "Received", sortable: true, align: "right" },
+  { key: "totalApplied", label: "Applied", sortable: true, align: "right" },
+];
+
+function formatSecondsAgo(s: number): string {
+  if (s < 60) return `${Math.round(s)}s ago`;
+  if (s < 3600) return `${Math.round(s / 60)}m ago`;
+  return `${Math.round(s / 3600)}h ago`;
 }
 
-export function MeshTrafficSection({ initialTraffic, topology }: MeshTrafficSectionProps) {
+export function MeshTrafficSection({ initialTraffic }: MeshTrafficSectionProps) {
   const { data } = useApiQuery(
     () => meshApi.getMeshTraffic(),
     { pollInterval: 15000 },
   );
 
   const traffic = data ?? initialTraffic;
-
-  const heatmapData = useMemo(() => {
-    if (!traffic?.nodeTraffic?.length || !topology?.nodes?.length) return null;
-    const nodes = topology.nodes;
-    const trafficMap = new Map(traffic.nodeTraffic.map((n) => [n.nodeId, n]));
-
-    return nodes.map((row) => {
-      return nodes.map((col) => {
-        if (row.id === col.id) return { label: "—", value: 0 };
-        const edge = topology.edges.find(
-          (e) => (e.from === row.id && e.to === col.id) ||
-                 (e.from === col.id && e.to === row.id),
-        );
-        const latency = edge?.latency ?? 0;
-        const nodeTraffic = trafficMap.get(row.id);
-        return {
-          label: `${row.label}→${col.label}: ${latency}ms`,
-          value: nodeTraffic ? latency : 0,
-        };
-      });
-    });
-  }, [traffic, topology]);
-
   if (!traffic) return null;
 
-  const rows: TrafficRow[] = traffic.nodeTraffic.map((n) => ({
-    nodeId: n.nodeId,
-    label: n.label,
-    bytesIn: formatBytes(n.bytesIn),
-    bytesOut: formatBytes(n.bytesOut),
-    latencyMs: n.latencyMs,
-    connections: n.connections,
+  const heartbeatRows: HeartbeatRow[] = (traffic.heartbeats ?? []).map((h) => ({
+    peer: h.peer,
+    lastSeen: formatSecondsAgo(h.last_seen_ago_s ?? 0),
+  }));
+
+  const syncPeerRows: SyncPeerRow[] = (traffic.sync_peers ?? []).map((sp) => ({
+    peer: sp.peer,
+    active: sp.active ? "Yes" : "No",
+    lastSync: formatSecondsAgo(sp.last_sync_ago_s ?? 0),
+    latencyMs: formatNumber(sp.latency_ms ?? 0),
+    totalSent: formatNumber(sp.total_sent ?? 0),
+    totalReceived: formatNumber(sp.total_received ?? 0),
+    totalApplied: formatNumber(sp.total_applied ?? 0),
   }));
 
   return (
     <div className="space-y-6">
-      {heatmapData && (
-        <div className="rounded-lg border border-border bg-card p-4">
-          <h2 className="text-sm font-heading uppercase tracking-wider text-muted-foreground mb-4">
-            Latency Heatmap
-          </h2>
-          <MnHeatmap
-            data={heatmapData}
-            showValues
-            ariaLabel="Node-to-node latency heatmap"
-          />
-        </div>
-      )}
+      <div className="rounded-lg border border-border bg-card p-4">
+        <h2 className="text-sm font-heading uppercase tracking-wider text-muted-foreground mb-4">
+          Heartbeats{traffic.local_node ? ` (${traffic.local_node})` : ""}
+        </h2>
+        <MnDataTable
+          columns={heartbeatColumns}
+          data={heartbeatRows}
+          compact
+          emptyMessage="No heartbeat data"
+        />
+      </div>
 
       <div className="rounded-lg border border-border bg-card p-4">
         <h2 className="text-sm font-heading uppercase tracking-wider text-muted-foreground mb-4">
-          Node Traffic
+          Sync Peers
         </h2>
         <MnDataTable
-          columns={trafficColumns}
-          data={rows}
+          columns={syncPeerColumns}
+          data={syncPeerRows}
           compact
-          emptyMessage="No traffic data"
+          emptyMessage="No sync peer data"
         />
       </div>
     </div>

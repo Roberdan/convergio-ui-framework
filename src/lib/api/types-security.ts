@@ -2,17 +2,13 @@
 
 /* ── Policy ── */
 
-export interface PolicyRule {
-  name: string;
-  status: "active" | "warning" | "standby" | "disabled";
-  lastChecked: string;
-  description?: string;
+export interface PolicyEntry {
+  [key: string]: unknown;
 }
 
 export interface PolicyStatus {
-  compliancePercent: number;
-  rules: PolicyRule[];
-  lastEvaluated: string;
+  policies: PolicyEntry[];
+  ok: boolean;
 }
 
 /* ── Validation ── */

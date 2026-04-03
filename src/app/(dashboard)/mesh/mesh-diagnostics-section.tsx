@@ -5,9 +5,20 @@ import { meshApi } from "@/lib/api";
 import type { MeshDiagnostics } from "@/lib/api";
 import { MnSystemStatus, MnBinnacle } from "@/components/maranello";
 import type { Service, BinnacleEntry } from "@/components/maranello";
+import { formatNumber } from "@/components/maranello/mn-format";
 
 interface MeshDiagnosticsSectionProps {
   initial: MeshDiagnostics | null;
+}
+
+function formatUptime(seconds: number): string {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  if (h > 24) {
+    const d = Math.floor(h / 24);
+    return `${d}d ${h % 24}h`;
+  }
+  return h > 0 ? `${h}h ${m}m` : `${m}m`;
 }
 
 export function MeshDiagnosticsSection({ initial }: MeshDiagnosticsSectionProps) {
@@ -19,44 +30,63 @@ export function MeshDiagnosticsSection({ initial }: MeshDiagnosticsSectionProps)
   const diag = data ?? initial;
   if (!diag) return null;
 
-  const services: Service[] = diag.entries.map((e) => ({
-    id: e.id,
-    name: `[${e.category}] ${e.message.slice(0, 60)}`,
-    status: e.severity === "ok" ? "operational" as const
-      : e.severity === "warning" ? "degraded" as const
-      : "outage" as const,
-  }));
+  const overallStatus = diag.ok
+    ? (diag.online_peers ?? 0) === (diag.total_peers ?? 0)
+      ? "healthy"
+      : "degraded"
+    : "unhealthy";
 
-  const binnacleEntries: BinnacleEntry[] = diag.entries.map((e) => ({
-    timestamp: e.timestamp,
-    severity: e.severity === "ok" ? "info" as const
-      : e.severity === "warning" ? "warning" as const
-      : "critical" as const,
-    source: e.nodeId ?? e.category,
-    message: e.message,
+  const services: Service[] = [
+    {
+      id: "peers",
+      name: `Peers: ${formatNumber(diag.online_peers ?? 0)} / ${formatNumber(diag.total_peers ?? 0)}`,
+      status: (diag.online_peers ?? 0) === (diag.total_peers ?? 0)
+        ? "operational"
+        : (diag.online_peers ?? 0) > 0
+          ? "degraded"
+          : "outage",
+    },
+    {
+      id: "uptime",
+      name: `Uptime: ${formatUptime(diag.uptime_secs ?? 0)}`,
+      status: "operational",
+    },
+    {
+      id: "version",
+      name: `Version: ${diag.version ?? "unknown"}`,
+      status: "operational",
+    },
+  ];
+
+  const warningEntries: BinnacleEntry[] = (diag.warnings ?? []).map((w) => ({
+    timestamp: new Date().toISOString(),
+    severity: "warning" as const,
+    source: "mesh",
+    message: typeof w === "string" ? w : String(w),
   }));
 
   return (
     <div className="space-y-6">
       <div className="rounded-lg border border-border bg-card p-4">
         <h2 className="text-sm font-heading uppercase tracking-wider text-muted-foreground mb-4">
-          Diagnostics — {diag.overall}
+          Diagnostics — {overallStatus}
         </h2>
         <MnSystemStatus
           services={services}
-          environment={`Checked: ${new Date(diag.checkedAt).toLocaleTimeString()}`}
+          version={diag.version ?? undefined}
+          environment={`Uptime: ${formatUptime(diag.uptime_secs ?? 0)}`}
         />
       </div>
 
-      {binnacleEntries.length > 0 && (
+      {warningEntries.length > 0 && (
         <div className="rounded-lg border border-border bg-card p-4">
           <h2 className="text-sm font-heading uppercase tracking-wider text-muted-foreground mb-4">
-            Mesh Event Log
+            Warnings
           </h2>
           <MnBinnacle
-            entries={binnacleEntries}
+            entries={warningEntries}
             maxVisible={30}
-            ariaLabel="Mesh diagnostic events"
+            ariaLabel="Mesh diagnostic warnings"
           />
         </div>
       )}

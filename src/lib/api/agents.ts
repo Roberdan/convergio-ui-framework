@@ -41,7 +41,11 @@ export async function listAgents(): Promise<AgentSummary[]> {
 }
 
 export async function getAgentCatalog(): Promise<AgentCatalogEntry[]> {
-  return api.get<AgentCatalogEntry[]>("/api/agents/catalog");
+  const data = await api.get<{ agents?: AgentCatalogEntry[]; ok?: boolean } | AgentCatalogEntry[]>(
+    "/api/agents/catalog",
+  );
+  if (Array.isArray(data)) return data;
+  return Array.isArray(data?.agents) ? data.agents : [];
 }
 
 export async function getActiveSessions(): Promise<AgentSession[]> {
