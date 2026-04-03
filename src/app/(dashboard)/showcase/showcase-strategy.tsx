@@ -14,6 +14,8 @@ import {
 } from '@/components/maranello';
 import type { Objective } from '@/components/maranello';
 import type { JourneyPhase } from '@/components/maranello/strategy/mn-customer-journey';
+import { CATALOG } from '@/lib/component-catalog';
+import { ComponentDoc } from './component-doc';
 import {
   strategyCanvasSegments,
   swotData,
@@ -24,6 +26,12 @@ import {
   nineBoxItems,
   riskItems,
 } from './showcase-strategy-data';
+
+function entry(slug: string) {
+  const e = CATALOG.find((c) => c.slug === slug);
+  if (!e) throw new Error(`Missing catalog entry: ${slug}`);
+  return e;
+}
 
 const customerPhases: JourneyPhase[] = [
   {
@@ -74,74 +82,64 @@ export function ShowcaseStrategy() {
         W5 — Strategy & Business Frameworks
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Strategy Canvas */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnStrategyCanvas</h3>
-          <MnStrategyCanvas segments={strategyCanvasSegments} ariaLabel="Platform strategy canvas" />
+        <div className="md:col-span-2">
+          <ComponentDoc entry={entry('mn-strategy-canvas')} example={`<MnStrategyCanvas segments={segments} />`}>
+            <MnStrategyCanvas segments={strategyCanvasSegments} ariaLabel="Platform strategy canvas" />
+          </ComponentDoc>
         </div>
 
-        {/* SWOT Analysis */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnSwot</h3>
-          <MnSwot
-            strengths={swotData.strengths}
-            weaknesses={swotData.weaknesses}
-            opportunities={swotData.opportunities}
-            threats={swotData.threats}
-            ariaLabel="Convergio SWOT analysis"
-          />
+        <div className="md:col-span-2">
+          <ComponentDoc entry={entry('mn-swot')} example={`<MnSwot strengths={s} weaknesses={w} opportunities={o} threats={t} />`}>
+            <MnSwot
+              strengths={swotData.strengths}
+              weaknesses={swotData.weaknesses}
+              opportunities={swotData.opportunities}
+              threats={swotData.threats}
+              ariaLabel="Convergio SWOT analysis"
+            />
+          </ComponentDoc>
         </div>
 
-        {/* Porter's Five Forces */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnPorterFiveForces</h3>
-          <MnPorterFiveForces forces={porterForces} ariaLabel="AI ops market forces" />
+        <div className="md:col-span-2">
+          <ComponentDoc entry={entry('mn-porter-five-forces')} example={`<MnPorterFiveForces forces={forces} />`}>
+            <MnPorterFiveForces forces={porterForces} ariaLabel="AI ops market forces" />
+          </ComponentDoc>
         </div>
 
-        {/* Customer Journey Map */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnCustomerJourneyMap</h3>
-          <MnCustomerJourneyMap stages={journeyStages} ariaLabel="Enterprise client journey" />
+        <div className="md:col-span-2">
+          <ComponentDoc entry={entry('mn-customer-journey-map')} example={`<MnCustomerJourneyMap stages={stages} />`}>
+            <MnCustomerJourneyMap stages={journeyStages} ariaLabel="Enterprise client journey" />
+          </ComponentDoc>
         </div>
 
-        {/* BCG Matrix */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnBcgMatrix</h3>
+        <ComponentDoc entry={entry('mn-bcg-matrix')} example={`<MnBcgMatrix items={items} height={280} />`}>
           <MnBcgMatrix items={bcgItems} height={280} />
-        </div>
+        </ComponentDoc>
 
-        {/* Nine Box Matrix */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnNineBoxMatrix</h3>
-          <MnNineBoxMatrix
-            items={nineBoxItems}
-            xLabel="Performance"
-            yLabel="Potential"
-          />
-        </div>
+        <ComponentDoc entry={entry('mn-nine-box-matrix')} example={`<MnNineBoxMatrix items={items} xLabel="Performance" yLabel="Potential" />`}>
+          <MnNineBoxMatrix items={nineBoxItems} xLabel="Performance" yLabel="Potential" />
+        </ComponentDoc>
 
-        {/* Risk Matrix */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnRiskMatrix</h3>
+        <ComponentDoc entry={entry('mn-risk-matrix')} example={`<MnRiskMatrix items={items} />`}>
           <MnRiskMatrix items={riskItems} ariaLabel="Platform risk assessment" />
+        </ComponentDoc>
+
+        <div className="md:col-span-2">
+          <ComponentDoc entry={entry('mn-business-model-canvas')} example={`<MnBusinessModelCanvas blocks={blocks} editable={false} />`}>
+            <MnBusinessModelCanvas blocks={bmcBlocks} editable={false} />
+          </ComponentDoc>
         </div>
 
-        {/* Business Model Canvas */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnBusinessModelCanvas</h3>
-          <MnBusinessModelCanvas blocks={bmcBlocks} editable={false} />
+        <div className="md:col-span-2">
+          <ComponentDoc entry={entry('mn-customer-journey')} example={`<MnCustomerJourney phases={phases} orientation="horizontal" />`}>
+            <MnCustomerJourney phases={customerPhases} orientation="horizontal" />
+          </ComponentDoc>
         </div>
 
-        {/* Customer Journey */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnCustomerJourney</h3>
-          <MnCustomerJourney phases={customerPhases} orientation="horizontal" />
-        </div>
-
-        {/* OKR Dashboard */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnOkr</h3>
-          <MnOkr objectives={okrObjectives} title="Q3 2025 Objectives" period="Q3 2025" />
+        <div className="md:col-span-2">
+          <ComponentDoc entry={entry('mn-okr')} example={`<MnOkr objectives={objectives} title="Q3 2025" period="Q3 2025" />`}>
+            <MnOkr objectives={okrObjectives} title="Q3 2025 Objectives" period="Q3 2025" />
+          </ComponentDoc>
         </div>
       </div>
     </section>

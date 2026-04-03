@@ -7,6 +7,7 @@ const sections: NavSection[] = [
     label: "Design System",
     items: [
       { id: "home", label: "Home", href: "/", iconName: "Home" },
+      { id: "icons", label: "Icons", href: "/showcase/icons", iconName: "Sparkles" },
     ],
   },
   {

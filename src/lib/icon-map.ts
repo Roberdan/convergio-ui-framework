@@ -34,6 +34,7 @@ import {
   Send,
   Settings,
   Shield,
+  Sparkles,
   Sun,
   Table,
   Target,
@@ -88,6 +89,7 @@ const iconMap: Record<string, ComponentType<{ className?: string }>> = {
   Send,
   Settings,
   Shield,
+  Sparkles,
   Sun,
   Table,
   Target,
@@ -99,4 +101,9 @@ const iconMap: Record<string, ComponentType<{ className?: string }>> = {
 /** Resolve a Lucide icon name to its component, or return undefined. */
 export function resolveIcon(name: string): ComponentType<{ className?: string }> | undefined {
   return iconMap[name];
+}
+
+/** Return all registered icon entries as [name, Component] pairs. */
+export function getAllIcons(): [string, ComponentType<{ className?: string }>][] {
+  return Object.entries(iconMap);
 }

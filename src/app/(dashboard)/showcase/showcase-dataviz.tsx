@@ -12,6 +12,9 @@ import {
   MnHbar,
   MnSpeedometer,
 } from '@/components/maranello';
+import { CATALOG } from '@/lib/component-catalog';
+import { ComponentDoc } from './component-doc';
+import { COMPONENT_PROPS } from './component-props';
 import {
   heatmapData,
   treemapItems,
@@ -22,6 +25,12 @@ import {
   activityItems,
 } from './showcase-data';
 
+function entry(slug: string) {
+  const e = CATALOG.find((c) => c.slug === slug);
+  if (!e) throw new Error(`Missing catalog entry: ${slug}`);
+  return e;
+}
+
 /** Section: W0 + W2 Data Visualization components. */
 export function ShowcaseDataViz() {
   return (
@@ -30,38 +39,40 @@ export function ShowcaseDataViz() {
         W0 + W2 — Data Visualization
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Chart — Area */}
-        <div className="rounded-lg border p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnChart (area)</h3>
-          <MnChart
-            type="area"
-            labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']}
-            series={[
-              { label: 'Requests', data: [1200, 1900, 1500, 2100, 2400, 2800] },
-              { label: 'Completions', data: [1100, 1700, 1400, 1950, 2300, 2650] },
-            ]}
-            showLegend
-          />
+        <div className="md:col-span-2">
+          <ComponentDoc
+            entry={entry('mn-chart')}
+            props={COMPONENT_PROPS['mn-chart']}
+            example={`<MnChart type="area" labels={labels} series={series} showLegend />`}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <MnChart
+                type="area"
+                labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']}
+                series={[
+                  { label: 'Requests', data: [1200, 1900, 1500, 2100, 2400, 2800] },
+                  { label: 'Completions', data: [1100, 1700, 1400, 1950, 2300, 2650] },
+                ]}
+                showLegend
+              />
+              <MnChart
+                type="donut"
+                segments={[
+                  { label: 'GPT-4o', value: 42 },
+                  { label: 'Claude 3.5', value: 31 },
+                  { label: 'Gemini Pro', value: 18 },
+                  { label: 'Local LLM', value: 9 },
+                ]}
+                showLegend
+              />
+            </div>
+          </ComponentDoc>
         </div>
 
-        {/* Chart — Donut */}
-        <div className="rounded-lg border p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnChart (donut)</h3>
-          <MnChart
-            type="donut"
-            segments={[
-              { label: 'GPT-4o', value: 42 },
-              { label: 'Claude 3.5', value: 31 },
-              { label: 'Gemini Pro', value: 18 },
-              { label: 'Local LLM', value: 9 },
-            ]}
-            showLegend
-          />
-        </div>
-
-        {/* Funnel */}
-        <div className="rounded-lg border p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnFunnel</h3>
+        <ComponentDoc
+          entry={entry('mn-funnel')}
+          example={`<MnFunnel data={{ pipeline: stages }} />`}
+        >
           <MnFunnel
             data={{
               pipeline: [
@@ -73,11 +84,12 @@ export function ShowcaseDataViz() {
               ],
             }}
           />
-        </div>
+        </ComponentDoc>
 
-        {/* Horizontal Bar */}
-        <div className="rounded-lg border p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnHbar</h3>
+        <ComponentDoc
+          entry={entry('mn-hbar')}
+          example={`<MnHbar title="Latency" unit="ms" maxValue={500} bars={bars} />`}
+        >
           <MnHbar
             title="Model latency (p95)"
             unit="ms"
@@ -90,54 +102,63 @@ export function ShowcaseDataViz() {
               { label: 'Mistral', value: 150, color: '#72EFDD' },
             ]}
           />
-        </div>
+        </ComponentDoc>
 
-        {/* Speedometer */}
-        <div className="rounded-lg border p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnSpeedometer</h3>
+        <ComponentDoc
+          entry={entry('mn-speedometer')}
+          props={COMPONENT_PROPS['mn-speedometer']}
+          example={`<MnSpeedometer value={187} max={300} unit="req/s" />`}
+        >
           <div className="flex justify-center">
             <MnSpeedometer value={187} min={0} max={300} unit="req/s" size="md" />
           </div>
-        </div>
+        </ComponentDoc>
 
-        {/* Heatmap */}
-        <div className="rounded-lg border p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnHeatmap</h3>
+        <ComponentDoc
+          entry={entry('mn-heatmap')}
+          example={`<MnHeatmap data={data} showValues />`}
+        >
           <MnHeatmap data={heatmapData} showValues ariaLabel="Weekly agent activity heatmap" />
-        </div>
+        </ComponentDoc>
 
-        {/* Budget Treemap */}
-        <div className="rounded-lg border p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnBudgetTreemap</h3>
+        <ComponentDoc
+          entry={entry('mn-budget-treemap')}
+          example={`<MnBudgetTreemap items={items} />`}
+        >
           <MnBudgetTreemap items={treemapItems} ariaLabel="Department budget allocation" />
-        </div>
+        </ComponentDoc>
 
-        {/* Waterfall */}
-        <div className="rounded-lg border p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnWaterfall</h3>
+        <ComponentDoc
+          entry={entry('mn-waterfall')}
+          example={`<MnWaterfall steps={steps} />`}
+        >
           <MnWaterfall steps={waterfallSteps} ariaLabel="Quarterly financial waterfall" />
-        </div>
+        </ComponentDoc>
 
-        {/* Pipeline Ranking */}
-        <div className="rounded-lg border p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnPipelineRanking</h3>
+        <ComponentDoc
+          entry={entry('mn-pipeline-ranking')}
+          example={`<MnPipelineRanking stages={stages} />`}
+        >
           <MnPipelineRanking stages={pipelineStages} ariaLabel="Client acquisition funnel" />
+        </ComponentDoc>
+
+        <div className="md:col-span-2">
+          <ComponentDoc
+            entry={entry('mn-decision-matrix')}
+            example={`<MnDecisionMatrix criteria={criteria} options={options} />`}
+          >
+            <MnDecisionMatrix criteria={decisionCriteria} options={decisionOptions} ariaLabel="LLM provider evaluation" />
+          </ComponentDoc>
         </div>
 
-        {/* Decision Matrix */}
-        <div className="rounded-lg border p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnDecisionMatrix</h3>
-          <MnDecisionMatrix
-            criteria={decisionCriteria}
-            options={decisionOptions}
-            ariaLabel="LLM provider evaluation"
-          />
-        </div>
-
-        {/* Activity Feed */}
-        <div className="rounded-lg border p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnActivityFeed</h3>
-          <MnActivityFeed items={activityItems} refreshInterval={0} ariaLabel="Platform activity log" />
+        <div className="md:col-span-2">
+          <ComponentDoc
+            entry={entry('mn-activity-feed')}
+            props={COMPONENT_PROPS['mn-activity-feed']}
+            example={`<MnActivityFeed items={items} refreshInterval={30000} />`}
+          >
+            <MnActivityFeed items={activityItems} refreshInterval={0} ariaLabel="Platform activity log" />
+          </ComponentDoc>
         </div>
       </div>
     </section>

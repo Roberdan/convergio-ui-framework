@@ -6,47 +6,56 @@ import {
   MnThemeToggle,
   MnThemeRotary,
 } from '@/components/maranello';
+import { CATALOG } from '@/lib/component-catalog';
+import { ComponentDoc } from './component-doc';
+
+function entry(slug: string) {
+  const e = CATALOG.find((c) => c.slug === slug);
+  if (!e) throw new Error(`Missing catalog entry: ${slug}`);
+  return e;
+}
 
 /** Sub-section: Theme & Accessibility controls. */
 export function ShowcaseInteractiveTheme() {
   return (
     <>
-      {/* Theme Toggle */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-        <h3 className="text-sm font-medium text-muted-foreground">MnThemeToggle</h3>
+      <ComponentDoc
+        entry={entry('mn-theme-toggle')}
+        example={`<MnThemeToggle size="md" showLabel />`}
+      >
         <div className="flex items-center gap-4">
           <MnThemeToggle size="sm" />
           <MnThemeToggle size="md" />
           <MnThemeToggle size="lg" />
           <MnThemeToggle showLabel />
         </div>
-      </div>
+      </ComponentDoc>
 
-      {/* Theme Rotary */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-        <h3 className="text-sm font-medium text-muted-foreground">MnThemeRotary</h3>
+      <ComponentDoc
+        entry={entry('mn-theme-rotary')}
+        example={`<MnThemeRotary size="md" />`}
+      >
         <div className="flex justify-center py-4">
           <MnThemeRotary size="md" />
         </div>
-      </div>
+      </ComponentDoc>
 
-      {/* A11y (inline preview) */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-        <h3 className="text-sm font-medium text-muted-foreground">MnA11y</h3>
-        <p className="text-xs text-muted-foreground mb-2">
-          Display settings FAB with text size, reduced motion, high contrast, and focus indicators.
-        </p>
+      <ComponentDoc
+        entry={entry('mn-a11y')}
+        example={`<MnA11y />`}
+      >
         <MnA11y className="relative bottom-auto right-auto z-auto" />
-      </div>
+      </ComponentDoc>
 
-      {/* A11y FAB */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-        <h3 className="text-sm font-medium text-muted-foreground">MnA11yFab</h3>
-        <p className="text-xs text-muted-foreground">
+      <ComponentDoc
+        entry={entry('mn-a11y-fab')}
+        example={`<MnA11yFab />`}
+      >
+        <p className="text-xs text-muted-foreground mb-2">
           The accessibility FAB renders fixed at the bottom-right corner of the viewport.
         </p>
         <MnA11yFab />
-      </div>
+      </ComponentDoc>
     </>
   );
 }

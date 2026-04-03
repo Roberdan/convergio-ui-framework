@@ -15,6 +15,9 @@ import {
   MnToast,
   toast,
 } from '@/components/maranello';
+import { CATALOG } from '@/lib/component-catalog';
+import { ComponentDoc } from './component-doc';
+import { COMPONENT_PROPS } from './component-props';
 import {
   adminUsers,
   sourceCards,
@@ -26,6 +29,12 @@ import {
   approvalSteps,
 } from './showcase-interactive-data';
 
+function entry(slug: string) {
+  const e = CATALOG.find((c) => c.slug === slug);
+  if (!e) throw new Error(`Missing catalog entry: ${slug}`);
+  return e;
+}
+
 /** Sub-section: Agents, Data & Visualization interactive components. */
 export function ShowcaseInteractiveAgents() {
   const [notifOpen, setNotifOpen] = useState(false);
@@ -33,81 +42,67 @@ export function ShowcaseInteractiveAgents() {
 
   return (
     <>
-      {/* User Table */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-        <h3 className="text-sm font-medium text-muted-foreground">MnUserTable</h3>
-        <MnUserTable users={adminUsers} searchable selectable={false} />
+      <div className="md:col-span-2">
+        <ComponentDoc entry={entry('mn-user-table')} example={`<MnUserTable users={users} searchable />`}>
+          <MnUserTable users={adminUsers} searchable selectable={false} />
+        </ComponentDoc>
       </div>
 
-      {/* Source Cards */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-        <h3 className="text-sm font-medium text-muted-foreground">MnSourceCards</h3>
-        <MnSourceCards cards={sourceCards} layout="grid" ariaLabel="Knowledge base results" />
+      <div className="md:col-span-2">
+        <ComponentDoc entry={entry('mn-source-cards')} example={`<MnSourceCards cards={cards} layout="grid" />`}>
+          <MnSourceCards cards={sourceCards} layout="grid" ariaLabel="Knowledge base results" />
+        </ComponentDoc>
       </div>
 
-      {/* Social Graph */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-        <h3 className="text-sm font-medium text-muted-foreground">MnSocialGraph</h3>
-        <MnSocialGraph
-          nodes={socialNodes}
-          edges={socialEdges}
-          groups={socialGroups}
-          showLabels
-        />
-      </div>
+      <ComponentDoc entry={entry('mn-social-graph')} example={`<MnSocialGraph nodes={nodes} edges={edges} groups={groups} />`}>
+        <MnSocialGraph nodes={socialNodes} edges={socialEdges} groups={socialGroups} showLabels />
+      </ComponentDoc>
 
-      {/* Progress Ring */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-        <h3 className="text-sm font-medium text-muted-foreground">MnProgressRing</h3>
+      <ComponentDoc
+        entry={entry('mn-progress-ring')}
+        props={COMPONENT_PROPS['mn-progress-ring']}
+        example={`<MnProgressRing value={87} size="lg" variant="primary" label="Completion" />`}
+      >
         <div className="flex items-center gap-4">
           <MnProgressRing value={87} size="lg" variant="primary" label="Completion" />
           <MnProgressRing value={42} size="md" variant="muted" label="Adoption" />
           <MnProgressRing value={100} size="sm" variant="success" label="Tests" />
         </div>
-      </div>
+      </ComponentDoc>
 
-      {/* Notification Center */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-        <h3 className="text-sm font-medium text-muted-foreground">MnNotificationCenter</h3>
-        <button
-          onClick={() => setNotifOpen(true)}
-          className="px-3 py-1.5 rounded border text-sm"
-        >
+      <ComponentDoc entry={entry('mn-notification-center')} example={`<MnNotificationCenter open={open} onOpenChange={setOpen} notifications={notifs} />`}>
+        <button onClick={() => setNotifOpen(true)} className="px-3 py-1.5 rounded border text-sm">
           Open Notifications ({notifications.filter(n => !n.read).length} unread)
         </button>
-        <MnNotificationCenter
-          open={notifOpen}
-          onOpenChange={setNotifOpen}
-          notifications={notifications}
-        />
-      </div>
+        <MnNotificationCenter open={notifOpen} onOpenChange={setNotifOpen} notifications={notifications} />
+      </ComponentDoc>
 
-      {/* Streaming Text */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-        <h3 className="text-sm font-medium text-muted-foreground">MnStreamingText</h3>
+      <ComponentDoc entry={entry('mn-streaming-text')} example={`<MnStreamingText text="Hello world" streaming processMarkdown />`}>
         <MnStreamingText
           text="The orchestration engine dispatched **3 agents** to handle the incoming request. Each agent processes a distinct subtask: *reasoning*, *tool invocation*, and *response synthesis*."
           streaming={false}
           typingCursor={false}
           processMarkdown
         />
+      </ComponentDoc>
+
+      <div className="md:col-span-2">
+        <ComponentDoc entry={entry('mn-agent-trace')} example={`<MnAgentTrace steps={steps} />`}>
+          <MnAgentTrace steps={traceSteps} ariaLabel="Agent execution trace" />
+        </ComponentDoc>
       </div>
 
-      {/* Agent Trace */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-        <h3 className="text-sm font-medium text-muted-foreground">MnAgentTrace</h3>
-        <MnAgentTrace steps={traceSteps} ariaLabel="Agent execution trace" />
+      <div className="md:col-span-2">
+        <ComponentDoc entry={entry('mn-approval-chain')} example={`<MnApprovalChain steps={steps} orientation="horizontal" />`}>
+          <MnApprovalChain steps={approvalSteps} orientation="horizontal" />
+        </ComponentDoc>
       </div>
 
-      {/* Approval Chain */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-        <h3 className="text-sm font-medium text-muted-foreground">MnApprovalChain</h3>
-        <MnApprovalChain steps={approvalSteps} orientation="horizontal" />
-      </div>
-
-      {/* Modal */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-        <h3 className="text-sm font-medium text-muted-foreground">MnModal</h3>
+      <ComponentDoc
+        entry={entry('mn-modal')}
+        props={COMPONENT_PROPS['mn-modal']}
+        example={`<MnModal open={open} onOpenChange={setOpen} title="Confirm">\n  <p>Content</p>\n</MnModal>`}
+      >
         <button onClick={() => setModalOpen(true)} className="px-3 py-1.5 rounded border text-sm">
           Open Modal
         </button>
@@ -118,11 +113,9 @@ export function ShowcaseInteractiveAgents() {
             <button onClick={() => setModalOpen(false)} className="px-3 py-1.5 rounded bg-primary text-primary-foreground text-sm">Deploy</button>
           </div>
         </MnModal>
-      </div>
+      </ComponentDoc>
 
-      {/* State Scaffold */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-        <h3 className="text-sm font-medium text-muted-foreground">MnStateScaffold</h3>
+      <ComponentDoc entry={entry('mn-state-scaffold')} example={`<MnStateScaffold state="loading" />`}>
         <div className="grid grid-cols-2 gap-2">
           <MnStateScaffold state="loading" className="border rounded p-2" />
           <MnStateScaffold state="empty" message="No agents found" className="border rounded p-2" />
@@ -131,18 +124,22 @@ export function ShowcaseInteractiveAgents() {
             <p className="text-sm text-center py-4">Content loaded</p>
           </MnStateScaffold>
         </div>
-      </div>
+      </ComponentDoc>
 
-      {/* Toast */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-        <h3 className="text-sm font-medium text-muted-foreground">MnToast</h3>
-        <MnToast />
-        <div className="flex gap-2 flex-wrap">
-          <button onClick={() => toast.success('Agent deployed successfully')} className="px-3 py-1.5 rounded border text-sm">Success</button>
-          <button onClick={() => toast.error('Deployment failed: timeout')} className="px-3 py-1.5 rounded border text-sm">Error</button>
-          <button onClick={() => toast.warning('High memory usage detected')} className="px-3 py-1.5 rounded border text-sm">Warning</button>
-          <button onClick={() => toast.info('New model version available')} className="px-3 py-1.5 rounded border text-sm">Info</button>
-        </div>
+      <div className="md:col-span-2">
+        <ComponentDoc
+          entry={entry('mn-toast')}
+          props={COMPONENT_PROPS['mn-toast']}
+          example={`toast.success('Agent deployed successfully')`}
+        >
+          <MnToast />
+          <div className="flex gap-2 flex-wrap">
+            <button onClick={() => toast.success('Agent deployed successfully')} className="px-3 py-1.5 rounded border text-sm">Success</button>
+            <button onClick={() => toast.error('Deployment failed: timeout')} className="px-3 py-1.5 rounded border text-sm">Error</button>
+            <button onClick={() => toast.warning('High memory usage detected')} className="px-3 py-1.5 rounded border text-sm">Warning</button>
+            <button onClick={() => toast.info('New model version available')} className="px-3 py-1.5 rounded border text-sm">Info</button>
+          </div>
+        </ComponentDoc>
       </div>
     </>
   );

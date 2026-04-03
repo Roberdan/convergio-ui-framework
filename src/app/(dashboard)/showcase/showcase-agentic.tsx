@@ -8,6 +8,8 @@ import {
   MnInstrumentBinnacle,
   MnOrgChart,
 } from '@/components/maranello';
+import { CATALOG } from '@/lib/component-catalog';
+import { ComponentDoc } from './component-doc';
 import {
   brainNodes,
   brainConnections,
@@ -15,6 +17,12 @@ import {
   stripMetrics,
   orgTree,
 } from './showcase-data';
+
+function entry(slug: string) {
+  const e = CATALOG.find((c) => c.slug === slug);
+  if (!e) throw new Error(`Missing catalog entry: ${slug}`);
+  return e;
+}
 
 /** Section: W4 Agentic & Intelligence components. */
 export function ShowcaseAgentic() {
@@ -24,62 +32,72 @@ export function ShowcaseAgentic() {
         W4 — Agentic & Intelligence
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Dashboard Strip */}
-        <div className="rounded-lg border p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnDashboardStrip</h3>
-          <MnDashboardStrip metrics={stripMetrics} ariaLabel="Platform health metrics" />
+        <div className="md:col-span-2">
+          <ComponentDoc
+            entry={entry('mn-dashboard-strip')}
+            example={`<MnDashboardStrip metrics={metrics} ariaLabel="Health metrics" />`}
+          >
+            <MnDashboardStrip metrics={stripMetrics} ariaLabel="Platform health metrics" />
+          </ComponentDoc>
         </div>
 
-        {/* Augmented Brain */}
-        <div className="rounded-lg border p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnAugmentedBrain</h3>
+        <ComponentDoc
+          entry={entry('mn-augmented-brain')}
+          example={`<MnAugmentedBrain nodes={nodes} connections={conns} />`}
+        >
           <MnAugmentedBrain
             nodes={brainNodes}
             connections={brainConnections}
             ariaLabel="Agent cognitive architecture"
           />
-        </div>
+        </ComponentDoc>
 
-        {/* Org Chart */}
-        <div className="rounded-lg border p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnOrgChart</h3>
+        <ComponentDoc
+          entry={entry('mn-org-chart')}
+          example={`<MnOrgChart tree={tree} ariaLabel="Agent hierarchy" />`}
+        >
           <MnOrgChart tree={orgTree} ariaLabel="Platform agent hierarchy" />
-        </div>
+        </ComponentDoc>
 
-        {/* Binnacle */}
-        <div className="rounded-lg border p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnBinnacle</h3>
+        <ComponentDoc
+          entry={entry('mn-binnacle')}
+          example={`<MnBinnacle entries={entries} ariaLabel="Event log" />`}
+        >
           <MnBinnacle entries={binnacleEntries} ariaLabel="System event log" />
-        </div>
+        </ComponentDoc>
 
-        {/* Instrument Binnacle */}
-        <div className="rounded-lg border p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnInstrumentBinnacle</h3>
+        <ComponentDoc
+          entry={entry('mn-instrument-binnacle')}
+          example={`<MnInstrumentBinnacle entries={entries} metrics={metrics} />`}
+        >
           <MnInstrumentBinnacle
             entries={binnacleEntries}
             metrics={stripMetrics.slice(0, 3)}
             ariaLabel="Combined instrument panel"
           />
-        </div>
+        </ComponentDoc>
 
-        {/* Chat */}
-        <div className="rounded-lg border p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnChat</h3>
-          <div className="h-80">
-            <MnChat
-              messages={[
-                { id: '1', role: 'user', content: 'Summarize the Q2 agent performance metrics.' },
-                { id: '2', role: 'assistant', content: 'Here\'s the Q2 summary:\n\n**Total tasks completed:** 12,847\n**Average latency:** 230ms\n**Success rate:** 98.4%\n\nThe orchestrator routed 67% of requests to the primary model and 33% to the fallback.' },
-                { id: '3', role: 'user', content: 'Which agents had the highest error rates?' },
-              ]}
-              quickActions={[
-                { label: 'Show details', action: 'details' },
-                { label: 'Export report', action: 'export' },
-              ]}
-              placeholder="Ask about agent performance..."
-              onSend={() => {}}
-            />
-          </div>
+        <div className="md:col-span-2">
+          <ComponentDoc
+            entry={entry('mn-chat')}
+            example={`<MnChat messages={msgs} onSend={handleSend} placeholder="Ask..." />`}
+          >
+            <div className="h-80">
+              <MnChat
+                messages={[
+                  { id: '1', role: 'user', content: 'Summarize the Q2 agent performance metrics.' },
+                  { id: '2', role: 'assistant', content: 'Here\'s the Q2 summary:\n\n**Total tasks completed:** 12,847\n**Average latency:** 230ms\n**Success rate:** 98.4%\n\nThe orchestrator routed 67% of requests to the primary model and 33% to the fallback.' },
+                  { id: '3', role: 'user', content: 'Which agents had the highest error rates?' },
+                ]}
+                quickActions={[
+                  { label: 'Show details', action: 'details' },
+                  { label: 'Export report', action: 'export' },
+                ]}
+                placeholder="Ask about agent performance..."
+                onSend={() => {}}
+              />
+            </div>
+          </ComponentDoc>
         </div>
       </div>
     </section>

@@ -7,6 +7,14 @@ import {
   MnKanbanBoard,
 } from '@/components/maranello';
 import type { GanttTask, KanbanColumn, KanbanCard, FacetGroup } from '@/components/maranello';
+import { CATALOG } from '@/lib/component-catalog';
+import { ComponentDoc } from './component-doc';
+
+function entry(slug: string) {
+  const e = CATALOG.find((c) => c.slug === slug);
+  if (!e) throw new Error(`Missing catalog entry: ${slug}`);
+  return e;
+}
 
 const ganttTasks: GanttTask[] = [
   { id: 'design', title: 'System Design', start: '2025-07-01', end: '2025-07-14', status: 'completed', progress: 1 },
@@ -53,45 +61,43 @@ const facetGroups: FacetGroup[] = [
 export function ShowcaseAdvancedOps() {
   return (
     <>
-      {/* Gantt */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-        <h3 className="text-sm font-medium text-muted-foreground">MnGantt</h3>
-        <MnGantt tasks={ganttTasks} showToday />
+      <div className="md:col-span-2">
+        <ComponentDoc entry={entry('mn-gantt')} example={`<MnGantt tasks={tasks} showToday />`}>
+          <MnGantt tasks={ganttTasks} showToday />
+        </ComponentDoc>
       </div>
 
-      {/* Kanban Board */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-        <h3 className="text-sm font-medium text-muted-foreground">MnKanbanBoard</h3>
-        <MnKanbanBoard columns={kanbanColumns} cards={kanbanCards} />
+      <div className="md:col-span-2">
+        <ComponentDoc entry={entry('mn-kanban-board')} example={`<MnKanbanBoard columns={cols} cards={cards} />`}>
+          <MnKanbanBoard columns={kanbanColumns} cards={kanbanCards} />
+        </ComponentDoc>
       </div>
 
-      {/* Entity Workbench */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-        <h3 className="text-sm font-medium text-muted-foreground">MnEntityWorkbench</h3>
-        <div className="h-48 border border-border rounded-lg overflow-hidden">
-          <MnEntityWorkbench
-            tabs={[
-              { id: 'orch', label: 'Orchestrator', dirty: true },
-              { id: 'plan', label: 'Planner' },
-              { id: 'deploy', label: 'Deployer' },
-            ]}
-            activeTabId="orch"
-            onTabClose={() => {}}
-            onSave={() => {}}
-            renderContent={(tab) => (
-              <div className="p-4 text-sm text-muted-foreground">
-                Editing entity: <strong>{tab.label}</strong>
-              </div>
-            )}
-          />
-        </div>
+      <div className="md:col-span-2">
+        <ComponentDoc entry={entry('mn-entity-workbench')} example={`<MnEntityWorkbench tabs={tabs} activeTabId="orch" renderContent={fn} />`}>
+          <div className="h-48 border border-border rounded-lg overflow-hidden">
+            <MnEntityWorkbench
+              tabs={[
+                { id: 'orch', label: 'Orchestrator', dirty: true },
+                { id: 'plan', label: 'Planner' },
+                { id: 'deploy', label: 'Deployer' },
+              ]}
+              activeTabId="orch"
+              onTabClose={() => {}}
+              onSave={() => {}}
+              renderContent={(tab) => (
+                <div className="p-4 text-sm text-muted-foreground">
+                  Editing entity: <strong>{tab.label}</strong>
+                </div>
+              )}
+            />
+          </div>
+        </ComponentDoc>
       </div>
 
-      {/* Facet Workbench */}
-      <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-        <h3 className="text-sm font-medium text-muted-foreground">MnFacetWorkbench</h3>
+      <ComponentDoc entry={entry('mn-facet-workbench')} example={`<MnFacetWorkbench groups={groups} />`}>
         <MnFacetWorkbench groups={facetGroups} />
-      </div>
+      </ComponentDoc>
     </>
   );
 }

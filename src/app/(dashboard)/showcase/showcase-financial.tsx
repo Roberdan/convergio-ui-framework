@@ -12,6 +12,9 @@ import {
   MnHalfGauge,
   MnKpiScorecard,
 } from '@/components/maranello';
+import { CATALOG } from '@/lib/component-catalog';
+import { ComponentDoc } from './component-doc';
+import { COMPONENT_PROPS } from './component-props';
 import {
   finOpsMetrics,
   agentCostRows,
@@ -22,6 +25,12 @@ import {
   tokenUsage,
 } from './showcase-financial-data';
 
+function entry(slug: string) {
+  const e = CATALOG.find((c) => c.slug === slug);
+  if (!e) throw new Error(`Missing catalog entry: ${slug}`);
+  return e;
+}
+
 /** Section: Financial, Cost & Metrics components. */
 export function ShowcaseFinancial() {
   return (
@@ -30,33 +39,44 @@ export function ShowcaseFinancial() {
         Financial & Metrics
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* FinOps */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnFinOps</h3>
-          <MnFinOps metrics={finOpsMetrics} ariaLabel="Platform financial operations" />
+        <div className="md:col-span-2">
+          <ComponentDoc entry={entry('mn-finops')} example={`<MnFinOps metrics={metrics} />`}>
+            <MnFinOps metrics={finOpsMetrics} ariaLabel="Platform financial operations" />
+          </ComponentDoc>
         </div>
 
-        {/* Agent Cost Breakdown */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnAgentCostBreakdown</h3>
-          <MnAgentCostBreakdown rows={agentCostRows} currency="USD" period="April 2026" />
+        <div className="md:col-span-2">
+          <ComponentDoc
+            entry={entry('mn-agent-cost-breakdown')}
+            example={`<MnAgentCostBreakdown rows={rows} currency="USD" period="April 2026" />`}
+          >
+            <MnAgentCostBreakdown rows={agentCostRows} currency="USD" period="April 2026" />
+          </ComponentDoc>
         </div>
 
-        {/* Cost Timeline */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnCostTimeline</h3>
-          <MnCostTimeline labels={costTimelineLabels} series={costTimelineSeries} unit="$" />
+        <div className="md:col-span-2">
+          <ComponentDoc
+            entry={entry('mn-cost-timeline')}
+            example={`<MnCostTimeline labels={labels} series={series} unit="$" />`}
+          >
+            <MnCostTimeline labels={costTimelineLabels} series={costTimelineSeries} unit="$" />
+          </ComponentDoc>
         </div>
 
-        {/* KPI Scorecard */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnKpiScorecard</h3>
-          <MnKpiScorecard rows={kpiRows} currency="$" ariaLabel="Platform KPIs" />
+        <div className="md:col-span-2">
+          <ComponentDoc
+            entry={entry('mn-kpi-scorecard')}
+            props={COMPONENT_PROPS['mn-kpi-scorecard']}
+            example={`<MnKpiScorecard rows={rows} currency="$" />`}
+          >
+            <MnKpiScorecard rows={kpiRows} currency="$" ariaLabel="Platform KPIs" />
+          </ComponentDoc>
         </div>
 
-        {/* Bullet Chart */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnBulletChart</h3>
+        <ComponentDoc
+          entry={entry('mn-bullet-chart')}
+          example={`<MnBulletChart value={487} target={500} max={600} label="Throughput" />`}
+        >
           <MnBulletChart
             value={487}
             target={500}
@@ -69,11 +89,12 @@ export function ShowcaseFinancial() {
               { min: 450, max: 600, label: 'High' },
             ]}
           />
-        </div>
+        </ComponentDoc>
 
-        {/* Confidence Chart */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnConfidenceChart</h3>
+        <ComponentDoc
+          entry={entry('mn-confidence-chart')}
+          example={`<MnConfidenceChart labels={l} values={v} lower={lo} upper={hi} />`}
+        >
           <MnConfidenceChart
             labels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']}
             values={[92, 94, 91, 95, 93, 96]}
@@ -82,32 +103,38 @@ export function ShowcaseFinancial() {
             unit="%"
             height={160}
           />
+        </ComponentDoc>
+
+        <div className="md:col-span-2">
+          <ComponentDoc
+            entry={entry('mn-cohort-grid')}
+            example={`<MnCohortGrid rows={rows} periodLabels={labels} />`}
+          >
+            <MnCohortGrid
+              rows={cohortRows}
+              periodLabels={['M0', 'M1', 'M2', 'M3', 'M4', 'M5']}
+            />
+          </ComponentDoc>
         </div>
 
-        {/* Cohort Grid */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnCohortGrid</h3>
-          <MnCohortGrid
-            rows={cohortRows}
-            periodLabels={['M0', 'M1', 'M2', 'M3', 'M4', 'M5']}
-          />
-        </div>
-
-        {/* Token Meter */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnTokenMeter</h3>
+        <ComponentDoc
+          entry={entry('mn-token-meter')}
+          example={`<MnTokenMeter usage={usage} label="Session Token Usage" showCost />`}
+        >
           <MnTokenMeter usage={tokenUsage} label="Session Token Usage" showCost />
-        </div>
+        </ComponentDoc>
 
-        {/* Half Gauge */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnHalfGauge</h3>
+        <ComponentDoc
+          entry={entry('mn-half-gauge')}
+          example={`<MnHalfGauge value={73} max={100} label="Efficiency" unit="%" />`}
+        >
           <MnHalfGauge value={73} min={0} max={100} label="Agent Efficiency" unit="%" />
-        </div>
+        </ComponentDoc>
 
-        {/* Flip Counter */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnFlipCounter</h3>
+        <ComponentDoc
+          entry={entry('mn-flip-counter')}
+          example={`<MnFlipCounter value={1847} digits={5} size="md" label="Tasks" />`}
+        >
           <div className="flex items-center gap-6">
             <div>
               <p className="text-xs text-muted-foreground mb-1">Tasks Completed</p>
@@ -118,7 +145,7 @@ export function ShowcaseFinancial() {
               <MnFlipCounter value={98520} digits={6} prefix="$" size="sm" label="Revenue" />
             </div>
           </div>
-        </div>
+        </ComponentDoc>
       </div>
     </section>
   );

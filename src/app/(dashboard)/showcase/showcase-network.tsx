@@ -15,6 +15,8 @@ import {
   MnSystemStatus,
 } from '@/components/maranello';
 import type { MeshNode, Service, Incident } from '@/components/maranello';
+import { CATALOG } from '@/lib/component-catalog';
+import { ComponentDoc } from './component-doc';
 import {
   meshNodes,
   meshEdges,
@@ -25,6 +27,12 @@ import {
   missions,
   nightJobs,
 } from './showcase-data';
+
+function entry(slug: string) {
+  const e = CATALOG.find((c) => c.slug === slug);
+  if (!e) throw new Error(`Missing catalog entry: ${slug}`);
+  return e;
+}
 
 const mapMarkers = [
   { id: 1, lat: 40.7128, lon: -74.006, label: 'New York', detail: 'US-East-1 · 3 nodes', color: 'active' as const },
@@ -59,95 +67,85 @@ export function ShowcaseNetwork() {
         W3 — Network & Infrastructure
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Map */}
-        <div className="rounded-lg border p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnMap</h3>
-          <div className="h-80">
-            <MnMap markers={mapMarkers} className="h-full rounded-lg" />
-          </div>
+        <div className="md:col-span-2">
+          <ComponentDoc entry={entry('mn-map')} example={`<MnMap markers={markers} />`}>
+            <div className="h-80">
+              <MnMap markers={mapMarkers} className="h-full rounded-lg" />
+            </div>
+          </ComponentDoc>
         </div>
 
-        {/* Mesh Network */}
-        <div className="rounded-lg border p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnMeshNetwork</h3>
-          <MnMeshNetwork nodes={meshNodes} edges={meshEdges} ariaLabel="Convergio mesh topology" />
+        <div className="md:col-span-2">
+          <ComponentDoc entry={entry('mn-mesh-network')} example={`<MnMeshNetwork nodes={nodes} edges={edges} />`}>
+            <MnMeshNetwork nodes={meshNodes} edges={meshEdges} ariaLabel="Convergio mesh topology" />
+          </ComponentDoc>
         </div>
 
-        {/* Mesh Network Canvas */}
-        <div className="rounded-lg border p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnMeshNetworkCanvas</h3>
-          <div className="h-64">
-            <MnMeshNetworkCanvas
-              nodes={meshNodes}
-              edges={meshEdges}
-              selected={selectedNode?.id ?? null}
-              onNodeClick={setSelectedNode}
-              ariaLabel="Canvas mesh topology"
-              maxParticles={20}
-              className="h-full"
+        <div className="md:col-span-2">
+          <ComponentDoc entry={entry('mn-mesh-network-canvas')} example={`<MnMeshNetworkCanvas nodes={nodes} edges={edges} />`}>
+            <div className="h-64">
+              <MnMeshNetworkCanvas
+                nodes={meshNodes}
+                edges={meshEdges}
+                selected={selectedNode?.id ?? null}
+                onNodeClick={setSelectedNode}
+                ariaLabel="Canvas mesh topology"
+                maxParticles={20}
+                className="h-full"
+              />
+            </div>
+          </ComponentDoc>
+        </div>
+
+        <div className="md:col-span-2">
+          <ComponentDoc entry={entry('mn-mesh-network-toolbar')} example={`<MnMeshNetworkToolbar onlineCount={4} totalCount={6} />`}>
+            <MnMeshNetworkToolbar
+              onlineCount={meshNodes.filter(n => n.status === 'online').length}
+              totalCount={meshNodes.length}
             />
-          </div>
+          </ComponentDoc>
         </div>
 
-        {/* Mesh Network Toolbar */}
-        <div className="rounded-lg border p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnMeshNetworkToolbar</h3>
-          <MnMeshNetworkToolbar
-            onlineCount={meshNodes.filter(n => n.status === 'online').length}
-            totalCount={meshNodes.length}
-          />
-        </div>
-
-        {/* Mesh Network Card */}
-        <div className="rounded-lg border p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnMeshNetworkCard</h3>
+        <ComponentDoc entry={entry('mn-mesh-network-card')} example={`<MnMeshNetworkCard node={node} onSelect={setSelected} />`}>
           <MnMeshNetworkCard
             node={sampleNode}
             selected={selectedNode?.id === sampleNode.id}
             onSelect={setSelectedNode}
           />
-        </div>
+        </ComponentDoc>
 
-        {/* System Status */}
-        <div className="rounded-lg border p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnSystemStatus</h3>
+        <ComponentDoc entry={entry('mn-system-status')} example={`<MnSystemStatus services={svcs} incidents={incs} />`}>
           <MnSystemStatus
             services={systemServices}
             incidents={systemIncidents}
             version="v20.8.0"
             environment="production"
           />
-        </div>
+        </ComponentDoc>
 
-        {/* Hub & Spoke */}
-        <div className="rounded-lg border p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnHubSpoke</h3>
+        <ComponentDoc entry={entry('mn-hub-spoke')} example={`<MnHubSpoke hub={hub} spokes={spokes} />`}>
           <MnHubSpoke hub={hubSpokeHub} spokes={hubSpokeSpokes} ariaLabel="Coordinator hub topology" />
+        </ComponentDoc>
+
+        <div className="md:col-span-2">
+          <ComponentDoc entry={entry('mn-deployment-table')} example={`<MnDeploymentTable deployments={deps} />`}>
+            <MnDeploymentTable deployments={deployments} ariaLabel="Node deployment status" />
+          </ComponentDoc>
         </div>
 
-        {/* Deployment Table */}
-        <div className="rounded-lg border p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnDeploymentTable</h3>
-          <MnDeploymentTable deployments={deployments} ariaLabel="Node deployment status" />
+        <div className="md:col-span-2">
+          <ComponentDoc entry={entry('mn-audit-log')} example={`<MnAuditLog entries={entries} />`}>
+            <MnAuditLog entries={auditEntries} ariaLabel="Platform audit trail" />
+          </ComponentDoc>
         </div>
 
-        {/* Audit Log */}
-        <div className="rounded-lg border p-4 space-y-3 md:col-span-2">
-          <h3 className="text-sm font-medium text-muted-foreground">MnAuditLog</h3>
-          <MnAuditLog entries={auditEntries} ariaLabel="Platform audit trail" />
-        </div>
-
-        {/* Active Missions */}
-        <div className="rounded-lg border p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnActiveMissions</h3>
+        <ComponentDoc entry={entry('mn-active-missions')} example={`<MnActiveMissions missions={missions} />`}>
           <MnActiveMissions missions={missions} ariaLabel="Current mission status" />
-        </div>
+        </ComponentDoc>
 
-        {/* Night Jobs */}
-        <div className="rounded-lg border p-4 space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">MnNightJobs</h3>
+        <ComponentDoc entry={entry('mn-night-jobs')} example={`<MnNightJobs jobs={jobs} />`}>
           <MnNightJobs jobs={nightJobs} ariaLabel="Scheduled batch operations" />
-        </div>
+        </ComponentDoc>
       </div>
     </section>
   );
