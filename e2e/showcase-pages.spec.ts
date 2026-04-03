@@ -68,20 +68,3 @@ test.describe("Theme Playground", () => {
     expect(crashes, "Theme playground has crash-level issues").toHaveLength(0);
   });
 });
-
-test.describe("Preview Page", () => {
-  test("renders all waves", async ({ page }) => {
-    const issues = await collectPageIssues(page);
-    await page.goto("/preview", { waitUntil: "domcontentloaded", timeout: 15000 });
-    await page.waitForTimeout(1500);
-
-    const sectionCount = await page.locator("section").count();
-    expect(sectionCount).toBeGreaterThanOrEqual(2);
-
-    const allIssues = [...issues, ...(await checkErrorBoundary(page))];
-    const crashes = allIssues.filter(
-      (i) => i.type === "pageerror" || i.type === "error-boundary" || i.type === "blank-page"
-    );
-    expect(crashes, "Preview page has crash-level issues").toHaveLength(0);
-  });
-});

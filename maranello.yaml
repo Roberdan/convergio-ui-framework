@@ -21,7 +21,4 @@ navigation:
           label: Theme Playground
           href: /showcase/themes
           icon: Palette
-        - id: preview
-          label: Preview
-          href: /preview
-          icon: Eye
+

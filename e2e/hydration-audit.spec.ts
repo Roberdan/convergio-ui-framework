@@ -10,7 +10,7 @@ test.beforeEach(async ({ context }) => {
 
 const PAGES = [
   "/showcase", "/showcase/data-viz", "/showcase/forms",
-  "/showcase/themes", "/preview", "/",
+  "/showcase/themes", "/",
 ];
 
 for (const path of PAGES) {

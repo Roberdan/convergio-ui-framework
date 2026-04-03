@@ -9,7 +9,6 @@ const sections: NavSection[] = [
       { id: "home", label: "Home", href: "/", iconName: "Home" },
       { id: "showcase", label: "Showcase", href: "/showcase", iconName: "Layout" },
       { id: "themes", label: "Themes", href: "/showcase/themes", iconName: "Palette" },
-      { id: "preview", label: "Preview", href: "/preview", iconName: "Eye" },
     ],
   },
   {

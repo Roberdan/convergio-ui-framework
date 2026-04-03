@@ -11,7 +11,6 @@ const ALL_PAGES = [
   { path: "/showcase/data-viz", name: "Category: Data Viz" },
   { path: "/showcase/forms", name: "Category: Forms" },
   { path: "/showcase/themes", name: "Theme Playground" },
-  { path: "/preview", name: "Preview" },
 ];
 
 function isInfraError(msg: string): boolean {

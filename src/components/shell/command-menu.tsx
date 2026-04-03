@@ -6,7 +6,6 @@ import {
   BarChart3,
   Brain,
   DollarSign,
-  Eye,
   FormInput,
   Home,
   Layout,
@@ -43,7 +42,6 @@ const NAV_ITEMS = [
   { label: "Home", href: "/", icon: Home },
   { label: "Showcase", href: "/showcase", icon: Layout },
   { label: "Theme Playground", href: "/showcase/themes", icon: Palette },
-  { label: "Preview", href: "/preview", icon: Eye },
 ] as const
 
 const CATEGORY_ITEMS = [
