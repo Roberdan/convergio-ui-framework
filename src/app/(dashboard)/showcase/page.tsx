@@ -5,6 +5,7 @@ import { ShowcaseAgentic } from './showcase-agentic';
 import { ShowcaseStrategy } from './showcase-strategy';
 import { ShowcaseFinancial } from './showcase-financial';
 import { ShowcaseInteractive } from './showcase-interactive';
+import { ShowcaseAdvanced } from './showcase-advanced';
 
 /**
  * Maranello Design System — Component Showcase.
@@ -29,6 +30,7 @@ export default function ShowcasePage() {
       <ShowcaseStrategy />
       <ShowcaseFinancial />
       <ShowcaseInteractive />
+      <ShowcaseAdvanced />
     </div>
   );
 }

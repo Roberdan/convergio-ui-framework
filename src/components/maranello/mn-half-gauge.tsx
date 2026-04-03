@@ -72,7 +72,7 @@ function render(
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h)
 
   const cx = w / 2, cy = h - 10
-  const radius = Math.min(w / 2, h) - 16, lineW = radius * thickness
+  const radius = Math.max(0, Math.min(w / 2, h) - 16), lineW = radius * thickness
   const startA = Math.PI, range = max - min || 1
   const pct = Math.max(0, Math.min(1, (value - min) / range)) * prog
 
