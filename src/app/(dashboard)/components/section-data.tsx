@@ -47,7 +47,7 @@ export function SectionData() {
           onOpenChange={setDetailOpen}
           title="Agent: Ali"
           sections={detailSections}
-          onSave={(data) => { setDetailOpen(false); }}
+          onSave={() => { setDetailOpen(false); }}
         />
       </Card>
 

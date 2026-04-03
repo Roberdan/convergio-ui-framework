@@ -2,7 +2,14 @@
 
 import { useApiQuery } from "@/hooks";
 import { meshApi } from "@/lib/api";
-import type { MeshTopology, MeshMetrics, HeartbeatStatus, PeerInfo } from "@/lib/api";
+import type {
+  MeshTopology,
+  MeshMetrics,
+  PeerInfo,
+  MeshSyncStatus,
+  MeshDiagnostics,
+  MeshTraffic,
+} from "@/lib/api";
 import {
   MnMeshNetwork,
   MnDashboardStrip,
@@ -11,19 +18,26 @@ import {
   MnSpinner,
 } from "@/components/maranello";
 import type { StripMetric } from "@/components/maranello";
+import { MeshSyncSection } from "./mesh-sync-section";
+import { MeshDiagnosticsSection } from "./mesh-diagnostics-section";
+import { MeshTrafficSection } from "./mesh-traffic-section";
 
 interface MeshClientProps {
   initialTopology: MeshTopology | null;
   initialMetrics: MeshMetrics | null;
-  initialHeartbeats: HeartbeatStatus[] | null;
   initialPeers: PeerInfo[] | null;
+  initialSyncStatus: MeshSyncStatus | null;
+  initialDiagnostics: MeshDiagnostics | null;
+  initialTraffic: MeshTraffic | null;
 }
 
 export function MeshClient({
   initialTopology,
   initialMetrics,
-  initialHeartbeats,
   initialPeers,
+  initialSyncStatus,
+  initialDiagnostics,
+  initialTraffic,
 }: MeshClientProps) {
   const { data: topology } = useApiQuery(
     () => meshApi.getMeshTopology(),
@@ -109,6 +123,12 @@ export function MeshClient({
           )}
         </div>
       </div>
+
+      <MeshSyncSection initial={initialSyncStatus} />
+
+      <MeshTrafficSection initialTraffic={initialTraffic} topology={topo} />
+
+      <MeshDiagnosticsSection initial={initialDiagnostics} />
 
       {deployments.length > 0 && (
         <div className="rounded-lg border border-border bg-card p-4">

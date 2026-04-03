@@ -192,14 +192,14 @@ function MnDataTable<T extends Record<string, unknown>>({
   const notify = React.useCallback((s: Set<number>) => onSelectionChange?.(Array.from(s).map((i) => data[i]).filter(Boolean)), [data, onSelectionChange])
   const toggleSelect = React.useCallback((idx: number) => setSelected((prev) => {
     if (selectable === "single") { const n = prev.has(idx) ? new Set<number>() : new Set([idx]); notify(n); return n }
-    const n = new Set(prev); n.has(idx) ? n.delete(idx) : n.add(idx); notify(n); return n
+    const n = new Set(prev); if (n.has(idx)) { n.delete(idx) } else { n.add(idx) }; notify(n); return n
   }), [selectable, notify])
   const toggleAll = React.useCallback(() => {
     if (selectable !== "multi") return
     setSelected((p) => { const n = p.size === data.length ? new Set<number>() : new Set(data.map((_, i) => i)); notify(n); return n })
   }, [selectable, data, notify])
   const onActivate = (e: React.KeyboardEvent, fn: () => void) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fn() } }
-  const toggleGroup = (name: string) => setCollapsed((p) => { const n = new Set(p); n.has(name) ? n.delete(name) : n.add(name); return n })
+  const toggleGroup = (name: string) => setCollapsed((p) => { const n = new Set(p); if (n.has(name)) { n.delete(name) } else { n.add(name) }; return n })
 
   function renderRow(row: T, ri: number) {
     const isSel = selected.has(ri)

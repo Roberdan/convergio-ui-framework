@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useCallback, useEffect, useRef } from "react"
-import { cva, type VariantProps } from "class-variance-authority"
+import { cva } from "class-variance-authority"
 import { Mic, Send, Copy, Check, Loader2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 

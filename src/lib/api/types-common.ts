@@ -28,6 +28,25 @@ export interface TaskDistribution {
   count: number;
 }
 
+export interface ModelTokenUsage {
+  model: string;
+  prompt: number;
+  completion: number;
+  total: number;
+  cached?: number;
+  costPerMToken?: number;
+  budget?: number;
+}
+
+export interface TaskEvidence {
+  id: string;
+  taskId: string;
+  type: 'log' | 'artifact' | 'screenshot' | 'metric';
+  title: string;
+  content: string;
+  timestamp: string;
+}
+
 /* ── Mesh / Infrastructure ── */
 
 export interface MeshTopology {
@@ -191,6 +210,27 @@ export interface CreateIdeaRequest {
   title: string;
   description: string;
   tags?: string[];
+}
+
+/* ── Coordinator ── */
+
+export interface CoordinatorEvent {
+  id: string;
+  agent: string;
+  action: string;
+  target: string;
+  timestamp: string;
+  priority?: 'low' | 'normal' | 'high' | 'critical';
+  type?: 'success' | 'error' | 'warning' | 'info';
+}
+
+export interface CoordinatorStatus {
+  state: 'running' | 'paused' | 'stopped';
+  activeAgents: number;
+  queuedTasks: number;
+  completedToday: number;
+  uptime: number;
+  lastEvent?: string;
 }
 
 /* ── Paginated Response ── */

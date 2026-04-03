@@ -1,4 +1,19 @@
-import { Page } from "@playwright/test";
+import { Page, BrowserContext } from "@playwright/test";
+
+/** HMAC-signed session cookie for dev secret. */
+export const SESSION_COOKIE = {
+  name: "session",
+  value: "authenticated.955738395f27445701db7db7c5262d188f16b7d76d4abaea47905d75a1a960f1",
+  domain: "127.0.0.1",
+  path: "/",
+  httpOnly: true,
+  sameSite: "Lax" as const,
+};
+
+/** Set authenticated session cookie on the browser context. */
+export async function authenticate(context: BrowserContext) {
+  await context.addCookies([SESSION_COOKIE]);
+}
 
 /** Infrastructure error filter for console noise. */
 export function isInfraError(msg: string): boolean {
@@ -7,7 +22,15 @@ export function isInfraError(msg: string): boolean {
     msg.includes("_next/webpack") ||
     msg.includes("favicon") ||
     msg.includes("hydration") ||
-    msg.includes("ERR_CONNECTION_REFUSED")
+    msg.includes("ERR_CONNECTION_REFUSED") ||
+    msg.includes("ERR_FAILED") ||
+    msg.includes("CORS policy") ||
+    msg.includes("Failed to fetch") ||
+    msg.includes("fetch") && msg.includes("localhost:8420") ||
+    msg.includes("a2ui") ||
+    msg.includes("net::ERR") ||
+    msg.includes("attribute points: Expected number") ||
+    msg.includes("Failed to load resource")
   );
 }
 

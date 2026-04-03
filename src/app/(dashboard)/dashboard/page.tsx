@@ -8,13 +8,15 @@ export default async function DashboardPage() {
   let brain = null;
   let tokenUsage = null;
   let taskDist = null;
+  let modelTokens = null;
 
   try {
-    [overview, brain, tokenUsage, taskDist] = await Promise.all([
+    [overview, brain, tokenUsage, taskDist, modelTokens] = await Promise.all([
       dashboardApi.getOverview(),
       dashboardApi.getBrainData(),
       dashboardApi.getTokenUsageDaily(),
       dashboardApi.getTaskDistribution(),
+      dashboardApi.getTokenUsageByModel(),
     ]);
   } catch {
     // Daemon offline — render with nulls, client will poll
@@ -26,6 +28,7 @@ export default async function DashboardPage() {
       initialBrain={brain}
       initialTokenUsage={tokenUsage}
       initialTaskDist={taskDist}
+      initialModelTokens={modelTokens}
     />
   );
 }

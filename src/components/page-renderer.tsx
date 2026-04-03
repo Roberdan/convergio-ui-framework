@@ -74,7 +74,7 @@ function BlockRenderer({ block }: { block: PageBlock }) {
     case "gauge-block":
       return <MnGauge {...block} />;
     case "chart-block": {
-      const { type: _, chartType, ...rest } = block;
+      const { type: _blockType, chartType, ...rest } = block; // eslint-disable-line @typescript-eslint/no-unused-vars
       return <MnChart type={chartType} {...rest} />;
     }
     case "gantt-block":

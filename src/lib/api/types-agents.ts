@@ -47,6 +47,19 @@ export interface TriageResult {
   reasoning: string;
 }
 
+export interface AgentHistoryEntry {
+  id: string;
+  agentId: string;
+  agentName: string;
+  action: string;
+  target: string;
+  status: 'success' | 'error' | 'running';
+  timestamp: string;
+  durationMs?: number;
+  tokensUsed?: number;
+  cost?: number;
+}
+
 /* ── Organizations ── */
 
 export interface Organization {

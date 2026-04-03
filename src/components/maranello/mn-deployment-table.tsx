@@ -171,7 +171,7 @@ export function MnDeploymentTable({
                 {formatTs(d.timestamp)}
               </td>
               <td className="px-4 py-2.5 font-mono text-xs text-muted-foreground">
-                {d.hash.slice(0, 8)}
+                {(d.hash ?? '').slice(0, 8)}
               </td>
             </tr>
           ))}

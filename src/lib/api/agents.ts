@@ -4,6 +4,7 @@ import type {
   AgentCatalogEntry,
   AgentSession,
   AgentTree,
+  AgentHistoryEntry,
   TriageRequest,
   TriageResult,
 } from "./types";
@@ -49,6 +50,13 @@ export async function getActiveSessions(): Promise<AgentSession[]> {
 
 export async function getAgentTree(): Promise<AgentTree> {
   return api.get<AgentTree>("/api/ipc/agents/tree");
+}
+
+export async function getAgentHistory(): Promise<AgentHistoryEntry[]> {
+  const data = await api.get<AgentHistoryEntry[] | Record<string, unknown>>("/api/agents/history");
+  if (Array.isArray(data)) return data;
+  const entries = (data as Record<string, unknown>).entries;
+  return Array.isArray(entries) ? entries as AgentHistoryEntry[] : [];
 }
 
 export async function triageAgent(req: TriageRequest): Promise<TriageResult> {

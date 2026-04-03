@@ -114,7 +114,7 @@ export { MnBinnacle } from "./mn-binnacle";
 export type { MnBinnacleProps, BinnacleEntry } from "./mn-binnacle";
 
 export { MnDashboardStrip } from "./mn-dashboard-strip";
-export type { MnDashboardStripProps, StripMetric } from "./mn-dashboard-strip";
+export type { MnDashboardStripProps, StripMetric, StripZone, StripGaugeZone, StripPipelineZone, StripTrendZone, StripBoardZone } from "./mn-dashboard-strip";
 
 export { MnInstrumentBinnacle } from "./mn-instrument-binnacle";
 export type { MnInstrumentBinnacleProps } from "./mn-instrument-binnacle";

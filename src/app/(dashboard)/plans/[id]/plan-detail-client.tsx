@@ -10,6 +10,10 @@ import {
   MnSpinner,
 } from "@/components/maranello";
 import type { GanttTask } from "@/components/maranello";
+import { PlanExecutionTree } from "./plan-execution-tree";
+import { PlanTaskEvidence } from "./plan-task-evidence";
+import { PlanApprovalChain } from "./plan-approval-chain";
+import Link from "next/link";
 import { ArrowLeft, Play } from "lucide-react";
 import { useState } from "react";
 
@@ -32,18 +36,33 @@ function planTaskToGantt(task: PlanDetail["tasks"][number]): GanttTask {
   };
 }
 
+const TONE_MAP: Record<string, "success" | "warning" | "danger" | "info" | "neutral"> = {
+  completed: "success",
+  in_progress: "info",
+  pending: "neutral",
+  failed: "danger",
+  cancelled: "warning",
+};
+
 export function PlanDetailClient({
   planId,
   initialPlan,
   initialTree,
 }: PlanDetailClientProps) {
   const [starting, setStarting] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+
   const { data: plan } = useApiQuery(
     () => plansApi.getPlanContext(planId),
     { pollInterval: 10000 },
   );
+  const { data: tree } = useApiQuery(
+    () => plansApi.getExecutionTree(planId),
+    { pollInterval: 15000 },
+  );
 
   const detail = plan ?? initialPlan;
+  const execTree = tree ?? initialTree;
 
   if (!detail) {
     return (
@@ -53,14 +72,6 @@ export function PlanDetailClient({
     );
   }
 
-  const toneMap: Record<string, "success" | "warning" | "danger" | "info" | "neutral"> = {
-    completed: "success",
-    in_progress: "info",
-    pending: "neutral",
-    failed: "danger",
-    cancelled: "warning",
-  };
-
   const steps = (detail.tasks ?? []).map((t) => ({
     label: t.title,
     description: t.status,
@@ -68,7 +79,6 @@ export function PlanDetailClient({
   const currentStep = steps.findIndex(
     (_, i) => detail.tasks[i]?.status === "in_progress",
   );
-
   const ganttTasks = (detail.tasks ?? []).map(planTaskToGantt);
 
   async function handleStart() {
@@ -83,39 +93,12 @@ export function PlanDetailClient({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <a
-          href="/plans"
-          className="rounded-md p-2 hover:bg-muted transition-colors"
-          aria-label="Back to plans"
-        >
-          <ArrowLeft className="size-5" />
-        </a>
-        <div className="flex-1">
-          <div className="flex items-center gap-3">
-            <h1>{detail.title}</h1>
-            <MnBadge
-              label={detail.status}
-              tone={toneMap[detail.status] ?? "neutral"}
-            />
-          </div>
-          {detail.description && (
-            <p className="text-caption mt-1">{detail.description}</p>
-          )}
-        </div>
-        {detail.status === "pending" && (
-          <button
-            type="button"
-            onClick={handleStart}
-            disabled={starting}
-            className="flex items-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:bg-accent/90 transition-colors disabled:opacity-50"
-          >
-            <Play className="size-4" />
-            {starting ? "Starting..." : "Start Plan"}
-          </button>
-        )}
-      </div>
-
+      <PlanDetailHeader
+        detail={detail}
+        starting={starting}
+        onStart={handleStart}
+      />
+      <PlanApprovalChain plan={detail} />
       {steps.length > 0 && (
         <div className="rounded-lg border border-border bg-card p-4">
           <h2 className="text-sm font-heading uppercase tracking-wider text-muted-foreground mb-4">
@@ -127,7 +110,18 @@ export function PlanDetailClient({
           />
         </div>
       )}
-
+      {execTree && (
+        <PlanExecutionTree
+          tree={execTree}
+          onTaskSelect={setSelectedTaskId}
+        />
+      )}
+      {selectedTaskId && (
+        <PlanTaskEvidence
+          taskId={selectedTaskId}
+          onClose={() => setSelectedTaskId(null)}
+        />
+      )}
       {ganttTasks.length > 0 && (
         <div className="rounded-lg border border-border bg-card p-4">
           <h2 className="text-sm font-heading uppercase tracking-wider text-muted-foreground mb-4">
@@ -135,6 +129,51 @@ export function PlanDetailClient({
           </h2>
           <MnGantt tasks={ganttTasks} showToday />
         </div>
+      )}
+    </div>
+  );
+}
+
+function PlanDetailHeader({
+  detail,
+  starting,
+  onStart,
+}: {
+  detail: PlanDetail;
+  starting: boolean;
+  onStart: () => void;
+}) {
+  return (
+    <div className="flex items-center gap-3">
+      <Link
+        href="/plans"
+        className="rounded-md p-2 hover:bg-muted transition-colors"
+        aria-label="Back to plans"
+      >
+        <ArrowLeft className="size-5" />
+      </Link>
+      <div className="flex-1">
+        <div className="flex items-center gap-3">
+          <h1>{detail.title}</h1>
+          <MnBadge
+            label={detail.status}
+            tone={TONE_MAP[detail.status] ?? "neutral"}
+          />
+        </div>
+        {detail.description && (
+          <p className="text-caption mt-1">{detail.description}</p>
+        )}
+      </div>
+      {detail.status === "pending" && (
+        <button
+          type="button"
+          onClick={onStart}
+          disabled={starting}
+          className="flex items-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:bg-accent/90 transition-colors disabled:opacity-50"
+        >
+          <Play className="size-4" />
+          {starting ? "Starting..." : "Start Plan"}
+        </button>
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { useId, useMemo } from 'react';
+import { useMemo } from 'react';
 
 export interface HubSpokeHub {
   label: string;
@@ -46,7 +46,6 @@ export function MnHubSpoke({
   ariaLabel = 'Hub and spoke network',
   className,
 }: MnHubSpokeProps) {
-  const uid = useId();
   const size = 360;
   const cx = size / 2;
   const cy = size / 2;
@@ -62,7 +61,7 @@ export function MnHubSpoke({
         y: cy + orbitR * Math.sin(angle),
       };
     });
-  }, [spokes.length, cx, cy, orbitR]);
+  }, [spokes, cx, cy, orbitR]);
 
   return (
     <div

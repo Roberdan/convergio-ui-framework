@@ -15,6 +15,7 @@ export type {
   AgentCatalogEntry,
   AgentSession,
   AgentTree,
+  AgentHistoryEntry,
   TriageRequest,
   TriageResult,
   Organization,
@@ -31,6 +32,8 @@ export type {
   BrainData,
   TokenUsage,
   TaskDistribution,
+  ModelTokenUsage,
+  TaskEvidence,
   MeshTopology,
   MeshNodeData,
   MeshEdgeData,
@@ -54,3 +57,47 @@ export type {
   CreateIdeaRequest,
   PaginatedResponse,
 } from "./types-common";
+
+export type {
+  CoordinatorEvent,
+  CoordinatorStatus,
+} from "./types-common";
+
+export type {
+  PolicyRule,
+  PolicyStatus,
+  ValidationItem,
+  ValidationVerdict,
+  SecurityAuditEntry,
+  ProjectAuditTrail,
+  SecurityPageData,
+} from "./types-security";
+
+export type {
+  Workspace,
+  WorkspaceDetail,
+  CreateWorkspaceRequest,
+  Deliverable,
+  Repository,
+  CreateRepositoryRequest,
+  ProjectTreeNode,
+  ProjectsPageData,
+} from "./types-workspaces";
+
+export type {
+  MeshSyncStatus,
+  MeshDiagnosticEntry,
+  MeshDiagnostics,
+  MeshNodeTraffic,
+  MeshTraffic,
+} from "./types-mesh";
+
+export type {
+  Worker,
+  WorkersStatus,
+  RollbackSnapshot,
+  RunLogEntry,
+  RunTask,
+  RunMetrics,
+  RunDetail,
+} from "./types-operations";

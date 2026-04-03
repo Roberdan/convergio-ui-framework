@@ -1,9 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import type { OrgDetail, OrgChartData, OrgMetrics, OrgTimelineEvent } from "@/lib/api";
 import {
   MnOrgChart,
-  MnFinOps,
   MnActivityFeed,
   MnSpinner,
   MnDashboardStrip,
@@ -62,13 +62,13 @@ export function OrgDetailClient({
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
-        <a
+        <Link
           href="/orgs"
           className="rounded-md p-2 hover:bg-muted transition-colors"
           aria-label="Back to organizations"
         >
           <ArrowLeft className="size-5" />
-        </a>
+        </Link>
         <div>
           <h1>{initialOrg.name}</h1>
           {initialOrg.description && (

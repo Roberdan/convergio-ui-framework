@@ -2,11 +2,13 @@
 
 import { useApiQuery } from "@/hooks";
 import { dashboardApi } from "@/lib/api";
-import type { OverviewStats, BrainData, TokenUsage, TaskDistribution } from "@/lib/api";
+import type { OverviewStats, BrainData, TokenUsage, TaskDistribution, ModelTokenUsage } from "@/lib/api";
 import { DashboardMetrics } from "./dashboard-metrics";
 import { DashboardCharts } from "./dashboard-charts";
 import { DashboardBrain } from "./dashboard-brain";
 import { DashboardActivity } from "./dashboard-activity";
+import { DashboardTokenMeters } from "./dashboard-token-meters";
+import { DashboardKpi } from "./dashboard-kpi";
 import { MnSpinner } from "@/components/maranello";
 
 interface DashboardClientProps {
@@ -14,6 +16,7 @@ interface DashboardClientProps {
   initialBrain: BrainData | null;
   initialTokenUsage: TokenUsage[] | null;
   initialTaskDist: TaskDistribution[] | null;
+  initialModelTokens: ModelTokenUsage[] | null;
 }
 
 export function DashboardClient({
@@ -21,6 +24,7 @@ export function DashboardClient({
   initialBrain,
   initialTokenUsage,
   initialTaskDist,
+  initialModelTokens,
 }: DashboardClientProps) {
   const { data: overview } = useApiQuery(
     () => dashboardApi.getOverview(),
@@ -38,11 +42,16 @@ export function DashboardClient({
     () => dashboardApi.getTaskDistribution(),
     { pollInterval: 30000 },
   );
+  const { data: modelTokens } = useApiQuery(
+    () => dashboardApi.getTokenUsageByModel(),
+    { pollInterval: 60000 },
+  );
 
   const stats = overview ?? initialOverview;
   const brainData = brain ?? initialBrain;
   const tokens = tokenUsage ?? initialTokenUsage;
   const tasks = taskDist ?? initialTaskDist;
+  const models = modelTokens ?? initialModelTokens;
 
   if (!stats) {
     return (
@@ -59,10 +68,12 @@ export function DashboardClient({
         <p className="text-caption mt-1">Real-time platform overview</p>
       </div>
       <DashboardMetrics stats={stats} />
+      <DashboardTokenMeters tokenUsage={tokens} modelTokens={models} />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <DashboardCharts tokenUsage={tokens} taskDist={tasks} />
         <DashboardBrain data={brainData} />
       </div>
+      <DashboardKpi stats={stats} taskDist={tasks} />
       <DashboardActivity stats={stats} />
     </div>
   );

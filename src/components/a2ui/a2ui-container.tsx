@@ -67,8 +67,11 @@ export function A2UIContainer({
   if (filtered.length === 0) return null;
 
   return (
-    <div className="space-y-2 mb-4" aria-label="Agent notifications">
-      {filtered.map((block) => (
+    <div
+      className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm"
+      aria-label="Agent notifications"
+    >
+      {filtered.slice(0, 3).map((block) => (
         <A2UIBlockRenderer key={block.block_id} block={block} />
       ))}
     </div>

@@ -4,6 +4,7 @@ import type {
   PlanDetail,
   ExecutionTree,
   CreatePlanRequest,
+  TaskEvidence,
 } from "./types";
 
 export async function listPlans(): Promise<PlanSummary[]> {
@@ -24,4 +25,8 @@ export async function createPlan(data: CreatePlanRequest): Promise<PlanSummary> 
 
 export async function startPlan(id: string): Promise<{ success: boolean }> {
   return api.post<{ success: boolean }>(`/api/plan-db/start/${id}`);
+}
+
+export async function getTaskEvidence(taskId: string): Promise<TaskEvidence[]> {
+  return api.get<TaskEvidence[]>(`/api/plan-db/task/evidence/${taskId}`);
 }

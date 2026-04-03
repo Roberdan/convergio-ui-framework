@@ -10,3 +10,7 @@ export * as chatApi from "./chat";
 export * as operationsApi from "./operations";
 export * as settingsApi from "./settings";
 export * as ideasApi from "./ideas";
+export * as securityApi from "./security";
+export * as workspacesApi from "./workspaces";
+export * as notificationsApi from "./notifications";
+export * as coordinatorApi from "./coordinator";

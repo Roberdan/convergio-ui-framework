@@ -163,7 +163,8 @@ function MnSocialGraph({
     }
     simRef.current.loop = () => { if (!simRef.current.raf && simRef.current.running) simRef.current.raf = requestAnimationFrame(tick) }
     redraw(); simRef.current.loop()
-    return () => { if (simRef.current.raf) { cancelAnimationFrame(simRef.current.raf); simRef.current.raf = 0 } }
+    const sim = simRef.current
+    return () => { if (sim.raf) { cancelAnimationFrame(sim.raf); sim.raf = 0 } }
   }, [inputNodes, inputEdges, animate, resize, redraw])
 
   React.useEffect(() => {

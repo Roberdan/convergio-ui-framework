@@ -6,16 +6,21 @@ export const dynamic = 'force-dynamic';
 export default async function MeshPage() {
   let topology = null;
   let metrics = null;
-  let heartbeats = null;
   let peers = null;
+  let syncStatus = null;
+  let diagnostics = null;
+  let traffic = null;
 
   try {
-    [topology, metrics, heartbeats, peers] = await Promise.all([
-      meshApi.getMeshTopology(),
-      meshApi.getMeshMetrics(),
-      meshApi.getHeartbeatStatus(),
-      meshApi.listPeers(),
-    ]);
+    [topology, metrics, peers, syncStatus, diagnostics, traffic] =
+      await Promise.all([
+        meshApi.getMeshTopology(),
+        meshApi.getMeshMetrics(),
+        meshApi.listPeers(),
+        meshApi.getMeshSyncStatus(),
+        meshApi.getMeshDiagnostics(),
+        meshApi.getMeshTraffic(),
+      ]);
   } catch {
     // Daemon offline
   }
@@ -24,8 +29,10 @@ export default async function MeshPage() {
     <MeshClient
       initialTopology={topology}
       initialMetrics={metrics}
-      initialHeartbeats={heartbeats}
       initialPeers={peers}
+      initialSyncStatus={syncStatus}
+      initialDiagnostics={diagnostics}
+      initialTraffic={traffic}
     />
   );
 }

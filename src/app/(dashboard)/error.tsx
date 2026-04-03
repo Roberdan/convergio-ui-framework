@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle } from "lucide-react";
 
@@ -34,12 +35,12 @@ export default function DashboardError({
       )}
       <div className="flex gap-3 mt-6">
         <Button onClick={reset}>Try Again</Button>
-        <a
+        <Link
           href="/"
           className="inline-flex items-center rounded-md border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
         >
           Go to dashboard
-        </a>
+        </Link>
       </div>
     </div>
   );

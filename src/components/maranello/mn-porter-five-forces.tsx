@@ -86,7 +86,6 @@ export function MnPorterFiveForces({
 
 function ForceCard({
   force,
-  position,
   isCenter = false,
 }: {
   force: Force;

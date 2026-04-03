@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { cva } from "class-variance-authority"
-import { Search, MoreHorizontal, UserPlus, Trash2 } from "lucide-react"
+import { Search, MoreHorizontal, Trash2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 /* ── Types ───────────────────────────────────────────────── */
@@ -113,7 +113,7 @@ function MnUserTable({
   const toggleOne = (id: string) => {
     setSelected((prev) => {
       const next = new Set(prev)
-      next.has(id) ? next.delete(id) : next.add(id)
+      if (next.has(id)) { next.delete(id) } else { next.add(id) }
       notify(next)
       return next
     })

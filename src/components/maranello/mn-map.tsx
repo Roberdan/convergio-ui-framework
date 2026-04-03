@@ -87,7 +87,7 @@ export function MnMap({
       ctx.beginPath()
       for (let i = 0; i < cont.length; i++) {
         const p = proj(cont[i][1], cont[i][0], vw, vh, pad, s.zoom, s.panX, s.panY)
-        i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y)
+        if (i === 0) { ctx.moveTo(p.x, p.y) } else { ctx.lineTo(p.x, p.y) }
       }
       ctx.closePath(); ctx.fill(); ctx.stroke()
     }

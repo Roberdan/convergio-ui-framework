@@ -4,7 +4,7 @@ import { useState } from "react"
 import {
   MnCommandPalette, MnHeaderShell, MnSectionNav,
   MnThemeToggle, MnThemeRotary, MnAsyncSelect,
-  MnDatePicker, MnProfile, MnA11y,
+  MnDatePicker, MnProfile,
 } from "@/components/maranello"
 import { toast } from "@/components/maranello"
 import { ShowcaseSection, ShowcaseCard, btn, searchTechnologies } from "./showcase-helpers"

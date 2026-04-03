@@ -1,16 +1,8 @@
 import { test, expect } from "@playwright/test";
+import { authenticate } from "./helpers";
 
 test.beforeEach(async ({ context }) => {
-  await context.addCookies([
-    {
-      name: "session",
-      value: "authenticated",
-      domain: "127.0.0.1",
-      path: "/",
-      httpOnly: true,
-      sameSite: "Lax",
-    },
-  ]);
+  await authenticate(context);
 });
 
 const THEMES = ["light", "dark", "navy", "colorblind"] as const;

@@ -2,9 +2,9 @@
 
 import { useState } from "react"
 import {
-  MnBadge, MnAvatar, MnAvatarGroup, MnBreadcrumb,
+  MnBadge, MnAvatar, MnAvatarGroup,
   MnFormField, MnFormFieldLabel, MnFormFieldHint,
-  MnStateScaffold, MnToast, toast,
+  MnStateScaffold, toast,
   MnTabs, MnTabList, MnTab, MnTabPanel,
   MnModal, MnCustomerJourney, MnDashboard,
 } from "@/components/maranello"

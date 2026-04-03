@@ -84,12 +84,6 @@ function formatScore(score: number): string {
   return `${(score * 100).toFixed(0)}%`
 }
 
-function sourceIcon(badge?: string) {
-  if (!badge) return FileText
-  const key = badge.toLowerCase()
-  return SOURCE_ICONS[key] ?? FileText
-}
-
 // ---------------------------------------------------------------------------
 // Card item
 // ---------------------------------------------------------------------------

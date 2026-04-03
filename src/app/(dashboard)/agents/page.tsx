@@ -8,13 +8,15 @@ export default async function AgentsPage() {
   let catalog = null;
   let sessions = null;
   let tree = null;
+  let history = null;
 
   try {
-    [agents, catalog, sessions, tree] = await Promise.all([
+    [agents, catalog, sessions, tree, history] = await Promise.all([
       agentsApi.listAgents(),
       agentsApi.getAgentCatalog(),
       agentsApi.getActiveSessions(),
       agentsApi.getAgentTree(),
+      agentsApi.getAgentHistory(),
     ]);
   } catch {
     // Daemon offline
@@ -26,6 +28,7 @@ export default async function AgentsPage() {
       initialCatalog={catalog}
       initialSessions={sessions}
       initialTree={tree}
+      initialHistory={history}
     />
   );
 }

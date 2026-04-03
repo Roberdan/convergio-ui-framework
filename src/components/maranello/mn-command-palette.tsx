@@ -206,6 +206,7 @@ function MnCommandPalette({
         role="combobox"
         aria-expanded={open}
         aria-haspopup="listbox"
+        aria-controls="mn-cp-listbox"
         className={cn(
           "flex max-h-[60vh] w-[520px] max-w-[90vw] flex-col overflow-hidden rounded-xl border border-border bg-background shadow-2xl",
           className,
@@ -229,6 +230,7 @@ function MnCommandPalette({
         <div
           ref={listRef}
           role="listbox"
+          id="mn-cp-listbox"
           className="flex-1 overflow-y-auto py-2"
           data-slot="mn-cp-list"
         >

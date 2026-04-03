@@ -1,11 +1,6 @@
 "use client";
 
 import {
-  MnStrategyCanvas,
-  MnSwot,
-  MnPorterFiveForces,
-  MnCustomerJourneyMap,
-  MnDecisionMatrix,
   MnTabs,
   MnTabList,
   MnTab,
