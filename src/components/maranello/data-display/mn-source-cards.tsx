@@ -1,54 +1,20 @@
 'use client'
 
 import { useState, useMemo, useCallback } from 'react'
-import { cva, type VariantProps } from 'class-variance-authority'
-import { ExternalLink, FileText, Globe, Database } from 'lucide-react'
+import { type VariantProps } from 'class-variance-authority'
+import { ExternalLink, FileText } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import {
+  type SourceCard,
+  type SourceCardLayout,
+  scoreVariants,
+  layoutVariants,
+  SOURCE_ICONS,
+  scoreTier,
+  formatScore,
+} from './mn-source-cards.helpers'
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
-export interface SourceCard {
-  id: string
-  title: string
-  excerpt?: string
-  source?: string
-  score?: number
-  date?: string
-  badge?: string
-  action?: { label: string; onClick: () => void }
-}
-
-export type SourceCardLayout = 'list' | 'grid'
-
-// ---------------------------------------------------------------------------
-// CVA variants
-// ---------------------------------------------------------------------------
-
-const scoreVariants = cva(
-  'shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold',
-  {
-    variants: {
-      tier: {
-        high: 'bg-[var(--mn-success-bg)] text-[var(--mn-success)] border border-[color-mix(in_srgb,var(--mn-success)_24%,transparent)]',
-        mid: 'bg-[var(--mn-warning-bg)] text-[var(--mn-warning)] border border-[color-mix(in_srgb,var(--mn-warning)_24%,transparent)]',
-        low: 'bg-muted text-muted-foreground border border-border',
-      },
-    },
-    defaultVariants: { tier: 'low' },
-  },
-)
-
-const layoutVariants = cva('', {
-  variants: {
-    layout: {
-      list: 'divide-y',
-      grid: 'grid gap-3 sm:grid-cols-2 lg:grid-cols-3',
-    },
-  },
-  defaultVariants: { layout: 'list' },
-})
+export type { SourceCard, SourceCardLayout } from './mn-source-cards.helpers'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -62,26 +28,6 @@ export interface MnSourceCardsProps
   layout?: SourceCardLayout
   ariaLabel?: string
   className?: string
-}
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-const SOURCE_ICONS: Record<string, typeof FileText> = {
-  web: Globe,
-  database: Database,
-  file: FileText,
-}
-
-function scoreTier(score: number): 'high' | 'mid' | 'low' {
-  if (score >= 0.8) return 'high'
-  if (score >= 0.5) return 'mid'
-  return 'low'
-}
-
-function formatScore(score: number): string {
-  return `${(score * 100).toFixed(0)}%`
 }
 
 // ---------------------------------------------------------------------------

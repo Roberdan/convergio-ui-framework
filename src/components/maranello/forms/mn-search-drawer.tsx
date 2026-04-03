@@ -2,72 +2,12 @@
 
 import * as React from "react"
 import { createPortal } from "react-dom"
-import { cva } from "class-variance-authority"
 import { Loader2, Search, X } from "lucide-react"
-
 import { cn } from "@/lib/utils"
+import { searchDrawerBackdropVariants, searchDrawerVariants, type SearchDrawerResult, type MnSearchDrawerProps } from "./mn-search-drawer.helpers"
 
-// ---------------------------------------------------------------------------
-// CVA variants
-// ---------------------------------------------------------------------------
-
-const searchDrawerBackdropVariants = cva(
-  "fixed inset-0 z-[9500] bg-black/50 transition-opacity duration-200",
-  {
-    variants: {
-      visible: {
-        true: "opacity-100 pointer-events-auto",
-        false: "opacity-0 pointer-events-none",
-      },
-    },
-    defaultVariants: { visible: false },
-  },
-)
-
-const searchDrawerVariants = cva(
-  "fixed inset-y-0 right-0 z-[9501] flex w-[400px] max-w-[90vw] flex-col border-l border-border bg-background shadow-2xl transition-transform duration-200",
-  {
-    variants: {
-      visible: {
-        true: "translate-x-0",
-        false: "translate-x-full",
-      },
-    },
-    defaultVariants: { visible: false },
-  },
-)
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
-export interface SearchDrawerResult {
-  id: string
-  title: string
-  subtitle?: string
-  badge?: string
-  icon?: React.ReactNode
-}
-
-export interface SearchDrawerSection {
-  id: string
-  label: string
-  content: React.ReactNode
-}
-
-export interface MnSearchDrawerProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  title: string
-  /** @default "Search…" */
-  placeholder?: string
-  onSearch: (query: string) => Promise<SearchDrawerResult[]>
-  onResultClick?: (result: SearchDrawerResult) => void
-  sections?: SearchDrawerSection[]
-  /** @default "No results found" */
-  emptyMessage?: string
-  className?: string
-}
+export type { SearchDrawerResult, SearchDrawerSection, MnSearchDrawerProps } from "./mn-search-drawer.helpers"
+export { searchDrawerBackdropVariants, searchDrawerVariants } from "./mn-search-drawer.helpers"
 
 // ---------------------------------------------------------------------------
 // Component
@@ -303,4 +243,4 @@ function MnSearchDrawer({
   )
 }
 
-export { MnSearchDrawer, searchDrawerBackdropVariants, searchDrawerVariants }
+export { MnSearchDrawer }

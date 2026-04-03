@@ -1,24 +1,16 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { cva } from "class-variance-authority";
+import {
+  type KpiStatus, type KpiRow,
+  STATUS_LABELS, HEADERS,
+  statusDotVariants, deltaVariants, sparklineVariants,
+  resolveStatus, fmtValue, fmtDelta, deltaDirection,
+} from "./mn-kpi-scorecard.helpers";
 
-/* ------------------------------------------------------------------ */
-/*  Types                                                              */
-/* ------------------------------------------------------------------ */
+export type { KpiStatus, KpiRow } from "./mn-kpi-scorecard.helpers";
 
-export type KpiStatus = "green" | "yellow" | "red" | "neutral";
-
-export interface KpiRow {
-  id: string;
-  label: string;
-  unit?: string;
-  target: number;
-  actual: number;
-  trend?: number[];
-  status?: KpiStatus;
-  format?: "number" | "percent" | "currency";
-}
+/* ── Props ─────────────────────────────────────────────────── */
 
 export interface MnKpiScorecardProps {
   rows: KpiRow[];
@@ -28,93 +20,7 @@ export interface MnKpiScorecardProps {
   className?: string;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Constants                                                          */
-/* ------------------------------------------------------------------ */
-
-const STATUS_LABELS: Record<KpiStatus, string> = {
-  green: "On track",
-  yellow: "At risk",
-  red: "Off track",
-  neutral: "\u2014",
-};
-
-const HEADERS = ["Metric", "Target", "Actual", "Delta", "Trend", "Status"] as const;
-
-/* ------------------------------------------------------------------ */
-/*  CVA variants                                                       */
-/* ------------------------------------------------------------------ */
-
-const statusDotVariants = cva("inline-block size-2 rounded-full shrink-0", {
-  variants: {
-    status: {
-      green: "bg-emerald-500 dark:bg-emerald-400",
-      yellow: "bg-amber-500 dark:bg-amber-400",
-      red: "bg-red-500 dark:bg-red-400",
-      neutral: "bg-muted-foreground",
-    },
-  },
-  defaultVariants: { status: "neutral" },
-});
-
-const deltaVariants = cva("tabular-nums text-sm font-medium", {
-  variants: {
-    direction: {
-      positive: "text-emerald-600 dark:text-emerald-400",
-      negative: "text-red-600 dark:text-red-400",
-      zero: "text-muted-foreground",
-    },
-  },
-  defaultVariants: { direction: "zero" },
-});
-
-const sparklineVariants = cva("inline-block", {
-  variants: {
-    status: {
-      green: "text-emerald-500 dark:text-emerald-400",
-      yellow: "text-amber-500 dark:text-amber-400",
-      red: "text-red-500 dark:text-red-400",
-      neutral: "text-muted-foreground",
-    },
-  },
-  defaultVariants: { status: "neutral" },
-});
-
-/* ------------------------------------------------------------------ */
-/*  Helpers                                                            */
-/* ------------------------------------------------------------------ */
-
-function resolveStatus(row: KpiRow): KpiStatus {
-  if (row.status) return row.status;
-  if (row.actual >= row.target) return "green";
-  if (row.actual >= row.target * 0.8) return "yellow";
-  return "red";
-}
-
-function fmtValue(val: number, fmt: KpiRow["format"], currency: string): string {
-  if (fmt === "percent") return `${val}%`;
-  const formatted = new Intl.NumberFormat("en", {
-    notation: "compact",
-    maximumFractionDigits: 1,
-  }).format(val);
-  if (fmt === "currency") return `${currency}${formatted}`;
-  return formatted;
-}
-
-function fmtDelta(delta: number, fmt: KpiRow["format"], currency: string): string {
-  const sign = delta > 0 ? "+" : "";
-  return `${sign}${fmtValue(delta, fmt, currency)}`;
-}
-
-function deltaDirection(delta: number): "positive" | "negative" | "zero" {
-  if (delta > 0) return "positive";
-  if (delta < 0) return "negative";
-  return "zero";
-}
-
-/* ------------------------------------------------------------------ */
-/*  Sparkline (SVG polyline)                                           */
-/* ------------------------------------------------------------------ */
+/* ── Sparkline ─────────────────────────────────────────────── */
 
 function Sparkline({ data, status }: { data: number[]; status: KpiStatus }) {
   if (data.length < 2) return null;
