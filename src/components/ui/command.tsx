@@ -53,9 +53,10 @@ function CommandDialog({
       </DialogHeader>
       <DialogContent
         className={cn(
-          "!top-[15%] !-translate-y-0 overflow-hidden rounded-xl! p-0 sm:!max-w-lg",
+          "overflow-hidden rounded-xl! p-0",
           className
         )}
+        style={{ top: '15%', transform: 'translateX(-50%)', maxWidth: '32rem' }}
         showCloseButton={showCloseButton}
       >
         <Command shouldFilter={shouldFilter} className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground">
