@@ -2,6 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import { useMemo } from 'react';
+import { formatNumber } from './mn-format';
 
 export interface PipelineStage {
   name: string;
@@ -93,7 +94,7 @@ export function MnPipelineRanking({
                     className="text-xs font-semibold"
                     style={{ color: 'var(--primary-foreground)' }}
                   >
-                    {stage.count.toLocaleString()}
+                    {formatNumber(stage.count)}
                   </span>
                 </div>
               </div>

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { cva } from "class-variance-authority"
 import { cn } from "@/lib/utils"
+import { formatNumber } from "./mn-format"
 import { ArrowDown, ArrowUp, ArrowUpDown, TrendingDown, TrendingUp } from "lucide-react"
 
 export interface AgentCostRow {
@@ -205,9 +206,9 @@ export function MnAgentCostBreakdown({
                 <td className={cn(TD, "text-right")}><span className={cachedCva({ level: cachedLevel(cp) })}>{cp.toFixed(0)}%</span></td>
                 <td className={cn(TD, "text-right tabular-nums")}><strong>{fmt.format(row.cost)}</strong></td>
                 <td className={cn(TD, "text-right")}><DeltaCell value={row.costDelta} /></td>
-                <td className={cn(TD, "text-right tabular-nums")}>{row.calls.toLocaleString()}</td>
+                <td className={cn(TD, "text-right tabular-nums")}>{formatNumber(row.calls)}</td>
                 <td className={cn(TD, "text-right tabular-nums hidden md:table-cell")}>
-                  {row.avgLatencyMs != null ? `${row.avgLatencyMs.toLocaleString()}ms` : <Dash />}
+                  {row.avgLatencyMs != null ? `${formatNumber(row.avgLatencyMs)}ms` : <Dash />}
                 </td>
                 <td className={TD}><BudgetCell row={row} /></td>
                 <td className={cn(TD, "hidden md:table-cell")}><TagsCell tags={row.tags} /></td>
@@ -222,7 +223,7 @@ export function MnAgentCostBreakdown({
             <td className={TD} />
             <td className={cn(TD, "text-right tabular-nums")}><strong>{fmt.format(totals.cost)}</strong></td>
             <td className={TD} />
-            <td className={cn(TD, "text-right tabular-nums")}><strong>{totals.calls.toLocaleString()}</strong></td>
+            <td className={cn(TD, "text-right tabular-nums")}><strong>{formatNumber(totals.calls)}</strong></td>
             <td className={cn(TD, "hidden md:table-cell")} colSpan={3} />
           </tr>
         </tfoot>

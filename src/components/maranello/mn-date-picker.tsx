@@ -3,6 +3,7 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
+import { formatMonthYear } from "./mn-format"
 
 /* ── Variants ── */
 
@@ -116,7 +117,7 @@ function MnDatePicker({
     document.addEventListener("mousedown", h); return () => document.removeEventListener("mousedown", h)
   }, [open])
 
-  const monthLabel = new Date(viewY, viewM).toLocaleDateString(undefined, { month: "long", year: "numeric" })
+  const monthLabel = formatMonthYear(viewY, viewM)
 
   return (
     <div ref={containerRef} data-slot="mn-date-picker" className={cn(datePickerVariants({ size }), className)}>

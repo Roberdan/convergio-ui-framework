@@ -2,6 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import { useMemo } from 'react';
+import { formatNumber } from './mn-format';
 
 export type TrendDirection = 'up' | 'down' | 'flat';
 
@@ -46,7 +47,7 @@ export function MnFinOps({
   className,
 }: MnFinOpsProps) {
   const fmt = useMemo(
-    () => formatValue ?? ((v: number) => v.toLocaleString()),
+    () => formatValue ?? formatNumber,
     [formatValue],
   );
 

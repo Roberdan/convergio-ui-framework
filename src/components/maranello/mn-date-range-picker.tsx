@@ -3,6 +3,7 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
+import { formatMonthYear } from "./mn-format"
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react"
 
 /* ── Variants ── */
@@ -82,7 +83,7 @@ interface CalendarProps { year: number; month: number; today: { y: number; m: nu
 function CalendarMonth({ year, month, today, rangeFrom, rangeTo, hoverDate, onSelect, onHover, min, max }: CalendarProps) {
   const total = daysIn(year, month)
   const offset = startDow(year, month)
-  const label = new Date(year, month).toLocaleDateString(undefined, { month: "long", year: "numeric" })
+  const label = formatMonthYear(year, month)
   const effectiveTo = rangeTo ?? hoverDate
 
   return (

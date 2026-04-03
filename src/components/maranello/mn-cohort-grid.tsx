@@ -3,6 +3,7 @@
 import { cn } from '@/lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { useCallback, useId, useMemo } from 'react';
+import { formatNumber } from './mn-format';
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -88,7 +89,7 @@ const COLOR_HIGH: RGB = parseHex('#00A651');
 const COLOR_LOW: RGB = parseHex('#DC0000');
 
 function formatCell(retention: number, initialSize: number, absolute: boolean): string {
-  if (absolute) return Math.round(initialSize * retention).toLocaleString();
+  if (absolute) return formatNumber(Math.round(initialSize * retention));
   return `${(retention * 100).toFixed(0)}%`;
 }
 
@@ -172,7 +173,7 @@ export function MnCohortGrid({
               <td className="sticky left-0 z-10 bg-[var(--mn-surface-raised)] px-3 py-2 font-medium text-[var(--mn-text)]">
                 {row.label}{' '}
                 <span className="text-[var(--mn-text-muted)]">
-                  (n={row.initialSize.toLocaleString()})
+                  (n={formatNumber(row.initialSize)})
                 </span>
               </td>
 

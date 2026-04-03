@@ -32,3 +32,20 @@ export function formatTime(ts: string): string {
     return ts;
   }
 }
+
+/** Format number with thousands separator (consistent across runtimes) */
+export function formatNumber(n: number): string {
+  const s = Math.abs(n).toString();
+  const parts: string[] = [];
+  for (let i = s.length; i > 0; i -= 3) {
+    parts.unshift(s.slice(Math.max(0, i - 3), i));
+  }
+  return (n < 0 ? '-' : '') + parts.join(',');
+}
+
+const MONTHS_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+/** Format month label as "January 2025" */
+export function formatMonthYear(year: number, month: number): string {
+  return `${MONTHS_LONG[month]} ${year}`;
+}
