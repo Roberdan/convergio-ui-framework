@@ -1,6 +1,6 @@
 # Adding a 5th Theme
 
-How to add a new theme (e.g. `mytheme`) to the Convergio frontend.
+How to add a new theme (e.g. `mytheme`) to the frontend.
 
 ## Step 1: Register the theme name in ThemeProvider
 
@@ -184,7 +184,7 @@ theme:
 - [ ] CSS custom properties block added in globals.css
 - [ ] All Maranello semantic tokens defined
 - [ ] All shadcn bridge tokens defined
-- [ ] WCAG 2.1 AA contrast ratios verified (4.5:1 text, 3:1 UI)
+- [ ] WCAG 2.2 AA contrast ratios verified (4.5:1 text, 3:1 UI)
 - [ ] theme-script.tsx allowlist updated
 - [ ] THEME_META entry added in mn-theme-toggle.tsx
 - [ ] POSITIONS entry added in mn-theme-rotary.tsx

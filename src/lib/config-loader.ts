@@ -11,12 +11,17 @@ import { rawConfigSchema, type ValidatedConfig } from "./config-schema";
  * Reads `convergio.yaml` from the project root and returns typed config
  * objects for app, navigation, pages, and AI agents.
  *
- * This runs at build time (in server components / generateStaticParams).
- * The YAML is parsed once and cached for the lifetime of the build.
+ * Used at build time (server components / generateStaticParams) and at
+ * runtime in layouts and route handlers.
+ * The YAML is parsed once and cached for the lifetime of the process.
  * Config is validated against a Zod schema at load time.
  * In dev mode, a file watcher invalidates the cache on changes.
  *
- * To override: set CONVERGIO_CONFIG_PATH env var to a custom path.
+ * To override the config path: set CONVERGIO_CONFIG_PATH env var.
+ *
+ * NOTE: `api.baseUrl` and `theme.storageKey` in the YAML are validated
+ * but not consumed by the runtime — API URL comes from env.ts (API_URL),
+ * and the theme storage key is hardcoded in theme-script.tsx.
  */
 
 let cached: ValidatedConfig | null = null;

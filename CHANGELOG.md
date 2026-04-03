@@ -1,6 +1,20 @@
 # Changelog
 
-## [0.2.0] - 01 Aprile 2026
+## [0.2.1] - 03 April 2026
+
+### Documentation Cleanup
+- Rewrote README.md: accurate component count (100), correct AI SDK version (v6), proper architecture diagram, env var table, accurate config-driven docs
+- Deleted stale docs: waves/, PHASE2-SUMMARY.md, WT-test-foundation.md, plan-10040-notes.md
+- Fixed CONSTITUTION.md: clarified as governance/policy doc
+- Fixed ADR-0001: corrected enforcement reference
+- Fixed docs/guides/adding-a-theme.md: WCAG 2.1 → 2.2
+- Fixed package.json: version 0.2.0, added description, added `test` script, removed dead `format` scripts
+- Fixed src-tauri/tauri.conf.json: updated productName/identifier/title
+- Fixed src/lib/config-loader.ts: accurate JSDoc (runtime + build, unused fields noted)
+- Fixed src/lib/env.ts: added JSDoc for all fields
+- Fixed src/lib/session.ts: documented fallback secret
+
+## [0.2.0] - 01 April 2026
 
 ### Phase 2: Expert Review Hardening + Maranello Components
 

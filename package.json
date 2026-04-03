@@ -1,18 +1,18 @@
 {
   "name": "convergio-frontend",
-  "version": "0.1.0",
+  "version": "0.2.0",
+  "description": "Maranello Design System — operational shell with 100+ React components, 4 themes, config-driven architecture. Built on Next.js 16, shadcn/ui, Tailwind CSS v4.",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
     "test:e2e": "playwright test",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
   },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.49",

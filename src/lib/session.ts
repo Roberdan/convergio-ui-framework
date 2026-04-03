@@ -10,6 +10,10 @@ import { cookies } from "next/headers";
 const COOKIE_NAME = "session";
 const ALGORITHM = { name: "HMAC", hash: "SHA-256" } as const;
 
+/**
+ * Return the session signing secret.
+ * Falls back to a dev-only default — in production, always set SESSION_SECRET.
+ */
 function getSecret(): string {
   return process.env.SESSION_SECRET ?? "convergio-dev-secret";
 }

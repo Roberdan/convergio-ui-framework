@@ -19,4 +19,4 @@ ONLY Thor can transition a task to `done`. The lifecycle is immutable: `pending 
 
 - Rule: CONSTITUTION.md rules X1-X8
 - Check: `cvg plan validate {plan_id}` returns `validated > 0`
-- Ref: execute.md line 18 — SQLite trigger `enforce_thor_done`
+- Implementation: SQLite trigger `enforce_thor_done` in ConvergioPlatform daemon

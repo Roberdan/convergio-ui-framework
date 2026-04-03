@@ -1,6 +1,8 @@
 # Convergio Frontend — Constitution
 
-> Binding rules. No exceptions.
+> Binding governance rules for this repository. These are conventions and policies
+> enforced by code review and plan execution — not runtime code.
+> No exceptions.
 
 ## Principles
 
