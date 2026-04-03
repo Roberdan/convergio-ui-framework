@@ -5,8 +5,6 @@ import { usePathname } from "next/navigation";
 import { Sidebar, type NavSection } from "./sidebar";
 import { Header } from "./header";
 import { CommandMenu } from "./command-menu";
-import { A2UIProvider } from "@/lib/a2ui";
-import { A2UIContainer } from "@/components/a2ui";
 
 export interface AppShellProps {
   children: React.ReactNode;
@@ -23,10 +21,10 @@ export function AppShell({ children, sections, brandName, brandLogo }: AppShellP
   const toggleSidebar = useCallback(() => setCollapsed((c) => !c), []);
   const openCommand = useCallback(() => setCommandOpen(true), []);
 
-  const breadcrumb = buildBreadcrumb(brandName ?? "Convergio", pathname, sections);
+  const breadcrumb = buildBreadcrumb(brandName ?? "Maranello", pathname, sections);
 
   return (
-    <A2UIProvider>
+    <>
       <Header
         onMenuToggle={toggleSidebar}
         onSearchClick={openCommand}
@@ -42,13 +40,12 @@ export function AppShell({ children, sections, brandName, brandLogo }: AppShellP
         />
         <main id="main-content" className="flex-1 min-h-[calc(100vh-52px)] overflow-auto">
           <div className="p-6">
-            <A2UIContainer currentPage={pathname} />
             {children}
           </div>
         </main>
       </div>
       <CommandMenu open={commandOpen} onOpenChange={setCommandOpen} />
-    </A2UIProvider>
+    </>
   );
 }
 

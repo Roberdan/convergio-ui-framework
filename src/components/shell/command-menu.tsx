@@ -3,15 +3,24 @@
 import { useCallback, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import {
-  Bell,
-  FolderKanban,
-  LayoutDashboard,
+  BarChart3,
+  Brain,
+  DollarSign,
+  Eye,
+  FormInput,
+  Home,
+  Layout,
+  MessageSquare,
   Monitor,
   Moon,
-  Plus,
+  Navigation,
+  Network,
+  Palette,
   Settings,
   Shield,
   Sun,
+  Table,
+  Target,
 } from "lucide-react"
 
 import {
@@ -31,9 +40,24 @@ interface CommandMenuProps {
 }
 
 const NAV_ITEMS = [
-  { label: "Dashboard", href: "/", icon: LayoutDashboard },
-  { label: "Settings", href: "/settings", icon: Settings },
-  { label: "Projects", href: "/projects", icon: FolderKanban },
+  { label: "Home", href: "/", icon: Home },
+  { label: "Showcase", href: "/showcase", icon: Layout },
+  { label: "Theme Playground", href: "/showcase/themes", icon: Palette },
+  { label: "Preview", href: "/preview", icon: Eye },
+] as const
+
+const CATEGORY_ITEMS = [
+  { label: "Agentic AI", href: "/showcase/agentic", icon: Brain },
+  { label: "Data Display", href: "/showcase/data-display", icon: Table },
+  { label: "Data Viz", href: "/showcase/data-viz", icon: BarChart3 },
+  { label: "Feedback", href: "/showcase/feedback", icon: MessageSquare },
+  { label: "Financial", href: "/showcase/financial", icon: DollarSign },
+  { label: "Forms", href: "/showcase/forms", icon: FormInput },
+  { label: "Layout", href: "/showcase/layout", icon: Layout },
+  { label: "Navigation", href: "/showcase/navigation", icon: Navigation },
+  { label: "Network", href: "/showcase/network", icon: Network },
+  { label: "Operations", href: "/showcase/ops", icon: Settings },
+  { label: "Strategy", href: "/showcase/strategy", icon: Target },
 ] as const
 
 const THEME_ITEMS = [
@@ -43,10 +67,7 @@ const THEME_ITEMS = [
   { label: "Colorblind", value: "colorblind" as const, icon: Shield },
 ] as const
 
-const ACTION_ITEMS = [
-  { label: "Create project", icon: Plus },
-  { label: "View notifications", icon: Bell },
-] as const
+const ACTION_ITEMS = [] as const
 
 export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
   const router = useRouter()
@@ -108,11 +129,11 @@ export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
 
         <CommandSeparator />
 
-        <CommandGroup heading="Theme">
-          {THEME_ITEMS.map((item) => (
+        <CommandGroup heading="Categories">
+          {CATEGORY_ITEMS.map((item) => (
             <CommandItem
-              key={item.value}
-              onSelect={() => handleTheme(item.value)}
+              key={item.href}
+              onSelect={() => handleNav(item.href)}
             >
               <item.icon className="size-4 text-muted-foreground" />
               <span>{item.label}</span>
@@ -122,9 +143,12 @@ export function CommandMenu({ open, onOpenChange }: CommandMenuProps) {
 
         <CommandSeparator />
 
-        <CommandGroup heading="Actions">
-          {ACTION_ITEMS.map((item) => (
-            <CommandItem key={item.label} onSelect={close}>
+        <CommandGroup heading="Theme">
+          {THEME_ITEMS.map((item) => (
+            <CommandItem
+              key={item.value}
+              onSelect={() => handleTheme(item.value)}
+            >
               <item.icon className="size-4 text-muted-foreground" />
               <span>{item.label}</span>
             </CommandItem>

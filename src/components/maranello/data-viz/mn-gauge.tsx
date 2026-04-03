@@ -13,17 +13,24 @@ const gaugeWrap = cva("relative inline-block", {
 
 function readPalette(el: Element) {
   const g = (n: string, fb: string) => getComputedStyle(el).getPropertyValue(n).trim() || fb
-  const lt = document.documentElement.getAttribute("data-theme") === "light"
-  const cb = document.documentElement.getAttribute("data-theme") === "colorblind"
+  const theme = document.documentElement.getAttribute("data-theme") ?? "navy"
+  const lt = theme === "light"
+  const cb = theme === "colorblind"
   return {
     tickMajor: lt ? "#a07818" : cb ? "#FFB000" : "#D4A826", tickHalf: lt ? "#806010" : cb ? "#B87E00" : "#9A7B1C", tickMinor: lt ? "#604808" : cb ? "#7A5400" : "#5a4a14",
-    numbers: g("--mn-text-tertiary","#c8c8c8"), centerValue: g("--mn-text","#fafafa"), centerUnit: g("--mn-text-muted","#9e9e9e"), centerLabel: g("--mn-text-disabled","#666"),
-    muted: g("--mn-text-disabled","#666"), highlightRing: g("--mn-hover-bg","rgba(255,255,255,0.04)"), trackAlpha: g("--mn-border-subtle","rgba(255,255,255,0.06)"),
-    needleTail: lt ? "#a8a49e" : "#555", needleTip: lt ? g("--mn-text","#1a1a1a") : "#fff", arcDot: g("--mn-text","#fff"), axisLabel: g("--mn-text-muted","#888"),
+    numbers: lt ? "#4a3d1a" : g("--mn-text-tertiary","#c8c8c8"),
+    centerValue: lt ? "#1a1206" : g("--mn-text","#fafafa"),
+    centerUnit: lt ? "#5a4a28" : g("--mn-text-muted","#9e9e9e"),
+    centerLabel: lt ? "#6b5a32" : g("--mn-text-disabled","#666"),
+    muted: lt ? "#6b5a32" : g("--mn-text-disabled","#666"), highlightRing: g("--mn-hover-bg", lt ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.04)"), trackAlpha: g("--mn-border-subtle", lt ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.06)"),
+    needleTail: lt ? "#a8a49e" : "#555", needleTip: lt ? "#1a1a1a" : "#fff", arcDot: lt ? "#1a1a1a" : g("--mn-text","#fff"), axisLabel: lt ? "#5a4a28" : g("--mn-text-muted","#888"),
     capOuter: lt ? ["#d0cfc9","#b8b4ae","#a09e98","#888582"] : ["#888","#555","#333","#1a1a1a"],
     capInner: lt ? ["#d8d4ce","#c0bcb6","#a8a49e"] : ["#aaa","#666","#2a2a2a"], capCenter: lt ? "#b0aba4" : "#444",
-    subDialBg: [g("--mn-surface-raised","#222"), g("--mn-surface-sunken","#111")], subDialBorder: g("--mn-border","#3a3a3a"), subDialTrack: g("--mn-border-subtle","rgba(255,255,255,0.08)"),
-    odometerBg: g("--mn-surface-sunken","#1a1a1a"), odometerBorder: g("--mn-border","#333"),
+    subDialBg: lt ? ["#e8e2d6","#d8d2c6"] : [g("--mn-surface-raised","#222"), g("--mn-surface-sunken","#111")],
+    subDialBorder: lt ? "#b8b2a6" : g("--mn-border","#3a3a3a"),
+    subDialTrack: lt ? "rgba(0,0,0,0.10)" : g("--mn-border-subtle","rgba(255,255,255,0.08)"),
+    odometerBg: lt ? "#e0dace" : g("--mn-surface-sunken","#1a1a1a"),
+    odometerBorder: lt ? "#b0aaa0" : g("--mn-border","#333"),
   }
 }
 type GaugePalette = ReturnType<typeof readPalette>

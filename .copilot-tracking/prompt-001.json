@@ -1,0 +1,39 @@
+{
+  "session": "interview",
+  "timestamp": "2026-04-03T14:10:00Z",
+  "user_request": "Riorganizzare il design system: fix visivi, unificare showcase/preview, documentare tutti i 100 componenti con props+semantica+esempio, fuzzy search nel Cmd-K, guida per estendere il sistema, solo icone Lucide, verificare completezza migrazione, accessibilità",
+  "clarifications": [
+    { "question": "Organizzazione categorie", "answer": "Fammi una proposta basata sul contenuto reale" },
+    { "question": "Formato documentazione", "answer": "Inline nella pagina + file .mdx esportabili" },
+    { "question": "Profondità docs", "answer": "Props table completa per tutti i 100 componenti" },
+    { "question": "Search Cmd-K", "answer": "Fuzzy search su nome+descrizione+keywords IT/EN" },
+    { "question": "Audit prima di procedere", "answer": "Sì, fare audit completo" },
+    { "question": "Lingua documentazione", "answer": "Bilingue: UI inglese, keywords anche italiano per search" },
+    { "question": "Icone e estensibilità", "answer": "Solo Lucide, documentare come creare nuovi componenti e icone mantenendo identità" }
+  ],
+  "requirements": [
+    { "id": "F-01", "text": "Riorganizzare le 12+1 categorie in cluster semantici basati sul contenuto reale. Proposta: Core UI (badge, avatar, icon, spinner, progress-ring, flip-counter, toggle-switch), Data (data-table, user-table, kpi-scorecard, source-cards, detail-panel, token-meter), Charts (chart, gauge, half-gauge, heatmap, funnel, waterfall, speedometer, confidence-chart, bullet-chart, hbar, pipeline-ranking, cost-timeline, cohort-grid, budget-treemap), Forms (form-field, async-select, search-drawer, date-picker, date-range-picker, calendar-range, filter-panel, voice-input, login, profile), Feedback (toast, modal, notification-center, state-scaffold, streaming-text, activity-feed), Layout (grid-layout, section-card, admin-shell, settings-panel, dashboard, dashboard-strip, dashboard-renderer, header-shell), Navigation (breadcrumb, tabs, stepper, section-nav, command-palette), Strategy (bcg-matrix, nine-box-matrix, risk-matrix, decision-matrix, swot, porter-five-forces, business-model-canvas, strategy-canvas, okr, customer-journey, customer-journey-map), Network (mesh-network, network-messages, system-status, deployment-table, social-graph, org-chart, map + sub-components), Operations (gantt, kanban-board, audit-log, binnacle, instrument-binnacle, night-jobs, entity-workbench, facet-workbench), Agentic (agent-trace, approval-chain, neural-nodes, augmented-brain, hub-spoke, active-missions, chat), Financial (finops, agent-cost-breakdown), Theme & A11y (theme-toggle, theme-rotary, ferrari-control, dropdown-menu, a11y, a11y-fab)", "wave": "W1" },
+    { "id": "F-02", "text": "Eliminare la pagina /preview. Unificare tutto in /showcase con sotto-pagine per categoria. Ogni categoria ha la propria pagina con TUTTI i suoi componenti demo.", "wave": "W1" },
+    { "id": "F-03", "text": "Fixare i 3 componenti network orfani (mn-mesh-network-canvas, mn-mesh-network-card, mn-mesh-network-toolbar) — aggiungerli al barrel network/index.ts.", "wave": "W1" },
+    { "id": "F-04", "text": "Fixare i 52 componenti mancanti dalle showcase sections. Ogni componente deve avere un demo live nella pagina della sua categoria.", "wave": "W2" },
+    { "id": "F-05", "text": "Per ogni componente: descrizione semantica (quando usarlo, in che contesto), esempio d'uso con codice, tabella props completa (nome, tipo, default, descrizione) estratta dal TypeScript.", "wave": "W2" },
+    { "id": "F-06", "text": "Generare file .mdx esportabile per ogni componente con la stessa documentazione inline (props table, semantica, esempio). Directory: docs/components/{category}/{component-name}.mdx", "wave": "W3" },
+    { "id": "F-07", "text": "Cmd-K fuzzy search: cercare componenti per nome, categoria, descrizione, keywords semantiche. Keywords bilingue IT/EN (es. 'grafico' trova chart/gauge/heatmap, 'tabella' trova data-table/user-table). Risultati navigabili con frecce, Enter porta alla pagina categoria con scroll al componente.", "wave": "W2" },
+    { "id": "F-08", "text": "Fix visivi cross-theme: (a) gauge readPalette con contrasti corretti su tutti e 4 i temi, (b) Ferrari Controls (Manettino/CruiseLever/ToggleLever/SteppedRotary) leggibili su tutti i temi, (c) eliminare i 22 file con colori hardcoded — usare solo CSS custom properties --mn-*.", "wave": "W1" },
+    { "id": "F-09", "text": "Accessibilità: (a) MnA11yFab visibile e funzionante globalmente nel layout, (b) fix aria-label mancante su mn-dashboard cells, (c) tutti i componenti interattivi devono avere focus ring visibile + aria attributes.", "wave": "W2" },
+    { "id": "F-10", "text": "Guida 'Creating a new component': docs/guides/creating-a-component.md. Deve coprire: naming (Mn prefix), file structure (.tsx + .helpers.ts), CVA + cn() pattern, 'use client' rules, CSS vars --mn-*, max 250 righe, named exports, barrel export, test, showcase entry, registry entry.", "wave": "W3" },
+    { "id": "F-11", "text": "Guida 'Adding icons': docs/guides/adding-icons.md. Solo Lucide. Come aggiungere un'icona: import in icon-map.ts, aggiungere al registry, zero emoji (P2 CONSTITUTION).", "wave": "W3" },
+    { "id": "F-12", "text": "Guida 'Extending the design system': docs/guides/extending-the-system.md. Come creare una nuova categoria, come aggiungere un tema, come personalizzare i tokens --mn-*, come contribuire.", "wave": "W3" },
+    { "id": "F-13", "text": "Fix tecnici: (a) 3 file >250 righe (gauge 258, date-range-picker 251, command-palette 251) → split, (b) aggiornare registry public/r/ con le correzioni, (c) aggiornare E2E per la nuova struttura senza /preview.", "wave": "W1" },
+    { "id": "F-14", "text": "Sidebar navigation: sezioni Overview + tutte le categorie con icone Lucide corrette. Cmd-K aggiornato con sezione Categories completa.", "wave": "W1" },
+    { "id": "F-15", "text": "Tutti i check devono passare alla fine: pnpm build, typecheck, lint (0 errori), vitest (tutti pass), test:e2e (tutti pass).", "wave": "WF" }
+  ],
+  "constraints": [
+    { "id": "C-01", "text": "Solo icone Lucide — zero emoji (CONSTITUTION P2)", "type": "design" },
+    { "id": "C-02", "text": "Max 250 righe per file (CONSTITUTION P4)", "type": "technical" },
+    { "id": "C-03", "text": "TypeScript strict — no any, named exports only (CONSTITUTION C1, C2)", "type": "technical" },
+    { "id": "C-04", "text": "No colori hardcoded — solo CSS custom properties --mn-* (CONSTITUTION C3)", "type": "design" },
+    { "id": "C-05", "text": "WCAG 2.2 AA minimo (CONSTITUTION P1)", "type": "accessibility" },
+    { "id": "C-06", "text": "4 temi sempre: navy, dark, light, colorblind (CONSTITUTION P3)", "type": "design" }
+  ]
+}
