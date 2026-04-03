@@ -1,5 +1,29 @@
 # Changelog
 
+## [Unreleased]
+
+### W1: Fix & Restructure
+- Refactor: split 3 oversized files (gauge, date-range-picker, command-palette) into component + helpers
+- Refactor: fix network barrel exports (3 missing components)
+- Fix: replace hardcoded hex colors in 9 files with --mn-* CSS custom properties
+- Fix: Ferrari Controls, gauge, speedometer cross-theme contrast
+- Refactor: remove /preview, unify all content under /showcase/[category]
+- Fix: sidebar navigation with 12 category sections + Cmd-K update
+
+### W2: Complete Showcase + A11y
+- Feat: add live demos for 34 missing components across all categories
+- Feat: component catalog (100 entries) with bilingual EN/IT fuzzy search
+- Feat: Cmd-K fuzzy component search across name, description, keywords
+- Fix: A11y — MnA11yFab global, skip-to-content, aria-labels, focus rings
+- Feat: inline component documentation with props table + code snippets
+
+### W3: Guides & MDX Documentation
+- Docs: 100 .mdx component documentation files + generation script
+- Docs: guide "Creating a new component" with full example
+- Docs: guide "Adding icons" (Lucide-only policy)
+- Docs: guide "Extending the design system" (categories, themes, tokens, WCAG)
+- Chore: regenerated shadcn registry (104 files, 13 helpers bundled)
+
 ## [0.2.1] - 03 April 2026
 
 ### Documentation Cleanup
