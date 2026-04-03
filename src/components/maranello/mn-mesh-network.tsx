@@ -88,17 +88,17 @@ export function MnMeshNetwork({
     [onNodeSelect],
   )
 
-  // Build positions whenever nodes change
-  useEffect(() => {
-    if (!nodes?.length) return
-    const dim = 400
-    const pts = circleLayout(nodes.length, dim / 2, dim / 2, dim * 0.35)
-    const map = new Map<string, NodePos>()
+  // Build positions based on actual element size
+  const buildPositions = useCallback((w: number, h: number) => {
+    if (!nodes?.length) return;
+    const dim = Math.min(w, h);
+    const pts = circleLayout(nodes.length, w / 2, h / 2, dim * 0.35);
+    const map = new Map<string, NodePos>();
     nodes.forEach((n, i) => {
-      map.set(n.id, { ...pts[i], pulsePhase: Math.random() * Math.PI * 2, established: 0 })
-    })
-    posRef.current = map
-  }, [nodes])
+      map.set(n.id, { ...pts[i], pulsePhase: Math.random() * Math.PI * 2, established: 0 });
+    });
+    posRef.current = map;
+  }, [nodes]);
 
   // Reset edge animations when edges change
   useEffect(() => {
@@ -118,6 +118,7 @@ export function MnMeshNetwork({
       const w = Math.max(280, host.clientWidth || 400)
       const h = Math.max(280, host.clientHeight || 400)
       setupCanvas(canvas, w, h)
+      buildPositions(w, h)
     }
 
     const palette = readPalette(host)

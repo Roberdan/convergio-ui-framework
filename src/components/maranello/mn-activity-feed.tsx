@@ -61,9 +61,10 @@ function groupByDay(items: ActivityItem[]): Map<string, ActivityItem[]> {
 
 function formatTime(ts: string): string {
   try {
-    return new Date(ts).toLocaleTimeString([], {
+    return new Date(ts).toLocaleTimeString('en-GB', {
       hour: '2-digit',
       minute: '2-digit',
+      hour12: false,
     });
   } catch {
     return ts;
