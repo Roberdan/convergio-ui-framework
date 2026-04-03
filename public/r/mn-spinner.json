@@ -1,0 +1,13 @@
+{
+  "name": "mn-spinner",
+  "type": "registry:ui",
+  "files": [
+    {
+      "path": "components/maranello/data-display/mn-spinner.tsx",
+      "content": "\"use client\";\n\nimport * as React from \"react\";\nimport { cn } from \"@/lib/utils\";\n\ntype SpinnerSize = \"sm\" | \"md\" | \"lg\";\ntype SpinnerVariant = \"primary\" | \"muted\" | \"destructive\";\n\nconst SIZE_MAP: Record<SpinnerSize, string> = {\n  sm: \"h-4 w-4 border-2\",\n  md: \"h-8 w-8 border-[3px]\",\n  lg: \"h-12 w-12 border-4\",\n};\n\nconst COLOR_MAP: Record<SpinnerVariant, string> = {\n  primary: \"border-primary/30 border-t-primary\",\n  muted: \"border-muted/30 border-t-muted-foreground\",\n  destructive: \"border-destructive/30 border-t-destructive\",\n};\n\ninterface MnSpinnerProps {\n  size?: SpinnerSize;\n  variant?: SpinnerVariant;\n  label?: string;\n  className?: string;\n}\n\n/** Animated loading spinner with size and color variants. */\nfunction MnSpinner({\n  size = \"md\",\n  variant = \"primary\",\n  label = \"Loading\",\n  className,\n}: MnSpinnerProps) {\n  return (\n    <div\n      role=\"status\"\n      aria-label={label}\n      className={cn(\"inline-flex items-center justify-center\", className)}\n    >\n      <div\n        className={cn(\n          \"animate-spin rounded-full\",\n          SIZE_MAP[size],\n          COLOR_MAP[variant],\n        )}\n      />\n      <span className=\"sr-only\">{label}</span>\n    </div>\n  );\n}\n\nexport { MnSpinner };\nexport type { MnSpinnerProps };\n",
+      "type": "registry:ui"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": []
+}

@@ -1,0 +1,15 @@
+{
+  "name": "mn-badge",
+  "type": "registry:ui",
+  "files": [
+    {
+      "path": "components/maranello/data-display/mn-badge.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\n\nimport { cn } from \"@/lib/utils\"\n\n// ---------------------------------------------------------------------------\n// Types\n// ---------------------------------------------------------------------------\n\nexport type BadgeTone = \"success\" | \"warning\" | \"danger\" | \"info\" | \"neutral\"\n\n// ---------------------------------------------------------------------------\n// CVA variants\n// ---------------------------------------------------------------------------\n\nconst mnBadgeVariants = cva(\n  \"inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold leading-tight\",\n  {\n    variants: {\n      tone: {\n        success:\n          \"bg-[var(--mn-success-bg)] text-[var(--mn-success)] border border-[color-mix(in_srgb,var(--mn-success)_24%,transparent)]\",\n        warning:\n          \"bg-[var(--mn-warning-bg)] text-[var(--mn-warning)] border border-[color-mix(in_srgb,var(--mn-warning)_24%,transparent)]\",\n        danger:\n          \"bg-[var(--mn-error-bg)] text-[var(--mn-error)] border border-[color-mix(in_srgb,var(--mn-error)_24%,transparent)]\",\n        info:\n          \"bg-[var(--mn-info-bg)] text-[var(--mn-info)] border border-[color-mix(in_srgb,var(--mn-info)_24%,transparent)]\",\n        neutral:\n          \"bg-muted text-muted-foreground border border-border\",\n      },\n    },\n    defaultVariants: {\n      tone: \"neutral\",\n    },\n  },\n)\n\n// ---------------------------------------------------------------------------\n// Props\n// ---------------------------------------------------------------------------\n\nexport interface MnBadgeProps\n  extends React.HTMLAttributes<HTMLSpanElement>,\n    VariantProps<typeof mnBadgeVariants> {\n  /** The text displayed inside the badge. Falls back to `children`. */\n  label?: string\n  /** Semantic tone controlling colors. */\n  tone?: BadgeTone\n}\n\n// ---------------------------------------------------------------------------\n// Component\n// ---------------------------------------------------------------------------\n\n/**\n * `MnBadge` renders a small status label.\n *\n * Supports five semantic tones (`success`, `warning`, `danger`, `info`,\n * `neutral`) that automatically adapt to the active Maranello theme.\n */\nexport function MnBadge({\n  label,\n  tone = \"neutral\",\n  className,\n  children,\n  role,\n  ...props\n}: MnBadgeProps) {\n  const content = label ?? children\n\n  return (\n    <span\n      role={role ?? \"status\"}\n      {...props}\n      className={cn(mnBadgeVariants({ tone }), className)}\n    >\n      {content}\n    </span>\n  )\n}\n\nexport { mnBadgeVariants }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "dependencies": [
+    "class-variance-authority"
+  ],
+  "registryDependencies": []
+}

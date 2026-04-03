@@ -1,0 +1,15 @@
+{
+  "name": "mn-instrument-binnacle",
+  "type": "registry:ui",
+  "files": [
+    {
+      "path": "components/maranello/ops/mn-instrument-binnacle.tsx",
+      "content": "'use client';\n\nimport { cn } from '@/lib/utils';\nimport { MnBinnacle } from './mn-binnacle';\nimport { MnDashboardStrip } from '../layout/mn-dashboard-strip';\n\nimport type { BinnacleEntry } from './mn-binnacle';\nimport type { StripMetric } from '../layout/mn-dashboard-strip';\n\nexport interface MnInstrumentBinnacleProps {\n  entries: BinnacleEntry[];\n  metrics: StripMetric[];\n  /** Max log entries to display. Default: 50 */\n  maxVisible?: number;\n  ariaLabel?: string;\n  className?: string;\n}\n\n/**\n * Combined instrument panel: metrics strip + event log.\n *\n * Composes MnDashboardStrip (top) and MnBinnacle (bottom)\n * in a unified view for operational dashboards.\n */\nexport function MnInstrumentBinnacle({\n  entries,\n  metrics,\n  maxVisible = 50,\n  ariaLabel = 'Instrument panel',\n  className,\n}: MnInstrumentBinnacleProps) {\n  return (\n    <div\n      className={cn('space-y-3', className)}\n      role=\"region\"\n      aria-label={ariaLabel}\n    >\n      <MnDashboardStrip\n        metrics={metrics}\n        ariaLabel=\"Key metrics\"\n      />\n      <MnBinnacle\n        entries={entries}\n        maxVisible={maxVisible}\n        ariaLabel=\"Event log\"\n      />\n    </div>\n  );\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": [
+    "mn-dashboard-strip"
+  ]
+}

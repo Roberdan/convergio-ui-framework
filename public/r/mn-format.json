@@ -1,0 +1,13 @@
+{
+  "name": "mn-format",
+  "type": "registry:lib",
+  "files": [
+    {
+      "path": "components/maranello/shared/mn-format.ts",
+      "content": "/**\n * Hydration-safe date/time formatting utilities.\n *\n * Uses manual formatting to prevent server/client mismatch\n * from differing Intl implementations (Node vs Safari vs Chrome).\n */\n\nconst MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];\n\nfunction pad2(n: number): string {\n  return n < 10 ? `0${n}` : `${n}`;\n}\n\n/** Format timestamp as \"1 Apr 2025, 14:30\" */\nexport function formatDateTime(ts: string): string {\n  try {\n    const d = new Date(ts);\n    if (Number.isNaN(d.getTime())) return ts;\n    return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}, ${pad2(d.getHours())}:${pad2(d.getMinutes())}`;\n  } catch {\n    return ts;\n  }\n}\n\n/** Format timestamp as \"14:30\" */\nexport function formatTime(ts: string): string {\n  try {\n    const d = new Date(ts);\n    if (Number.isNaN(d.getTime())) return ts;\n    return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;\n  } catch {\n    return ts;\n  }\n}\n\n/** Format number with thousands separator (consistent across runtimes) */\nexport function formatNumber(n: number): string {\n  const s = Math.abs(n).toString();\n  const parts: string[] = [];\n  for (let i = s.length; i > 0; i -= 3) {\n    parts.unshift(s.slice(Math.max(0, i - 3), i));\n  }\n  return (n < 0 ? '-' : '') + parts.join(',');\n}\n\nconst MONTHS_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];\n\n/** Format month label as \"January 2025\" */\nexport function formatMonthYear(year: number, month: number): string {\n  return `${MONTHS_LONG[month]} ${year}`;\n}\n",
+      "type": "registry:lib"
+    }
+  ],
+  "dependencies": [],
+  "registryDependencies": []
+}
