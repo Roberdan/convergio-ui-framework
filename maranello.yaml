@@ -1,0 +1,23 @@
+app:
+  name: Maranello Design System
+  description: Component showcase and design system explorer
+
+theme:
+  default: navy
+
+navigation:
+  sections:
+    - label: Design System
+      items:
+        - id: home
+          label: Home
+          href: /
+          icon: Home
+        - id: showcase
+          label: Component Showcase
+          href: /showcase
+          icon: Palette
+        - id: preview
+          label: Preview
+          href: /preview
+          icon: Eye

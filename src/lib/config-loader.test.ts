@@ -8,9 +8,9 @@ import YAML from "yaml";
  * content and verify config transformation logic.
  */
 
-function mockFs(yamlContent: string, fileExists = true) {
+function mockFs(yamlContent: string, fileExists: boolean | ((path: string) => boolean) = true) {
   const readFileSync = () => yamlContent;
-  const existsSync = () => fileExists;
+  const existsSync = typeof fileExists === "function" ? fileExists : () => fileExists;
   const watch = () => ({ close: () => {} });
   vi.doMock("fs", () => ({
     default: { readFileSync, existsSync, watch },
@@ -154,6 +154,20 @@ describe("config-loader functions", () => {
     const routes = loadPageRoutes();
 
     expect(routes).toEqual(["/", "/agents", "/settings"]);
+  });
+
+  it("prefers maranello.yaml over convergio.yaml when both exist", async () => {
+    mockFs(
+      YAML.stringify({
+        app: { name: "Maranello Design System" },
+      }),
+      (path: string) => path.includes("maranello.yaml"),
+    );
+
+    const { loadAppConfig } = await import("./config-loader");
+    const config = loadAppConfig();
+
+    expect(config.name).toBe("Maranello Design System");
   });
 
   it("throws descriptive error for invalid config file", async () => {
