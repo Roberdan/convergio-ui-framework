@@ -28,9 +28,9 @@ export function ShowcaseAdvanced() {
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Ferrari Controls */}
-        <div className="rounded-lg border border-border bg-card p-4 space-y-3">
+        <div className="md:col-span-2 rounded-lg border border-border bg-card p-6 space-y-4">
           <h3 className="text-sm font-medium text-muted-foreground">MnManettino / MnCruiseLever / MnToggleLever / MnSteppedRotary</h3>
-          <div className="flex flex-wrap items-end gap-6">
+          <div className="flex flex-wrap items-start justify-around gap-8">
             <MnManettino label="Drive Mode" positions={['WET', 'COMFORT', 'SPORT', 'RACE', 'ESC-OFF']} defaultValue={2} />
             <MnCruiseLever label="Cruise" positions={['OFF', 'SET', 'RES', 'ACC']} defaultValue={0} />
             <MnToggleLever label="DRS" />

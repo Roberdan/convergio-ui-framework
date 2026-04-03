@@ -652,3 +652,32 @@ html.mn-reduced-motion *::after {
   animation-iteration-count: 1 !important;
   transition-duration: 0.01ms !important;
 }
+
+/* ── MnA11yFab v2: new class names ── */
+body.mn-a11y-dyslexia-font,
+body.mn-a11y-dyslexia-font input,
+body.mn-a11y-dyslexia-font textarea,
+body.mn-a11y-dyslexia-font select,
+body.mn-a11y-dyslexia-font button {
+  font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif !important;
+}
+
+body.mn-a11y-high-contrast {
+  --foreground: #ffffff;
+  --background: #000000;
+  --muted-foreground: #e0e0e0;
+  --border: #ffffff;
+}
+
+body.mn-a11y-reduced-motion *,
+body.mn-a11y-reduced-motion *::before,
+body.mn-a11y-reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+html.mn-no-focus-ring *:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}

@@ -1,80 +1,109 @@
 "use client";
 
 import * as React from "react";
+import { SlidersHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  type A11ySettings,
+  DEFAULTS,
+  FONT_KEYS,
+  FONT_LABELS,
+  LINE_KEYS,
+  LINE_LABELS,
+  loadSettings,
+  saveSettings,
+  applySettings,
+} from "./mn-a11y-fab.helpers";
 
-/** Accessibility preference keys stored in localStorage. */
-const STORAGE_KEY = "mn-a11y-prefs";
-
-interface A11yPrefs {
-  fontSize: "normal" | "large" | "xl";
-  dyslexicFont: boolean;
-  highContrast: boolean;
-  reducedMotion: boolean;
+/* ── Toggle switch ── */
+function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: () => void }) {
+  return (
+    <div className="flex items-center justify-between py-1.5">
+      <span className="text-sm" style={{ color: "var(--mn-text, currentColor)" }}>{label}</span>
+      <button
+        role="switch"
+        aria-checked={checked}
+        onClick={onChange}
+        className={cn(
+          "relative h-[22px] w-10 cursor-pointer rounded-full border-none p-0 transition-colors duration-150",
+          checked ? "bg-primary" : "bg-muted",
+        )}
+      >
+        <span className={cn(
+          "absolute top-0.5 h-[18px] w-[18px] rounded-full bg-background transition-[left] duration-150",
+          checked ? "left-5" : "left-0.5",
+        )} />
+      </button>
+    </div>
+  );
 }
 
-const DEFAULT_PREFS: A11yPrefs = {
-  fontSize: "normal",
-  dyslexicFont: false,
-  highContrast: false,
-  reducedMotion: false,
-};
-
-function loadPrefs(): A11yPrefs {
-  if (typeof window === "undefined") return DEFAULT_PREFS;
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return DEFAULT_PREFS;
-    return { ...DEFAULT_PREFS, ...JSON.parse(raw) };
-  } catch {
-    return DEFAULT_PREFS;
-  }
+/* ── Segmented button group ── */
+function BtnGroup<T extends string>({
+  keys,
+  labels,
+  active,
+  onSelect,
+}: {
+  keys: T[];
+  labels: Record<T, string>;
+  active: T;
+  onSelect: (k: T) => void;
+}) {
+  return (
+    <div className="flex gap-1">
+      {keys.map((k) => (
+        <button
+          key={k}
+          onClick={() => onSelect(k)}
+          className={cn(
+            "cursor-pointer rounded-md border px-3 py-1.5 text-xs font-medium transition-colors duration-150",
+            active === k
+              ? "border-primary bg-primary text-primary-foreground"
+              : "border-border bg-transparent hover:bg-accent",
+          )}
+          style={active !== k ? { color: "var(--mn-text-muted, currentColor)" } : undefined}
+        >
+          {labels[k]}
+        </button>
+      ))}
+    </div>
+  );
 }
-
-function savePrefs(prefs: A11yPrefs) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
-}
-
-/** Apply CSS classes to <html> based on current preferences. */
-function applyToDocument(prefs: A11yPrefs) {
-  const html = document.documentElement;
-  html.classList.remove("mn-font-large", "mn-font-xl");
-  if (prefs.fontSize === "large") html.classList.add("mn-font-large");
-  if (prefs.fontSize === "xl") html.classList.add("mn-font-xl");
-
-  html.classList.toggle("mn-dyslexic", prefs.dyslexicFont);
-  html.classList.toggle("mn-high-contrast", prefs.highContrast);
-  html.classList.toggle("mn-reduced-motion", prefs.reducedMotion);
-}
-
-const FONT_SIZES: A11yPrefs["fontSize"][] = ["normal", "large", "xl"];
 
 /** Floating Action Button for accessibility settings. */
 function MnA11yFab({ className }: { className?: string }) {
   const [open, setOpen] = React.useState(false);
-  const [prefs, setPrefs] = React.useState<A11yPrefs>(DEFAULT_PREFS);
-  const panelRef = React.useRef<HTMLDivElement>(null);
+  const [settings, setSettings] = React.useState<A11ySettings>(DEFAULTS);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const fabRef = React.useRef<HTMLButtonElement>(null);
 
   React.useEffect(() => {
-    const loaded = loadPrefs();
-    setPrefs(loaded);
-    applyToDocument(loaded);
+    const s = loadSettings();
+    setSettings(s);
+    applySettings(s);
   }, []);
 
-  const update = React.useCallback((patch: Partial<A11yPrefs>) => {
-    setPrefs((prev) => {
+  const update = React.useCallback((patch: Partial<A11ySettings>) => {
+    setSettings((prev) => {
       const next = { ...prev, ...patch };
-      savePrefs(next);
-      applyToDocument(next);
+      saveSettings(next);
+      applySettings(next);
       return next;
     });
+  }, []);
+
+  const reset = React.useCallback(() => {
+    setSettings({ ...DEFAULTS });
+    saveSettings({ ...DEFAULTS });
+    applySettings({ ...DEFAULTS });
   }, []);
 
   /* Close on Escape */
   React.useEffect(() => {
     if (!open) return;
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") { setOpen(false); fabRef.current?.focus(); }
     };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
@@ -84,123 +113,77 @@ function MnA11yFab({ className }: { className?: string }) {
   React.useEffect(() => {
     if (!open) return;
     const handler = (e: MouseEvent) => {
-      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) setOpen(false);
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, [open]);
 
-  const cycleFontSize = () => {
-    const idx = FONT_SIZES.indexOf(prefs.fontSize);
-    update({ fontSize: FONT_SIZES[(idx + 1) % FONT_SIZES.length] });
-  };
-
   return (
-    <div ref={panelRef} className={cn("fixed bottom-6 right-6 z-50", className)}>
-      {open && (
-        <div
-          role="dialog"
-          aria-label="Accessibility settings"
-          className="mb-3 w-64 rounded-lg border border-border bg-card p-4 shadow-lg"
-        >
-          <h3 className="mb-3 text-sm font-semibold text-card-foreground">
-            Accessibility
-          </h3>
-          <div className="flex flex-col gap-3">
-            <ToggleRow
-              label={`Font size: ${prefs.fontSize}`}
-              pressed={prefs.fontSize !== "normal"}
-              onToggle={cycleFontSize}
-            />
-            <ToggleRow
-              label="OpenDyslexic font"
-              pressed={prefs.dyslexicFont}
-              onToggle={() => update({ dyslexicFont: !prefs.dyslexicFont })}
-            />
-            <ToggleRow
-              label="High contrast"
-              pressed={prefs.highContrast}
-              onToggle={() => update({ highContrast: !prefs.highContrast })}
-            />
-            <ToggleRow
-              label="Reduced motion"
-              pressed={prefs.reducedMotion}
-              onToggle={() => update({ reducedMotion: !prefs.reducedMotion })}
-            />
-          </div>
+    <div ref={containerRef} className={cn("fixed bottom-6 right-6 z-[8500]", className)}>
+      {/* Panel */}
+      <div
+        role="dialog"
+        aria-label="Accessibility settings"
+        className={cn(
+          "absolute bottom-16 right-0 w-[280px] rounded-lg border border-border bg-card p-4 shadow-xl transition-all duration-200",
+          open ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0",
+        )}
+      >
+        <div className="mb-3 flex items-center gap-2 text-sm font-semibold" style={{ color: "var(--mn-text, currentColor)" }}>
+          <SlidersHorizontal className="h-4 w-4" aria-hidden />
+          Accessibility
         </div>
-      )}
+
+        {/* Font size */}
+        <div className="mb-3">
+          <div className="mb-1.5 text-xs uppercase tracking-wider" style={{ color: "var(--mn-text-muted, currentColor)" }}>
+            Text Size
+          </div>
+          <BtnGroup keys={FONT_KEYS} labels={FONT_LABELS} active={settings.fontSize} onSelect={(k) => update({ fontSize: k })} />
+        </div>
+
+        {/* Line spacing */}
+        <div className="mb-3">
+          <div className="mb-1.5 text-xs uppercase tracking-wider" style={{ color: "var(--mn-text-muted, currentColor)" }}>
+            Line Spacing
+          </div>
+          <BtnGroup keys={LINE_KEYS} labels={LINE_LABELS} active={settings.lineSpacing} onSelect={(k) => update({ lineSpacing: k })} />
+        </div>
+
+        <hr className="my-2.5 border-border" />
+
+        {/* Toggles */}
+        <Toggle label="OpenDyslexic Font" checked={settings.dyslexiaFont} onChange={() => update({ dyslexiaFont: !settings.dyslexiaFont })} />
+        <Toggle label="Reduced Motion" checked={settings.reducedMotion} onChange={() => update({ reducedMotion: !settings.reducedMotion })} />
+        <Toggle label="High Contrast" checked={settings.highContrast} onChange={() => update({ highContrast: !settings.highContrast })} />
+        <Toggle label="Focus Indicators" checked={settings.focusVisible} onChange={() => update({ focusVisible: !settings.focusVisible })} />
+
+        <hr className="my-2.5 border-border" />
+
+        {/* Reset */}
+        <button
+          onClick={reset}
+          className="mt-1 w-full cursor-pointer rounded-md border border-border bg-transparent px-2 py-2 text-xs transition-colors duration-150 hover:bg-accent"
+          style={{ color: "var(--mn-text-muted, currentColor)" }}
+        >
+          Reset to Defaults
+        </button>
+      </div>
+
+      {/* FAB */}
       <button
+        ref={fabRef}
         aria-label="Accessibility settings"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <AccessibilityIcon />
+        <SlidersHorizontal className="h-5 w-5" aria-hidden />
       </button>
     </div>
   );
 }
 
-/** Individual toggle row inside the panel. */
-function ToggleRow({
-  label,
-  pressed,
-  onToggle,
-}: {
-  label: string;
-  pressed: boolean;
-  onToggle: () => void;
-}) {
-  return (
-    <button
-      role="switch"
-      aria-checked={pressed}
-      onClick={onToggle}
-      className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm text-card-foreground hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
-    >
-      <span>{label}</span>
-      <span
-        className={cn(
-          "inline-block h-5 w-9 rounded-full transition-colors",
-          pressed ? "bg-primary" : "bg-muted",
-        )}
-      >
-        <span
-          className={cn(
-            "mt-0.5 block h-4 w-4 rounded-full bg-background transition-transform",
-            pressed ? "translate-x-4" : "translate-x-0.5",
-          )}
-        />
-      </span>
-    </button>
-  );
-}
-
-/** Simple accessibility (universal access) SVG icon. */
-function AccessibilityIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="22"
-      height="22"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <circle cx="12" cy="4" r="1.5" />
-      <path d="M7 8h10" />
-      <path d="M12 8v4" />
-      <path d="M9 20l3-8 3 8" />
-    </svg>
-  );
-}
-
 export { MnA11yFab };
-export type { A11yPrefs };
+export type { A11ySettings as A11yPrefs };

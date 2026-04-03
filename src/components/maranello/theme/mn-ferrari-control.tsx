@@ -19,19 +19,19 @@ function MnManettino({ positions = ["WET", "COMFORT", "SPORT", "RACE", "ESC OFF"
   return (
     <div className={cn(controlBase({ size }), className)}>
       {label && <span className={LBL}>{label}</span>}
-      <div className="relative h-[160px] w-[160px]">
+      <div className="relative h-[200px] w-[200px]">
         {/* Outer ring */}
-        <div className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-[var(--mn-border)] pointer-events-none" />
+        <div className="absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-[var(--mn-border)] pointer-events-none" />
         {/* Position labels arranged radially */}
         {positions.map((p, i) => {
           const a = count > 1 ? START + (i / (count - 1)) * ARC : 0
           const rad = ((a - 90) * Math.PI) / 180
-          const r = 70
+          const r = 88
           return (
             <button key={i} onClick={() => go(i)}
-              className={cn("absolute whitespace-nowrap text-[0.65rem] uppercase tracking-[.04em] -translate-x-1/2 -translate-y-1/2 transition-colors duration-150",
-                i === idx ? "font-bold text-[var(--mn-text)]" : "font-medium text-[var(--mn-text-secondary)] hover:text-[var(--mn-text)]")}
-              style={{ left: 80 + Math.cos(rad) * r, top: 80 + Math.sin(rad) * r }}>
+              className={cn("absolute whitespace-nowrap text-xs uppercase tracking-wider -translate-x-1/2 -translate-y-1/2 transition-colors duration-150",
+                i === idx ? "font-bold text-[var(--mn-accent,#FFC72C)]" : "font-medium text-[var(--mn-text-secondary)] hover:text-[var(--mn-text)]")}
+              style={{ left: 100 + Math.cos(rad) * r, top: 100 + Math.sin(rad) * r }}>
               {p}
             </button>
           )
@@ -39,16 +39,16 @@ function MnManettino({ positions = ["WET", "COMFORT", "SPORT", "RACE", "ESC OFF"
         {/* Knob */}
         <div role="slider" aria-label={label ?? "Manettino selector"} aria-valuemin={0} aria-valuemax={count - 1}
           aria-valuenow={idx} aria-valuetext={positions[idx]} tabIndex={0} onKeyDown={onKey}
-          className={cn(DIAL, "absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2",
+          className={cn(DIAL, "absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2",
             "shadow-[0_3px_8px_rgba(0,0,0,.55),inset_0_1px_1px_rgba(255,255,255,.2)]",
             "active:shadow-[0_1px_4px_rgba(0,0,0,.7),inset_0_1px_1px_rgba(255,255,255,.15)]")}
           style={{ transform: `translate(-50%,-50%) rotate(${angle}deg)` }}
           onClick={() => go((idx + 1) % count)}>
           {/* Pointer notch */}
-          <div className="absolute left-1/2 top-1.5 h-[18px] w-0.5 -translate-x-1/2 rounded-sm bg-[var(--mn-text)] pointer-events-none" />
+          <div className="absolute left-1/2 top-2 h-[22px] w-0.5 -translate-x-1/2 rounded-sm bg-[var(--mn-text)] pointer-events-none" />
         </div>
       </div>
-      <span className="text-[0.65rem] font-semibold tracking-wide text-[var(--mn-text-secondary)]">{positions[idx]}</span>
+      <span className="text-xs font-semibold tracking-wide text-[var(--mn-accent,#FFC72C)]">{positions[idx]}</span>
     </div>
   )
 }
