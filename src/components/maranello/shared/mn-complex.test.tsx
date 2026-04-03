@@ -1,10 +1,10 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { MnDataTable } from "./mn-data-table";
-import { MnGauge } from "./mn-gauge";
-import { MnActivityFeed } from "./mn-activity-feed";
-import { MnDecisionMatrix } from "./mn-decision-matrix";
-import { MnOrgChart } from "./mn-org-chart";
+import { MnDataTable } from "../data-display/mn-data-table";
+import { MnGauge } from "../data-viz/mn-gauge";
+import { MnActivityFeed } from "../feedback/mn-activity-feed";
+import { MnDecisionMatrix } from "../strategy/mn-decision-matrix";
+import { MnOrgChart } from "../network/mn-org-chart";
 
 describe("MnDataTable", () => {
   const columns = [

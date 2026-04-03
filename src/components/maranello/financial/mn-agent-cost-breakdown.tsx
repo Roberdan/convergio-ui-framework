@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { cva } from "class-variance-authority"
 import { cn } from "@/lib/utils"
-import { formatNumber } from "./mn-format"
+import { formatNumber } from "../shared/mn-format"
 import { ArrowDown, ArrowUp, ArrowUpDown, TrendingDown, TrendingUp } from "lucide-react"
 
 export interface AgentCostRow {

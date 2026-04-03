@@ -20,7 +20,8 @@ import { rawConfigSchema, type ValidatedConfig } from "./config-schema";
  * Config path resolution (first match wins):
  *   1. MARANELLO_CONFIG_PATH env var
  *   2. CONVERGIO_CONFIG_PATH env var (backward compat)
- *   3. convergio.yaml in project root
+ *   3. maranello.yaml in project root
+ *   4. convergio.yaml in project root (backward compat)
  *
  * If no config file is found the loader returns sensible defaults
  * (app name "Maranello", navy theme, empty navigation/pages/AI).
@@ -36,11 +37,14 @@ let cached: ValidatedConfig | null = null;
 let watcherInitialized = false;
 
 function getConfigPath(): string {
-  return (
-    process.env.MARANELLO_CONFIG_PATH ??
-    process.env.CONVERGIO_CONFIG_PATH ??
-    join(/* turbopackIgnore: true */ process.cwd(), "convergio.yaml")
-  );
+  if (process.env.MARANELLO_CONFIG_PATH) return process.env.MARANELLO_CONFIG_PATH;
+  if (process.env.CONVERGIO_CONFIG_PATH) return process.env.CONVERGIO_CONFIG_PATH;
+
+  const root = /* turbopackIgnore: true */ process.cwd();
+  const maranello = join(root, "maranello.yaml");
+  if (existsSync(maranello)) return maranello;
+
+  return join(root, "convergio.yaml");
 }
 
 /** In dev mode, watch the config file and invalidate cache on change. */

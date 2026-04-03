@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import { useCallback, useMemo, useState } from 'react';
-import { formatDateTime } from './mn-format';
+import { formatDateTime } from '../shared/mn-format';
 
 export interface AuditEntry {
   timestamp: string;

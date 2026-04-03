@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { formatTime } from './mn-format';
+import { formatTime } from '../shared/mn-format';
 
 export interface ActivityItem {
   agent: string;

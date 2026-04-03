@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { formatDateTime } from './mn-format';
+import { formatDateTime } from '../shared/mn-format';
 
 export interface NightJob {
   name: string;

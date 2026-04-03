@@ -2,10 +2,10 @@
 
 import { cn } from '@/lib/utils';
 import { MnBinnacle } from './mn-binnacle';
-import { MnDashboardStrip } from './mn-dashboard-strip';
+import { MnDashboardStrip } from '../layout/mn-dashboard-strip';
 
 import type { BinnacleEntry } from './mn-binnacle';
-import type { StripMetric } from './mn-dashboard-strip';
+import type { StripMetric } from '../layout/mn-dashboard-strip';
 
 export interface MnInstrumentBinnacleProps {
   entries: BinnacleEntry[];

@@ -1,10 +1,10 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { MnBadge } from "./mn-badge";
-import { MnSpinner } from "./mn-spinner";
-import { MnStepper } from "./mn-stepper";
-import { MnToggleSwitch } from "./mn-toggle-switch";
-import { MnSwot } from "./mn-swot";
+import { MnBadge } from "../data-display/mn-badge";
+import { MnSpinner } from "../data-display/mn-spinner";
+import { MnStepper } from "../navigation/mn-stepper";
+import { MnToggleSwitch } from "../forms/mn-toggle-switch";
+import { MnSwot } from "../strategy/mn-swot";
 
 describe("MnBadge", () => {
   it("renders label text", () => {

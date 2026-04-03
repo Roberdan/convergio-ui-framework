@@ -34,7 +34,7 @@ const STATUS_LABEL: Record<string, string> = {
   pending: 'Pending',
 };
 
-import { formatDateTime } from './mn-format';
+import { formatDateTime } from '../shared/mn-format';
 
 /**
  * Sortable deployment table with status badges.

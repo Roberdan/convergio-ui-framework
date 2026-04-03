@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { useCallback, useId, useMemo } from 'react';
-import { formatNumber } from './mn-format';
+import { formatNumber } from '../shared/mn-format';
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */

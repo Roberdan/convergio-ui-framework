@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import { useMemo } from 'react';
-import { formatNumber } from './mn-format';
+import { formatNumber } from '../shared/mn-format';
 
 export type TrendDirection = 'up' | 'down' | 'flat';
 
