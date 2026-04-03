@@ -48,9 +48,14 @@ function useVoiceInput(opts: UseVoiceInputOptions = {}): UseVoiceInputReturn {
   const recognitionRef = React.useRef<SpeechRecog | null>(null)
   const recoveryRef = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
-  const isSupported =
-    typeof window !== "undefined" &&
-    ("SpeechRecognition" in window || "webkitSpeechRecognition" in window)
+  const [isSupported, setIsSupported] = React.useState(false)
+
+  React.useEffect(() => {
+    setIsSupported(
+      typeof window !== "undefined" &&
+      ("SpeechRecognition" in window || "webkitSpeechRecognition" in window)
+    )
+  }, [])
 
   const changeState = React.useCallback(
     (next: VoiceState) => {

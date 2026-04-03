@@ -34,13 +34,13 @@ async function hydrateBlocks(): Promise<A2UIBlock[]> {
       headers: { Authorization: `Bearer ${AUTH_TOKEN}` },
     });
     if (!res.ok) {
-      console.error(`[a2ui] hydration failed: ${res.status}`);
+      if (res.status !== 0) console.warn(`[a2ui] daemon returned ${res.status} for /api/a2ui/blocks`);
       return [];
     }
     const data: A2UIBlocksResponse = await res.json();
     return data.blocks ?? [];
-  } catch (err) {
-    console.error("[a2ui] hydration error:", err);
+  } catch {
+    // Daemon offline — silent fallback, not an error
     return [];
   }
 }

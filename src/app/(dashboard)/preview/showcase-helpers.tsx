@@ -14,10 +14,10 @@ export const sampleTableData = [
 ]
 
 export const initialMessages: ChatMessage[] = [
-  { id: "1", role: "user", content: "What's our conversion rate this week?", timestamp: new Date(Date.now() - 120000) },
-  { id: "2", role: "assistant", content: "Your conversion rate is **3.2%** this week, up from 2.8% last week. The main driver was the new landing page variant B which showed a `+15%` lift in signups.", timestamp: new Date(Date.now() - 60000) },
-  { id: "3", role: "user", content: "Which channel performs best?", timestamp: new Date(Date.now() - 30000) },
-  { id: "4", role: "assistant", content: "Organic search leads with **42%** of total conversions, followed by direct traffic at **28%**. Social media contributes **18%** — up 3pp from last month.", timestamp: new Date() },
+  { id: "1", role: "user", content: "What's our conversion rate this week?", timestamp: new Date("2026-04-01T10:00:00Z") },
+  { id: "2", role: "assistant", content: "Your conversion rate is **3.2%** this week, up from 2.8% last week. The main driver was the new landing page variant B which showed a `+15%` lift in signups.", timestamp: new Date("2026-04-01T10:01:00Z") },
+  { id: "3", role: "user", content: "Which channel performs best?", timestamp: new Date("2026-04-01T10:02:00Z") },
+  { id: "4", role: "assistant", content: "Organic search leads with **42%** of total conversions, followed by direct traffic at **28%**. Social media contributes **18%** — up 3pp from last month.", timestamp: new Date("2026-04-01T10:03:00Z") },
 ]
 
 export const initialKanbanCards: KanbanCard[] = [
