@@ -2,6 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import { useCallback, useMemo, useState } from 'react';
+import { formatDateTime } from './mn-format';
 
 export interface AuditEntry {
   timestamp: string;
@@ -19,19 +20,7 @@ export interface MnAuditLogProps {
   className?: string;
 }
 
-function formatTs(ts: string): string {
-  try {
-    return new Date(ts).toLocaleString([], {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    });
-  } catch {
-    return ts;
-  }
-}
+const formatTs = formatDateTime;
 
 /**
  * Chronological audit log with filtering.

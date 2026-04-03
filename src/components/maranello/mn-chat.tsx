@@ -37,7 +37,7 @@ const bubbleVariants = cva(
 
 /* ── Helpers ───────────────────────────────────────────── */
 
-const fmtTime = (d: Date) => d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+const fmtTime = (d: Date) => d.toLocaleTimeString('en-GB', { hour: "2-digit", minute: "2-digit", hour12: false })
 
 function renderContent(text: string) {
   const parts: React.ReactNode[] = []

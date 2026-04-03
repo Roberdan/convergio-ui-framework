@@ -34,18 +34,7 @@ const STATUS_LABEL: Record<string, string> = {
   pending: 'Pending',
 };
 
-function formatTs(ts: string): string {
-  try {
-    return new Date(ts).toLocaleString([], {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  } catch {
-    return ts;
-  }
-}
+import { formatDateTime } from './mn-format';
 
 /**
  * Sortable deployment table with status badges.
@@ -168,7 +157,7 @@ export function MnDeploymentTable({
                 </span>
               </td>
               <td className="px-4 py-2.5 text-muted-foreground">
-                {formatTs(d.timestamp)}
+                {formatDateTime(d.timestamp)}
               </td>
               <td className="px-4 py-2.5 font-mono text-xs text-muted-foreground">
                 {(d.hash ?? '').slice(0, 8)}

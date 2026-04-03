@@ -115,19 +115,27 @@ export function MnMeshNetwork({
     if (!ctx) return
 
     const resize = () => {
-      const w = Math.max(280, host.clientWidth || 400)
-      const h = Math.max(280, host.clientHeight || 400)
+      const w = Math.max(200, canvas.clientWidth || host.clientWidth || 400)
+      const h = Math.max(200, canvas.clientHeight || host.clientHeight || 400)
       setupCanvas(canvas, w, h)
       buildPositions(w, h)
     }
 
     const palette = readPalette(host)
 
+    // Initial build with a short delay for layout to settle
+    resize()
+
     const loop = (now: number) => {
       const dt = Math.min(48, lastTs.current ? now - lastTs.current : 16)
       lastTs.current = now
       const w = canvas.clientWidth || 1
       const h = canvas.clientHeight || 1
+
+      // Rebuild positions if they haven't been set yet
+      if (posRef.current.size === 0 && nodes.length > 0) {
+        buildPositions(w, h)
+      }
 
       maybeSpawnParticle(particlesRef.current, edges, nodes, maxParticles)
       drawFrame(
@@ -141,10 +149,10 @@ export function MnMeshNetwork({
 
     resize()
     raf.current = requestAnimationFrame(loop)
-    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(resize) : null
-    ro?.observe(host)
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(() => resize()) : null
+    ro?.observe(canvas)
     return () => { cancelAnimationFrame(raf.current); ro?.disconnect() }
-  }, [nodes, edges, selected, maxParticles])
+  }, [nodes, edges, selected, maxParticles, buildPositions])
 
   const handleCanvasClick = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {

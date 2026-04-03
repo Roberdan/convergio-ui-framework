@@ -1,6 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import { formatDateTime } from './mn-format';
 
 export interface NightJob {
   name: string;
@@ -40,18 +41,7 @@ const STATUS_ICON: Record<string, string> = {
   scheduled: '\u25F7',
 };
 
-function formatTs(ts: string): string {
-  try {
-    return new Date(ts).toLocaleString([], {
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  } catch {
-    return ts;
-  }
-}
+const formatTs = formatDateTime;
 
 /**
  * Night/scheduled job monitor.

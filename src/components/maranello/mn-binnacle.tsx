@@ -2,6 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import { useCallback, useMemo, useState } from 'react';
+import { formatDateTime } from './mn-format';
 
 export interface BinnacleEntry {
   timestamp: string;
@@ -34,19 +35,7 @@ const SEVERITY_LABEL: Record<BinnacleEntry['severity'], string> = {
 
 type SeverityFilter = BinnacleEntry['severity'] | 'all';
 
-function formatTimestamp(ts: string): string {
-  try {
-    return new Date(ts).toLocaleString([], {
-      month: 'short',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    });
-  } catch {
-    return ts;
-  }
-}
+const formatTimestamp = formatDateTime;
 
 /**
  * Ship's log / event recorder.
