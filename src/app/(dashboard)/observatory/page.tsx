@@ -2,8 +2,9 @@
 
 import { useCallback, useMemo, useState } from 'react';
 import { useApiQuery } from '@/hooks/use-api-query';
+import { useSse } from '@/hooks/use-sse';
 import * as api from '@/lib/api';
-import type { TimelineEvent, Anomaly, ObservatoryDashboard } from '@/lib/types';
+import type { IpcEvent, TimelineEvent, Anomaly, ObservatoryDashboard } from '@/lib/types';
 import { MnSectionCard } from '@/components/maranello/layout';
 import { MnBadge } from '@/components/maranello/data-display';
 import { MnChart } from '@/components/maranello/data-viz';
@@ -14,11 +15,28 @@ export default function ObservatoryPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [orgFilter, setOrgFilter] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
+  const [sourceFilter, setSourceFilter] = useState('');
+  const [sseEvents, setSseEvents] = useState<IpcEvent[]>([]);
+
+  const onSseMessage = useCallback((e: IpcEvent) => {
+    setSseEvents((prev) => [e, ...prev].slice(0, 200));
+  }, []);
+
+  const { connected } = useSse({
+    event_type: typeFilter || undefined,
+    org_id: orgFilter || undefined,
+    onMessage: onSseMessage,
+  });
 
   const { data: dashboard, loading, error, refetch } =
     useApiQuery<ObservatoryDashboard>(() => api.observatoryDashboard(), { pollInterval: 30_000 });
   const { data: timeline } = useApiQuery<TimelineEvent[]>(
-    () => api.observatoryTimeline({ org_id: orgFilter || undefined, event_type: typeFilter || undefined, limit: 100 }),
+    () => api.observatoryTimeline({
+      org_id: orgFilter || undefined,
+      event_type: typeFilter || undefined,
+      source: sourceFilter || undefined,
+      limit: 100,
+    }),
     { pollInterval: 15_000 },
   );
   const { data: anomalies, refetch: refetchAnomalies } = useApiQuery<Anomaly[]>(
@@ -30,16 +48,23 @@ export default function ObservatoryPage() {
     { enabled: searchQuery.length >= 2 },
   );
 
-  const activityItems: ActivityItem[] = useMemo(
-    () => (timeline ?? []).map((e) => ({
+  const activityItems: ActivityItem[] = useMemo(() => {
+    const polled = (timeline ?? []).map((e) => ({
       agent: e.source ?? 'system',
       action: e.event_type,
       target: e.org_id ?? '',
       timestamp: e.timestamp,
       priority: e.event_type.includes('Alert') ? 'critical' as const : 'normal' as const,
-    })),
-    [timeline],
-  );
+    }));
+    const live = sseEvents.map((e) => ({
+      agent: e.from,
+      action: e.event_type,
+      target: e.to ?? '',
+      timestamp: e.ts,
+      priority: e.event_type.includes('Alert') ? 'critical' as const : 'normal' as const,
+    }));
+    return [...live, ...polled].slice(0, 200);
+  }, [timeline, sseEvents]);
 
   const modelLabels = useMemo(
     () => Object.keys(dashboard?.model_breakdown ?? {}),
@@ -64,9 +89,14 @@ export default function ObservatoryPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Observatory</h1>
-        {(anomalies ?? []).length > 0 && (
-          <MnBadge tone="warning">{(anomalies ?? []).length} anomalies</MnBadge>
-        )}
+        <div className="flex items-center gap-2">
+          <MnBadge tone={connected ? 'success' : 'danger'}>
+            {connected ? 'Live' : 'Polling'}
+          </MnBadge>
+          {(anomalies ?? []).length > 0 && (
+            <MnBadge tone="warning">{(anomalies ?? []).length} anomalies</MnBadge>
+          )}
+        </div>
       </div>
 
       {/* KPI dashboard */}
@@ -93,6 +123,13 @@ export default function ObservatoryPage() {
           placeholder="Filter by org..."
           value={orgFilter}
           onChange={(e) => setOrgFilter(e.target.value)}
+          className="w-40 rounded-md border bg-background px-3 py-2 text-sm"
+        />
+        <input
+          type="text"
+          placeholder="Filter by source..."
+          value={sourceFilter}
+          onChange={(e) => setSourceFilter(e.target.value)}
           className="w-40 rounded-md border bg-background px-3 py-2 text-sm"
         />
         <select

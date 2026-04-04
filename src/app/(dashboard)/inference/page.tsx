@@ -24,7 +24,7 @@ export default function InferencePage() {
 
   const { data: costs, loading, error, refetch } = useApiQuery<CostSummary[]>(
     () => api.inferenceCosts({}),
-    { pollInterval: 30_000 },
+    { pollInterval: 10_000 },
   );
 
   const { data: routing } = useApiQuery<RoutingResponse>(

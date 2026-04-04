@@ -31,15 +31,15 @@ export default function BillingPage() {
   const { data: orgs } = useApiQuery<Org[]>(api.orgList);
   const { data: usage, loading, error, refetch } = useApiQuery<UsageResponse>(
     () => selectedOrg ? api.billingUsage({ org_id: selectedOrg }) : Promise.reject(new Error('no org')),
-    { enabled: !!selectedOrg },
+    { enabled: !!selectedOrg, pollInterval: 10_000 },
   );
   const { data: invoices } = useApiQuery<Invoice[]>(
     () => selectedOrg ? api.billingInvoices(selectedOrg) : Promise.resolve([]),
-    { enabled: !!selectedOrg },
+    { enabled: !!selectedOrg, pollInterval: 60_000 },
   );
   const { data: rates } = useApiQuery<RateCard[]>(
     () => selectedOrg ? api.billingRates(selectedOrg) : Promise.resolve([]),
-    { enabled: !!selectedOrg },
+    { enabled: !!selectedOrg, pollInterval: 60_000 },
   );
 
   const budgetItems: TreemapItem[] = useMemo(
