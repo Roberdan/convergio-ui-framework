@@ -19,19 +19,19 @@ function MnManettino({ positions = ["WET", "COMFORT", "SPORT", "RACE", "ESC OFF"
   return (
     <div className={cn(controlBase({ size }), className)}>
       {label && <span className={LBL}>{label}</span>}
-      <div className="relative h-[180px] w-[180px]">
+      <div className="relative h-[220px] w-[220px]">
         {/* Outer ring */}
-        <div className="absolute left-1/2 top-1/2 h-[88px] w-[88px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[var(--mn-border)] pointer-events-none" />
+        <div className="absolute left-1/2 top-1/2 h-[120px] w-[120px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[var(--mn-border)] pointer-events-none" />
         {/* Position labels arranged radially */}
         {positions.map((p, i) => {
           const a = count > 1 ? START + (i / (count - 1)) * ARC : 0
           const rad = ((a - 90) * Math.PI) / 180
-          const r = 78
+          const r = 96
           return (
             <button key={i} onClick={() => go(i)}
               className={cn("absolute whitespace-nowrap text-[11px] uppercase tracking-wider -translate-x-1/2 -translate-y-1/2 transition-colors duration-150",
                 i === idx ? "font-bold text-[var(--mn-accent,#FFC72C)]" : "font-medium text-[var(--mn-text-secondary)] hover:text-[var(--mn-text)]")}
-              style={{ left: 90 + Math.cos(rad) * r, top: 90 + Math.sin(rad) * r }}>
+              style={{ left: 110 + Math.cos(rad) * r, top: 110 + Math.sin(rad) * r }}>
               {p}
             </button>
           )
@@ -39,7 +39,7 @@ function MnManettino({ positions = ["WET", "COMFORT", "SPORT", "RACE", "ESC OFF"
         {/* Knob */}
         <div role="slider" aria-label={label ?? "Manettino selector"} aria-valuemin={0} aria-valuemax={count - 1}
           aria-valuenow={idx} aria-valuetext={positions[idx]} tabIndex={0} onKeyDown={onKey}
-          className={cn(DIAL, "absolute left-1/2 top-1/2 h-14 w-14 -translate-x-1/2 -translate-y-1/2",
+          className={cn(DIAL, "absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2",
             "shadow-[0_3px_8px_rgba(0,0,0,.55),inset_0_1px_1px_rgba(255,255,255,.2)]",
             "active:shadow-[0_1px_4px_rgba(0,0,0,.7),inset_0_1px_1px_rgba(255,255,255,.15)]")}
           style={{ transform: `translate(-50%,-50%) rotate(${angle}deg)` }}
