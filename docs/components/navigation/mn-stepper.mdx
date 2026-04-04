@@ -17,21 +17,28 @@ Use to guide users through a sequential multi-step workflow.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `steps` | `Step[]` | **required** | — |
-| `currentStep` | `number` | **required** | — |
-| `className` | `string` | — | — |
-| `onChange` | `(step: number) =&gt; void` | — | — |
+| `steps` | `Step[]` | **required** | Array of steps |
+| `currentStep` | `number` | **required** | Current Step value |
+| `className` | `string` | `{cn("w-full"` | Additional CSS classes |
+| `onChange` | `(step: number) =&gt; void` | — | Change event handler |
 
 ## Example
 
 ```tsx
 import { MnStepper } from "@/components/maranello"
 
-<MnStepper />
+<MnStepper
+  steps={[
+    { label: "Account" },
+    { label: "Profile" },
+    { label: "Review" },
+    { label: "Confirm" },
+  ]}
+  currentStep={1}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Implements `aria-current` for active navigation items
 - Full keyboard navigation support with arrow keys

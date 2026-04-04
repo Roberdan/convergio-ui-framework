@@ -17,20 +17,32 @@ Use to manage workflow stages with visual card-based task tracking.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `columns` | `KanbanColumn[]` | **required** | — |
-| `onCardMove` | `(cardId: string, fromCol: string, toCol: string, position: number) =&gt; void` | — | — |
-| `onCardClick` | `(card: KanbanCard) =&gt; void` | — | — |
+| `columns` | `KanbanColumn[]` | **required** | Array of columns |
+| `cards` | `KanbanCard[]` | **required** | Array of cards |
+| `onCardMove` | `(cardId: string, fromCol: string, toCol: string, position: number) =&gt; void` | — | Callback when card move |
+| `onCardClick` | `(card: KanbanCard) =&gt; void` | — | Callback when card click |
+| `onAddCard` | `(columnId: string) =&gt; void` | — | Callback when add card |
 
 ## Example
 
 ```tsx
 import { MnKanbanBoard } from "@/components/maranello"
 
-<MnKanbanBoard />
+<MnKanbanBoard
+  columns={[
+    { id: "todo", title: "To Do" },
+    { id: "in-progress", title: "In Progress" },
+    { id: "done", title: "Done" },
+  ]}
+  cards={[
+    { id: "c1", column: "todo", title: "Update API docs", assignee: "Alice" },
+    { id: "c2", column: "in-progress", title: "Fix auth bug", assignee: "Bob", priority: "high" },
+    { id: "c3", column: "done", title: "Deploy v2.4", assignee: "Carol" },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Data tables include proper `<th>` scope attributes
 - Drag-and-drop has keyboard alternatives

@@ -17,20 +17,26 @@ Use to rank and compare pipeline items by a scoring metric.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `stages` | `PipelineStage[]` | **required** | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `stages` | `PipelineStage[]` | **required** | Array of stages |
+| `ariaLabel` | `string` | `'Pipeline funnel'` | Accessible label |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnPipelineRanking } from "@/components/maranello"
 
-<MnPipelineRanking />
+<MnPipelineRanking
+  stages={[
+    { label: "Discovery", count: 42, value: 1200000 },
+    { label: "Proposal", count: 18, value: 850000 },
+    { label: "Negotiation", count: 8, value: 520000 },
+    { label: "Closed Won", count: 3, value: 180000 },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Charts include `aria-label` describing the data trend
-- Color is supplemented with patterns or labels for color-blind users
+- Color is supplemented with labels for color-blind users

@@ -17,20 +17,27 @@ Use to analyze competitive dynamics using Porter's framework.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `forces` | `Force[]` | **required** | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `forces` | `Force[]` | **required** | Exactly 5 forces: rivalry, buyers, suppliers, new entrants, substitutes |
+| `ariaLabel` | `string` | `"Porter's Five Forces"` | Accessible label |
+| `className` | `string` | `{cn('relative w-full max-w-lg mx-auto'` | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnPorterFiveForces } from "@/components/maranello"
 
-<MnPorterFiveForces />
+<MnPorterFiveForces
+  forces={[
+    { label: "Supplier Power", value: 3, description: "Few alternative suppliers" },
+    { label: "Buyer Power", value: 4, description: "High price sensitivity" },
+    { label: "Competitive Rivalry", value: 5, description: "Intense competition" },
+    { label: "Threat of Substitution", value: 2, description: "Few direct substitutes" },
+    { label: "Threat of New Entry", value: 3, description: "Moderate barriers" },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Matrix cells are keyboard navigable
 - Visual data is supplemented with text descriptions

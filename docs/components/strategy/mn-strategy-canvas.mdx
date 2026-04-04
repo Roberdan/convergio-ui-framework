@@ -17,21 +17,26 @@ Use to contrast strategic profiles using Blue Ocean value curves.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `segments` | `CanvasSegment[]` | **required** | — |
-| `onChange` | `(segments: CanvasSegment[]) =&gt; void` | — | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `segments` | `CanvasSegment[]` | **required** | 9 segments for Business Model Canvas (or any count) |
+| `onChange` | `(segments: CanvasSegment[]) =&gt; void` | `{(e) => setDraft(e.target.value)` | Called when segments change |
+| `ariaLabel` | `string` | `'Strategy Canvas'` | Accessible label |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnStrategyCanvas } from "@/components/maranello"
 
-<MnStrategyCanvas />
+<MnStrategyCanvas
+  segments={[
+    { label: "Value Proposition", items: ["AI-powered automation", "Real-time analytics"] },
+    { label: "Key Activities", items: ["Platform development", "Customer success"] },
+    { label: "Revenue Streams", items: ["SaaS subscriptions", "Enterprise licenses"] },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Matrix cells are keyboard navigable
 - Visual data is supplemented with text descriptions

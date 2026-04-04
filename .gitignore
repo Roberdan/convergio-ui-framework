@@ -46,3 +46,4 @@ playwright-report/
 test-results/
 .claude/
 data/
+.worktrees/

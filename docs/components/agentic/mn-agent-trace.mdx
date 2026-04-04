@@ -17,22 +17,28 @@ Use to debug or inspect how an AI agent arrived at its response.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `steps` | `TraceStep[]` | **required** | — |
-| `onSelect` | `(step: TraceStep) =&gt; void` | — | — |
-| `maxVisible` | `number` | — | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `steps` | `TraceStep[]` | **required** | Array of steps |
+| `onSelect` | `(step: TraceStep) =&gt; void` | — | Callback when a step is expanded |
+| `maxVisible` | `number` | — | Maximum visible steps (scrollable beyond this) |
+| `ariaLabel` | `string` | `'Agent trace'` | Accessible label for screen readers |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnAgentTrace } from "@/components/maranello"
 
-<MnAgentTrace />
+<MnAgentTrace
+  steps={[
+    { id: "s1", type: "thought", content: "The user wants deployment status", timestamp: "10:32:01" },
+    { id: "s2", type: "action", content: "Querying deployment API...", timestamp: "10:32:02" },
+    { id: "s3", type: "observation", content: "3 services running, 1 degraded", timestamp: "10:32:03" },
+    { id: "s4", type: "response", content: "All services operational except Task Queue", timestamp: "10:32:04" },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Status updates use `aria-live` for real-time announcements
 - Interactive elements support keyboard activation

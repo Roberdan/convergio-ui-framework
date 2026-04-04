@@ -17,30 +17,31 @@ Use for confirmations, forms, or content that requires focused attention.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `open` | `boolean` | **required** | — |
-| `onOpenChange` | `(open: boolean) =&gt; void` | **required** | — |
-| `title` | `string` | — | — |
-| `closeOnBackdropClick` | `boolean` | — | — |
-| `closeOnEscape` | `boolean` | — | — |
-| `titleId` | `string` | — | — |
-| `bodyId` | `string` | — | — |
-| `className` | `string` | — | — |
-| `children` | `React.ReactNode` | — | — |
+| `open` | `boolean` | **required** | Whether the modal is open. |
+| `onOpenChange` | `(open: boolean) =&gt; void` | **required** | Called when the modal requests to close. |
+| `title` | `string` | — | Modal title rendered in the header. |
+| `closeOnBackdropClick` | `boolean` | `true` | Close on backdrop click. @default true |
+| `closeOnEscape` | `boolean` | `true` | Close on Escape key press. @default true |
+| `titleId` | `string` | `titleIdProp ?? fallbackTitleId` | id applied to the title element for aria-labelledby. |
+| `bodyId` | `string` | `bodyIdProp ?? fallbackBodyId` | id applied to the body element for aria-describedby. |
+| `className` | `string` | `{backdropVariants({ visible: open` | Additional CSS classes |
+| `children` | `React.ReactNode` | — | Child elements |
 
 ## Example
 
 ```tsx
 import { MnModal } from "@/components/maranello"
 
-<MnModal title="Example Title">
-  {/* content */}
+const [open, setOpen] = useState(false)
+
+<MnModal open={open} onOpenChange={setOpen} title="Confirm Action">
+  <p>Are you sure you want to proceed?</p>
 </MnModal>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Uses `role="alert"` or `aria-live` regions for dynamic content
-- Focus is managed appropriately when content appears/disappears
+- Focus is managed when content appears/disappears
 - Focus is trapped inside the modal while open
 - Escape key closes the modal

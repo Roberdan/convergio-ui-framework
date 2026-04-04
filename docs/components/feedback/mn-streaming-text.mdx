@@ -17,25 +17,28 @@ Use when rendering text that arrives token-by-token from an LLM.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `text` | `string` | **required** | — |
-| `streaming` | `boolean` | — | — |
-| `typingCursor` | `boolean` | — | — |
-| `processMarkdown` | `boolean` | — | — |
-| `speed` | `number` | — | — |
-| `onDone` | `() =&gt; void` | — | — |
-| `onCitationClick` | `(index: number) =&gt; void` | — | — |
-| `className` | `string` | — | — |
+| `text` | `string` | **required** | Full or accumulated text to render. |
+| `streaming` | `boolean` | `false` | Whether more chunks are expected. Controls cursor and done callback. |
+| `typingCursor` | `boolean` | `true` | Show a blinking cursor while streaming. @default true |
+| `processMarkdown` | `boolean` | `true` | Parse bold, inline code, and citation refs. @default true |
+| `speed` | `number` | `= null) return` | Typewriter speed in ms per character. Omit for instant rendering. |
+| `onDone` | `() =&gt; void` | — | Fires when streaming transitions from true to false. |
+| `onCitationClick` | `(index: number) =&gt; void` | — | Fires when a [N] citation button is clicked. |
+| `className` | `string` | `"font-semibold">` | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnStreamingText } from "@/components/maranello"
 
-<MnStreamingText />
+<MnStreamingText
+  text="The deployment was successful. All services are now running on v2.4.1."
+  streaming={isStreaming}
+  typingCursor
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Uses `role="alert"` or `aria-live` regions for dynamic content
-- Focus is managed appropriately when content appears/disappears
+- Focus is managed when content appears/disappears

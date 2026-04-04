@@ -17,23 +17,28 @@ Use to provide an at-a-glance operational health overview.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `services` | `Service[]` | **required** | — |
-| `incidents` | `Incident[]` | — | — |
-| `refreshInterval` | `number` | — | — |
-| `onRefresh` | `() =&gt; void` | — | — |
-| `version` | `string` | — | — |
-| `environment` | `string` | — | — |
+| `services` | `Service[]` | **required** | List of services to display. |
+| `incidents` | `Incident[]` | — | Recent incidents to show. |
+| `refreshInterval` | `number` | `0` | Polling interval in milliseconds. Set to 0 to disable. |
+| `onRefresh` | `() =&gt; void` | — | Callback invoked on each refresh tick. Use this to update service data. |
+| `version` | `string` | — | Application version label. |
+| `environment` | `string` | — | Environment label (e.g. "production"). |
 
 ## Example
 
 ```tsx
 import { MnSystemStatus } from "@/components/maranello"
 
-<MnSystemStatus />
+<MnSystemStatus
+  services={[
+    { id: "api", name: "API Gateway", status: "operational", uptime: 99.98, latencyMs: 42 },
+    { id: "db", name: "Database", status: "operational", uptime: 99.95, latencyMs: 8 },
+    { id: "queue", name: "Task Queue", status: "degraded", uptime: 98.7, latencyMs: 230 },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
-- Interactive graph nodes are keyboard focusable
-- Status information uses `aria-live` for dynamic updates
+- Interactive nodes are keyboard focusable
+- Status information uses `aria-live` for updates

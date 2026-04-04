@@ -17,19 +17,20 @@ Use to display icons from the Maranello icon set.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `name` | `MnIconName` | **required** | — |
-| `label` | `string` | — | — |
+| `name` | `MnIconName` | **required** | Icon name from the catalog. |
+| `label` | `string` | `"Success" className="text-green-600" />` | Accessible label. When provided the icon is meaningful; otherwise it is decorative (`aria-hidden`). |
 
 ## Example
 
 ```tsx
 import { MnIcon } from "@/components/maranello"
 
-<MnIcon label="Example" />
+<MnIcon
+  name={/* MnIconName */}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Color is not the only indicator — text or icons provide meaning
 - Interactive elements are keyboard accessible

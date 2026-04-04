@@ -17,19 +17,20 @@ Use to present application or module settings in a structured panel.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `sections` | `SettingsSection[]` | **required** | — |
-| `className` | `string` | — | — |
+| `sections` | `SettingsSection[]` | **required** | Array of sections |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnSettingsPanel } from "@/components/maranello"
 
-<MnSettingsPanel />
+<MnSettingsPanel
+  sections={[]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
-- Landmarks (`<main>`, `<nav>`, `<aside>`) structure the layout
+- Uses semantic landmarks (`<main>`, `<nav>`, `<aside>`)
 - Skip-to-content link is supported

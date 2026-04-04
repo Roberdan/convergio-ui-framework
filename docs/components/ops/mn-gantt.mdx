@@ -17,19 +17,28 @@ Use to plan and track project schedules with task timelines.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `tasks` | `GanttTask[]` | **required** | — |
-| `labelWidth` | `number` | — | — |
+| `tasks` | `GanttTask[]` | **required** | Array of tasks |
+| `dependencies` | `GanttDependency[]` | — | Array of dependencies |
+| `labelWidth` | `number` | `240` | Label Width value |
+| `rowHeight` | `number` | `38` | Row Height value |
+| `showToday` | `boolean` | `true` | Whether to show today |
 
 ## Example
 
 ```tsx
 import { MnGantt } from "@/components/maranello"
 
-<MnGantt />
+<MnGantt
+  tasks={[
+    { id: "t1", label: "Design", start: "2025-01-01", end: "2025-01-15", status: "done" },
+    { id: "t2", label: "Development", start: "2025-01-10", end: "2025-02-15", status: "active", progress: 60 },
+    { id: "t3", label: "Testing", start: "2025-02-10", end: "2025-02-28", status: "pending" },
+  ]}
+  showToday
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Data tables include proper `<th>` scope attributes
 - Drag-and-drop has keyboard alternatives

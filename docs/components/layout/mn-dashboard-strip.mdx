@@ -17,10 +17,10 @@ Use for a top-of-page summary bar with key performance indicators.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `metrics` | `StripMetric[]` | — | — |
-| `zones` | `StripZone[]` | — | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `metrics` | `StripMetric[]` | — | Array of metrics |
+| `zones` | `StripZone[]` | — | Array of zones |
+| `ariaLabel` | `string` | `'Dashboard metrics'` | Accessible label for screen readers |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
@@ -32,6 +32,5 @@ import { MnDashboardStrip } from "@/components/maranello"
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
-- Landmarks (`<main>`, `<nav>`, `<aside>`) structure the layout
+- Uses semantic landmarks (`<main>`, `<nav>`, `<aside>`)
 - Skip-to-content link is supported

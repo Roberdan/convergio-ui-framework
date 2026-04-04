@@ -17,21 +17,30 @@ Use to visualize company or team hierarchies with reporting lines.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `tree` | `OrgNode` | **required** | — |
-| `onNodeClick` | `(node: OrgNode) =&gt; void` | — | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `tree` | `OrgNode` | **required** | Tree |
+| `onNodeClick` | `(node: OrgNode) =&gt; void` | — | Called when a node is clicked |
+| `ariaLabel` | `string` | `'Organization chart'` | Accessible label for screen readers |
+| `className` | `string` | `{cn(` | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnOrgChart } from "@/components/maranello"
 
-<MnOrgChart />
+<MnOrgChart
+  tree={{
+    id: "ceo", label: "CEO", children: [
+      { id: "cto", label: "CTO", children: [
+        { id: "eng1", label: "Eng Lead" },
+        { id: "eng2", label: "Infra Lead" },
+      ]},
+      { id: "cfo", label: "CFO" },
+    ],
+  }}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
-- Interactive graph nodes are keyboard focusable
-- Status information uses `aria-live` for dynamic updates
+- Interactive nodes are keyboard focusable
+- Status information uses `aria-live` for updates

@@ -17,20 +17,25 @@ Use for user settings pages where profile data can be viewed and edited.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `name` | `string` | **required** | — |
-| `sections` | `ProfileSection[]` | — | — |
+| `name` | `string` | **required** | Name text |
+| `email` | `string` | — | Email text |
+| `avatarUrl` | `string` | — | Avatar Url text |
+| `sections` | `ProfileSection[]` | `[]` | Array of sections |
+| `trigger` | `React.ReactNode` | — | Trigger |
+| `className` | `string` | `{cn(avatarBase` | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnProfile } from "@/components/maranello"
 
-<MnProfile />
+<MnProfile
+  name="Example"
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Form controls are associated with labels via `htmlFor`/`id`
 - Validation errors are announced to screen readers
 - Supports keyboard navigation between fields

@@ -17,8 +17,8 @@ Use when users need to rearrange widgets within a grid.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `columns` | `GridColumns` | — | — |
-| `breakpoints` | `Breakpoints` | — | — |
+| `columns` | `GridColumns` | `1` | Base number of columns (used at smallest viewport). |
+| `breakpoints` | `Breakpoints` | — | Responsive column overrides per breakpoint. |
 
 ## Example
 
@@ -30,6 +30,5 @@ import { MnGridLayout } from "@/components/maranello"
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
-- Landmarks (`<main>`, `<nav>`, `<aside>`) structure the layout
+- Uses semantic landmarks (`<main>`, `<nav>`, `<aside>`)
 - Skip-to-content link is supported

@@ -17,26 +17,31 @@ Use to visualize prediction confidence, error ranges, or probability bands.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `labels` | `string[]` | **required** | — |
-| `values` | `number[]` | **required** | — |
-| `lower` | `number[]` | **required** | — |
-| `upper` | `number[]` | **required** | — |
-| `unit` | `string` | — | — |
-| `color` | `string` | — | — |
-| `showDots` | `boolean` | — | — |
-| `animate` | `boolean` | — | — |
-| `height` | `number` | — | — |
+| `labels` | `string[]` | **required** | Array of labels |
+| `values` | `number[]` | **required** | Array of values |
+| `lower` | `number[]` | **required** | Array of lower |
+| `upper` | `number[]` | **required** | Array of upper |
+| `unit` | `string` | `""` | Unit suffix (e.g. "%", "$", "km/h") |
+| `color` | `string` | `"var(--mn-accent)"` | Color text |
+| `showDots` | `boolean` | `true` | Whether to show dots |
+| `animate` | `boolean` | `true` | Enable entry animation |
+| `height` | `number` | `200` | Component height in pixels |
 
 ## Example
 
 ```tsx
 import { MnConfidenceChart } from "@/components/maranello"
 
-<MnConfidenceChart />
+<MnConfidenceChart
+  labels={["Jan", "Feb", "Mar", "Apr", "May"]}
+  values={[42, 55, 48, 62, 70]}
+  lower={[35, 45, 38, 50, 58]}
+  upper={[50, 65, 58, 74, 82]}
+  unit="%"
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Charts include `aria-label` describing the data trend
-- Color is supplemented with patterns or labels for color-blind users
+- Color is supplemented with labels for color-blind users

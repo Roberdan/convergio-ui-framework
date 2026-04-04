@@ -17,29 +17,36 @@ Use as the top-level layout for admin or back-office applications.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `collapsed` | `boolean` | — | — |
-| `defaultCollapsed` | `boolean` | — | — |
-| `onCollapsedChange` | `(collapsed: boolean) =&gt; void` | — | — |
-| `sidebarHeader` | `React.ReactNode` | — | — |
-| `sidebarFooter` | `React.ReactNode` | — | — |
-| `nav` | `AdminShellNavItem[]` | — | — |
-| `activeNavId` | `string` | — | — |
-| `onNavigate` | `(id: string) =&gt; void` | — | — |
-| `topBar` | `boolean` | — | — |
-| `breadcrumbs` | `AdminShellBreadcrumb[]` | — | — |
-| `pageTitle` | `string` | — | — |
-| `contentId` | `string` | — | — |
+| `collapsed` | `boolean` | `{isCollapsed` | Enable collapsed |
+| `defaultCollapsed` | `boolean` | `false` | Default value for collapsed |
+| `onCollapsedChange` | `(collapsed: boolean) =&gt; void` | — | Callback when collapsed change |
+| `sidebarHeader` | `React.ReactNode` | — | Sidebar Header |
+| `sidebarFooter` | `React.ReactNode` | — | Sidebar Footer |
+| `nav` | `AdminShellNavItem[]` | `[]` | Array of nav |
+| `activeNavId` | `string` | — | Active Nav Id text |
+| `onNavigate` | `(id: string) =&gt; void` | `{handleNavigate` | Callback when navigate |
+| `topBar` | `boolean` | `true` | Enable top bar |
+| `breadcrumbs` | `AdminShellBreadcrumb[]` | `{breadcrumbs` | Array of breadcrumbs |
+| `pageTitle` | `string` | `{pageTitle` | Page Title text |
+| `contentId` | `string` | `"main-content"` | Content Id text |
 
 ## Example
 
 ```tsx
 import { MnAdminShell } from "@/components/maranello"
 
-<MnAdminShell />
+<MnAdminShell
+  nav={[
+    { label: "Dashboard", href: "/", icon: "LayoutDashboard" },
+    { label: "Users", href: "/users", icon: "Users" },
+    { label: "Settings", href: "/settings", icon: "Settings" },
+  ]}
+>
+  <main>{children}</main>
+</MnAdminShell>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
-- Landmarks (`<main>`, `<nav>`, `<aside>`) structure the layout
+- Uses semantic landmarks (`<main>`, `<nav>`, `<aside>`)
 - Skip-to-content link is supported

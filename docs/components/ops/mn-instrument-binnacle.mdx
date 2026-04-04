@@ -17,22 +17,30 @@ Use to present multiple live instruments in a dashboard cockpit view.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `entries` | `BinnacleEntry[]` | **required** | — |
-| `metrics` | `StripMetric[]` | **required** | — |
-| `maxVisible` | `number` | — | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `entries` | `BinnacleEntry[]` | **required** | Array of entries |
+| `metrics` | `StripMetric[]` | **required** | Array of metrics |
+| `maxVisible` | `number` | `50` | Max log entries to display. Default: 50 |
+| `ariaLabel` | `string` | `'Instrument panel'` | Accessible label for screen readers |
+| `className` | `string` | `{cn('space-y-3'` | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnInstrumentBinnacle } from "@/components/maranello"
 
-<MnInstrumentBinnacle />
+<MnInstrumentBinnacle
+  entries={[
+    { id: "e1", timestamp: "10:32:01", level: "info", message: "All systems nominal" },
+  ]}
+  metrics={[
+    { label: "CPU", value: 42, unit: "%" },
+    { label: "Memory", value: 6.2, unit: "GB" },
+    { label: "Requests", value: 1420, unit: "/min" },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Data tables include proper `<th>` scope attributes
 - Drag-and-drop has keyboard alternatives

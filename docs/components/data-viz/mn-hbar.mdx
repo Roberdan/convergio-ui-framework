@@ -17,21 +17,35 @@ Use for category comparisons where horizontal bars improve label readability.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `bars` | `HBarItem[]` | **required** | — |
-| `showValues` | `boolean` | — | — |
-| `animate` | `boolean` | — | — |
-| `onBarClick` | `(bar: HBarItem, index: number) =&gt; void` | — | — |
+| `bars` | `HBarItem[]` | **required** | Array of bars |
+| `title` | `string` | `{`${bar.label` | Title text |
+| `unit` | `string` | `""` | Unit suffix (e.g. "%", "$", "km/h") |
+| `maxValue` | `number` | `mvp && mvp > 0 ? mvp : 100` | Max Value value |
+| `showValues` | `boolean` | `true` | Display numeric values on items |
+| `showGrid` | `boolean` | `true` | Display grid lines |
+| `sortDescending` | `boolean` | `true` | Enable sort descending |
+| `animate` | `boolean` | `true` | Enable entry animation |
+| `barHeight` | `number` | `28` | Bar Height value |
+| `onBarClick` | `(bar: HBarItem, index: number) =&gt; void` | `{onBarClick` | Callback when bar click |
 
 ## Example
 
 ```tsx
 import { MnHbar } from "@/components/maranello"
 
-<MnHbar />
+<MnHbar
+  bars={[
+    { label: "Chrome", value: 65 },
+    { label: "Safari", value: 18 },
+    { label: "Firefox", value: 10 },
+    { label: "Edge", value: 7 },
+  ]}
+  unit="%"
+  showValues
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Charts include `aria-label` describing the data trend
-- Color is supplemented with patterns or labels for color-blind users
+- Color is supplemented with labels for color-blind users

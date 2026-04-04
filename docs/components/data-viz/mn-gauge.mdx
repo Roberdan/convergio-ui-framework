@@ -17,22 +17,34 @@ Use to display a single metric as a dial gauge with color-coded zones.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `number` | — | — |
-| `ticks` | `number` | — | — |
-| `startAngle` | `number` | — | — |
-| `arcBar` | `ArcBar` | — | — |
-| `odometer` | `Odometer` | — | — |
+| `value` | `number` | `0` | Current value |
+| `min` | `number` | `0` | Minimum value |
+| `max` | `number` | `100` | Maximum value |
+| `unit` | `string` | — | Unit suffix (e.g. "%", "$", "km/h") |
+| `label` | `string` | `{label ?? `Gauge: ${value` | Display label |
+| `ticks` | `number` | `10` | Ticks value |
+| `subticks` | `number` | `5` | Subticks value |
+| `numbers` | `number[]` | — | Array of numbers |
+| `startAngle` | `number` | `-135` | Start Angle value |
+| `endAngle` | `number` | `135` | End Angle value |
+| `color` | `string` | — | Color text |
+| `arcBar` | `ArcBar` | — | Arc Bar |
+| `subDials` | `SubDial[]` | — | Array of subDials |
+| `innerRing` | `InnerRing` | — | Inner Ring |
+| `odometer` | `Odometer` | — | Odometer |
+| `statusLed` | `StatusLed` | — | Status Led |
+| `trend` | `Trend` | — | Trend |
+| `animate` | `boolean` | `true` | Enable entry animation |
 
 ## Example
 
 ```tsx
 import { MnGauge } from "@/components/maranello"
 
-<MnGauge />
+<MnGauge value={73} min={0} max={100} unit="%" animate />
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Charts include `aria-label` describing the data trend
-- Color is supplemented with patterns or labels for color-blind users
+- Color is supplemented with labels for color-blind users

@@ -17,27 +17,32 @@ Use to aggregate and manage app-wide notifications in one place.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `open` | `boolean` | **required** | — |
-| `onOpenChange` | `(open: boolean) =&gt; void` | **required** | — |
-| `notifications` | `MnNotification[]` | **required** | — |
-| `onMarkRead` | `(id: string) =&gt; void` | — | — |
-| `onMarkAllRead` | `() =&gt; void` | — | — |
-| `onRemove` | `(id: string) =&gt; void` | — | — |
-| `onClear` | `() =&gt; void` | — | — |
-| `loading` | `boolean` | — | — |
-| `className` | `string` | — | — |
+| `open` | `boolean` | **required** | Whether the component is open/visible |
+| `onOpenChange` | `(open: boolean) =&gt; void` | **required** | Callback when open state changes |
+| `notifications` | `MnNotification[]` | **required** | Array of notifications |
+| `onMarkRead` | `(id: string) =&gt; void` | `{onMarkRead` | Callback when mark read |
+| `onMarkAllRead` | `() =&gt; void` | — | Callback when mark all read |
+| `onRemove` | `(id: string) =&gt; void` | `{onRemove` | Callback when remove |
+| `onClear` | `() =&gt; void` | — | Callback when clear |
+| `loading` | `boolean` | — | Show loading state |
+| `className` | `string` | `{cn(` | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnNotificationCenter } from "@/components/maranello"
 
-<MnNotificationCenter />
+<MnNotificationCenter
+  open={open}
+  onOpenChange={setOpen}
+  notifications={[
+    { id: "1", title: "Deploy complete", message: "v2.4.1 is live", time: "5m ago", read: false },
+    { id: "2", title: "Review requested", message: "PR #42 needs your review", time: "1h ago", read: true },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Uses `role="alert"` or `aria-live` regions for dynamic content
-- Focus is managed appropriately when content appears/disappears
-- Auto-dismissed after timeout with configurable duration
+- Focus is managed when content appears/disappears

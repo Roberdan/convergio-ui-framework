@@ -17,23 +17,27 @@ Use for context menus or action menus triggered by a button.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `trigger` | `React.ReactNode` | **required** | — |
-| `children` | `React.ReactNode` | **required** | — |
-| `align` | `"start" \| "end"` | — | — |
-| `className` | `string` | — | — |
+| `trigger` | `React.ReactNode` | **required** | Trigger |
+| `children` | `React.ReactNode` | **required** | Child elements |
+| `align` | `"start" \| "end"` | `"start"` | Align |
+| `className` | `string` | `{cn("relative inline-block"` | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnDropdownMenu } from "@/components/maranello"
 
-<MnDropdownMenu>
-  {/* content */}
-</MnDropdownMenu>
+<MnDropdownMenu
+  trigger={<button>Options</button>}
+  items={[
+    { label: "Edit", onClick: () => edit() },
+    { label: "Duplicate", onClick: () => duplicate() },
+    { label: "Delete", onClick: () => remove(), variant: "destructive" },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Theme changes are announced via `aria-live`
-- All controls meet WCAG 2.1 contrast requirements
+- All controls meet WCAG 2.2 AA contrast requirements

@@ -17,23 +17,22 @@ Use to wrap any input with consistent label, hint, and error display.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `fieldId` | `string` | — | — |
-| `label` | `string` | — | — |
-| `hint` | `string` | — | — |
-| `error` | `string` | — | — |
-| `required` | `boolean` | — | — |
+| `fieldId` | `string` | — | Associates label via htmlFor and wires aria-describedby on the child control. |
+| `label` | `string` | — | Display label |
+| `hint` | `string` | — | Hint text |
+| `error` | `string` | — | Error text |
+| `required` | `boolean` | `{required` | Enable required |
 
 ## Example
 
 ```tsx
 import { MnFormField } from "@/components/maranello"
 
-<MnFormField label="Example" />
+<MnFormField />
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Form controls are associated with labels via `htmlFor`/`id`
 - Validation errors are announced to screen readers
 - Supports keyboard navigation between fields

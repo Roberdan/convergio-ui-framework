@@ -17,20 +17,25 @@ Use to visualize end-to-end customer experience across channels.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `stages` | `JourneyStage[]` | **required** | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `stages` | `JourneyStage[]` | **required** | Array of stages |
+| `ariaLabel` | `string` | `'Customer Journey Map'` | Accessible label |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnCustomerJourneyMap } from "@/components/maranello"
 
-<MnCustomerJourneyMap />
+<MnCustomerJourneyMap
+  stages={[
+    { label: "Discovery", emotion: 3, actions: ["Searches online", "Reads reviews"], painPoints: ["Hard to compare"] },
+    { label: "Evaluation", emotion: 4, actions: ["Requests demo", "Talks to sales"], painPoints: ["Pricing unclear"] },
+    { label: "Purchase", emotion: 5, actions: ["Signs contract"], painPoints: [] },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Matrix cells are keyboard navigable
 - Visual data is supplemented with text descriptions

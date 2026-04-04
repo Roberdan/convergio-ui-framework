@@ -17,14 +17,14 @@ Use to select a single date from a calendar or by typing.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `string` | — | — |
-| `onChange` | `(date: string) =&gt; void` | — | — |
-| `min` | `string` | — | — |
-| `max` | `string` | — | — |
-| `disabledDates` | `string[]` | — | — |
-| `placeholder` | `string` | — | — |
-| `disabled` | `boolean` | — | — |
-| `className` | `string` | — | — |
+| `value` | `string` | — | Current value |
+| `onChange` | `(date: string) =&gt; void` | — | Change event handler |
+| `min` | `string` | — | Minimum value |
+| `max` | `string` | — | Maximum value |
+| `disabledDates` | `string[]` | — | Array of disabledDates |
+| `placeholder` | `string` | `"Select date"` | Placeholder text |
+| `disabled` | `boolean` | `{disabled` | Disable the component |
+| `className` | `string` | `{cn(datePickerVariants({ size` | Additional CSS classes |
 
 ## Example
 
@@ -36,7 +36,6 @@ import { MnDatePicker } from "@/components/maranello"
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Form controls are associated with labels via `htmlFor`/`id`
 - Validation errors are announced to screen readers
 - Supports keyboard navigation between fields

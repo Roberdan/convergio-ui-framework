@@ -17,21 +17,32 @@ Use to set, track, and review Objectives and Key Results.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `objectives` | `Objective[]` | **required** | — |
-| `title` | `string` | — | — |
-| `period` | `string` | — | — |
-| `defaultOpenFirst` | `boolean` | — | — |
+| `objectives` | `Objective[]` | **required** | List of objectives with nested key results. |
+| `title` | `string` | `"OKR Dashboard"` | Dashboard title. |
+| `period` | `string` | — | Time period label (e.g. "Q2 2025"). |
+| `defaultOpenFirst` | `boolean` | `true` | Whether to expand the first objective by default. |
 
 ## Example
 
 ```tsx
 import { MnOkr } from "@/components/maranello"
 
-<MnOkr title="Example Title" />
+<MnOkr
+  objectives={[
+    {
+      title: "Improve platform reliability",
+      keyResults: [
+        { label: "Uptime > 99.9%", progress: 85 },
+        { label: "P1 incidents < 2/month", progress: 100 },
+        { label: "Deploy time < 5min", progress: 60 },
+      ],
+    },
+  ]}
+  title="Q1 2025 OKRs"
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Matrix cells are keyboard navigable
 - Visual data is supplemented with text descriptions

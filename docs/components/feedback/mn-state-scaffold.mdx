@@ -17,22 +17,28 @@ Use for empty, error, or loading states to guide users toward next steps.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `state` | `StateScaffoldState` | **required** | — |
-| `message` | `string` | — | — |
-| `actionLabel` | `string` | — | — |
-| `onRetry` | `() =&gt; void` | — | — |
-| `onAction` | `() =&gt; void` | — | — |
+| `state` | `StateScaffoldState` | **required** | Current scaffold state. |
+| `message` | `string` | — | Optional message displayed in non-ready states. |
+| `actionLabel` | `string` | — | Label for the action button (error retry or empty action). |
+| `onRetry` | `() =&gt; void` | — | Called when the retry button is clicked (error state). |
+| `onAction` | `() =&gt; void` | `{onRetry` | Called when the action button is clicked (empty state). |
 
 ## Example
 
 ```tsx
 import { MnStateScaffold } from "@/components/maranello"
 
-<MnStateScaffold />
+{/* Loading state */}
+<MnStateScaffold state="loading" />
+
+{/* Empty state */}
+<MnStateScaffold state="empty" title="No data" description="Add items to get started" />
+
+{/* Error state */}
+<MnStateScaffold state="error" title="Something went wrong" onRetry={() => refetch()} />
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Uses `role="alert"` or `aria-live` regions for dynamic content
-- Focus is managed appropriately when content appears/disappears
+- Focus is managed when content appears/disappears

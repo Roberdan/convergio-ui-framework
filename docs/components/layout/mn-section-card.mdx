@@ -17,23 +17,24 @@ Use to group related content into a visually distinct section.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `title` | `string` | **required** | — |
-| `action` | `SectionCardAction` | — | — |
-| `badge` | `number` | — | — |
-| `collapsible` | `boolean` | — | — |
-| `defaultOpen` | `boolean` | — | — |
-| `noPadding` | `boolean` | — | — |
+| `title` | `string` | **required** | Section title displayed in the header. |
+| `action` | `SectionCardAction` | `{action` | Optional action link/button in the header. |
+| `badge` | `number` | — | Badge count displayed next to the title. |
+| `collapsible` | `boolean` | `true` | Whether the card body is collapsible. |
+| `defaultOpen` | `boolean` | `true` | Controlled open state. |
+| `noPadding` | `boolean` | `false` | Remove body padding. |
 
 ## Example
 
 ```tsx
 import { MnSectionCard } from "@/components/maranello"
 
-<MnSectionCard title="Example Title" />
+<MnSectionCard title="Configuration" collapsible defaultOpen>
+  <p>Card content goes here.</p>
+</MnSectionCard>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
-- Landmarks (`<main>`, `<nav>`, `<aside>`) structure the layout
+- Uses semantic landmarks (`<main>`, `<nav>`, `<aside>`)
 - Skip-to-content link is supported

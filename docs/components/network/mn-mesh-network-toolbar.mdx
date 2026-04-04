@@ -17,21 +17,23 @@ Use alongside MnMeshNetwork to provide user controls for the graph.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `onlineCount` | `number` | **required** | — |
-| `totalCount` | `number` | **required** | — |
-| `onAction` | `(action: MeshAction) =&gt; void` | — | — |
-| `className` | `string` | — | — |
+| `onlineCount` | `number` | **required** | Callback when line count |
+| `totalCount` | `number` | **required** | Total Count value |
+| `onAction` | `(action: MeshAction) =&gt; void` | — | Callback when action |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnMeshNetworkToolbar } from "@/components/maranello"
 
-<MnMeshNetworkToolbar />
+<MnMeshNetworkToolbar
+  onlineCount={0}
+  totalCount={0}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
-- Interactive graph nodes are keyboard focusable
-- Status information uses `aria-live` for dynamic updates
+- Interactive nodes are keyboard focusable
+- Status information uses `aria-live` for updates

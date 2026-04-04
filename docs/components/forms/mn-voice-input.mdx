@@ -17,12 +17,12 @@ Use to add voice-based input alongside or instead of typing.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `locale` | `string` | — | — |
-| `continuous` | `boolean` | — | — |
-| `showWaveform` | `boolean` | — | — |
-| `onStateChange` | `(state: VoiceState) =&gt; void` | — | — |
-| `onTranscript` | `(text: string, isFinal: boolean) =&gt; void` | — | — |
-| `onVoiceError` | `(error: Error) =&gt; void` | — | — |
+| `locale` | `string` | — | Locale text |
+| `continuous` | `boolean` | — | Enable continuous |
+| `showWaveform` | `boolean` | `true` | Whether to show waveform |
+| `onStateChange` | `(state: VoiceState) =&gt; void` | — | Callback when state change |
+| `onTranscript` | `(text: string, isFinal: boolean) =&gt; void` | — | Callback when transcript |
+| `onVoiceError` | `(error: Error) =&gt; void` | — | Callback when voice error |
 
 ## Example
 
@@ -34,7 +34,6 @@ import { MnVoiceInput } from "@/components/maranello"
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Form controls are associated with labels via `htmlFor`/`id`
 - Validation errors are announced to screen readers
 - Supports keyboard navigation between fields

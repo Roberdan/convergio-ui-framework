@@ -17,28 +17,33 @@ Use to reveal extended details without leaving the current view.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `open` | `boolean` | **required** | — |
-| `onOpenChange` | `(open: boolean) =&gt; void` | **required** | — |
-| `title` | `string` | **required** | — |
-| `sections` | `DetailSection[]` | **required** | — |
-| `defaultEditing` | `boolean` | — | — |
-| `editable` | `boolean` | — | — |
-| `onSave` | `(data: Record&lt;string, unknown&gt;) =&gt; void` | — | — |
-| `className` | `string` | — | — |
-| `children` | `React.ReactNode` | — | — |
+| `open` | `boolean` | **required** | Whether the component is open/visible |
+| `onOpenChange` | `(open: boolean) =&gt; void` | **required** | Callback when open state changes |
+| `title` | `string` | **required** | Title text |
+| `sections` | `DetailSection[]` | **required** | Array of sections |
+| `defaultEditing` | `boolean` | `false` | Default value for editing |
+| `editable` | `boolean` | `true` | Enable inline editing |
+| `onSave` | `(data: Record&lt;string, unknown&gt;) =&gt; void` | — | Callback when save |
+| `className` | `string` | — | Additional CSS classes |
+| `children` | `React.ReactNode` | — | Child elements |
 
 ## Example
 
 ```tsx
 import { MnDetailPanel } from "@/components/maranello"
 
-<MnDetailPanel title="Example Title">
-  {/* content */}
-</MnDetailPanel>
+<MnDetailPanel
+  open={open}
+  onOpenChange={setOpen}
+  title="User Details"
+  sections={[
+    { label: "Info", fields: [{ label: "Name", value: "Alice" }, { label: "Email", value: "alice@example.com" }] },
+    { label: "Activity", fields: [{ label: "Last login", value: "2 hours ago" }] },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Color is not the only indicator — text or icons provide meaning
 - Interactive elements are keyboard accessible

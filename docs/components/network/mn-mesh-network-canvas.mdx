@@ -17,23 +17,29 @@ Use for high-performance rendering of complex mesh network graphs.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `nodes` | `MeshNode[]` | **required** | — |
-| `edges` | `MeshEdge[]` | **required** | — |
-| `selected` | `string \| null` | **required** | — |
-| `onNodeClick` | `(node: MeshNode) =&gt; void` | **required** | — |
-| `ariaLabel` | `string` | **required** | — |
-| `maxParticles` | `number` | **required** | — |
+| `nodes` | `MeshNode[]` | **required** | Array of nodes |
+| `edges` | `MeshEdge[]` | **required** | Array of edges |
+| `selected` | `string \| null` | **required** | Selected |
+| `onNodeClick` | `(node: MeshNode) =&gt; void` | **required** | Callback when node click |
+| `ariaLabel` | `string` | **required** | Accessible label for screen readers |
+| `maxParticles` | `number` | **required** | Max Particles value |
 
 ## Example
 
 ```tsx
 import { MnMeshNetworkCanvas } from "@/components/maranello"
 
-<MnMeshNetworkCanvas />
+<MnMeshNetworkCanvas
+  nodes={[]}
+  edges={[]}
+  selected={/* string | null */}
+  onNodeClick={() => {}}
+  ariaLabel="Example"
+  maxParticles={0}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
-- Interactive graph nodes are keyboard focusable
-- Status information uses `aria-live` for dynamic updates
+- Interactive nodes are keyboard focusable
+- Status information uses `aria-live` for updates

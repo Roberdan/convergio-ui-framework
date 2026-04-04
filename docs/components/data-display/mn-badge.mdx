@@ -17,19 +17,21 @@ Use to show status, counts, or labels inline with other content.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `label` | `string` | — | — |
-| `tone` | `BadgeTone` | — | — |
+| `label` | `string` | — | The text displayed inside the badge. Falls back to `children`. |
+| `tone` | `BadgeTone` | `"neutral"` | Semantic tone controlling colors. |
 
 ## Example
 
 ```tsx
 import { MnBadge } from "@/components/maranello"
 
-<MnBadge label="Example" />
+<MnBadge tone="success">Active</MnBadge>
+<MnBadge tone="warning">Pending</MnBadge>
+<MnBadge tone="danger">Failed</MnBadge>
+<MnBadge tone="neutral">Draft</MnBadge>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Color is not the only indicator — text or icons provide meaning
 - Interactive elements are keyboard accessible

@@ -17,21 +17,27 @@ Use to display a chronological record of system or user actions.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `entries` | `AuditEntry[]` | **required** | — |
-| `maxVisible` | `number` | — | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `entries` | `AuditEntry[]` | **required** | Array of entries |
+| `maxVisible` | `number` | `50` | Max visible entries before virtual scroll kicks in |
+| `ariaLabel` | `string` | `'Audit log'` | Accessible label for screen readers |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnAuditLog } from "@/components/maranello"
 
-<MnAuditLog />
+<MnAuditLog
+  entries={[
+    { id: "a1", action: "user.login", actor: "alice@example.com", timestamp: "2025-01-15T10:30:00Z", details: "IP: 192.168.1.1" },
+    { id: "a2", action: "plan.created", actor: "bob@example.com", timestamp: "2025-01-15T11:00:00Z", details: "Plan #1042" },
+    { id: "a3", action: "deploy.started", actor: "system", timestamp: "2025-01-15T12:00:00Z", details: "v2.4.1 to production" },
+  ]}
+  maxVisible={50}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Data tables include proper `<th>` scope attributes
 - Drag-and-drop has keyboard alternatives

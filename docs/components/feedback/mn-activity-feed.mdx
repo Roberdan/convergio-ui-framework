@@ -17,22 +17,27 @@ Use to display a timeline of user actions, system events, or audit entries.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `items` | `ActivityItem[]` | **required** | — |
-| `onRefresh` | `() =&gt; void` | — | — |
-| `refreshInterval` | `number` | — | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `items` | `ActivityItem[]` | **required** | Array of items |
+| `onRefresh` | `() =&gt; void` | — | Auto-refresh callback. Called every `refreshInterval` ms. |
+| `refreshInterval` | `number` | `30_000` | Refresh interval in ms. Default: 30000 (30s). 0 = disabled. |
+| `ariaLabel` | `string` | `'Activity feed'` | Accessible label |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnActivityFeed } from "@/components/maranello"
 
-<MnActivityFeed items={sampleData} />
+<MnActivityFeed
+  items={[
+    { id: "1", time: "2m ago", text: "Deployment completed successfully", status: "success" },
+    { id: "2", time: "8m ago", text: "New PR opened: feature/auth-refactor", status: "info" },
+    { id: "3", time: "1h ago", text: "Build failed on staging", status: "error" },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Uses `role="alert"` or `aria-live` regions for dynamic content
-- Focus is managed appropriately when content appears/disappears
+- Focus is managed when content appears/disappears

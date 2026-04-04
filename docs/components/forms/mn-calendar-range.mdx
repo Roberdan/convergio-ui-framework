@@ -17,25 +17,27 @@ Use to pick contiguous date ranges from a visual calendar.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `DateRange` | **required** | — |
-| `onChange` | `(range: DateRange) =&gt; void` | **required** | — |
-| `minDate` | `string` | — | — |
-| `maxDate` | `string` | — | — |
-| `className` | `string` | — | — |
-| `startLabel` | `string` | — | — |
-| `endLabel` | `string` | — | — |
+| `value` | `DateRange` | **required** | Current value |
+| `onChange` | `(range: DateRange) =&gt; void` | **required** | Change event handler |
+| `minDate` | `string` | — | Min Date text |
+| `maxDate` | `string` | — | Max Date text |
+| `className` | `string` | `{cn("flex flex-wrap items-end gap-4"` | Additional CSS classes |
+| `startLabel` | `string` | `"Start date"` | Start Label text |
+| `endLabel` | `string` | `"End date"` | End Label text |
 
 ## Example
 
 ```tsx
 import { MnCalendarRange } from "@/components/maranello"
 
-<MnCalendarRange />
+<MnCalendarRange
+  value={/* DateRange */}
+  onChange={() => {}}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Form controls are associated with labels via `htmlFor`/`id`
 - Validation errors are announced to screen readers
 - Supports keyboard navigation between fields

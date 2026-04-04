@@ -17,20 +17,29 @@ Use to display location-based data on a geographic map.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `markers` | `MapMarker[]` | — | — |
-| `enableZoom` | `boolean` | — | — |
-| `onMarkerClick` | `(marker: MapMarker) =&gt; void` | — | — |
+| `markers` | `MapMarker[]` | `[]` | Array of markers |
+| `zoom` | `number` | `Math.max(0.5` | Zoom value |
+| `center` | `[number, number]` | — | Center |
+| `enableZoom` | `boolean` | `true` | Enable zoom |
+| `enablePan` | `boolean` | `true` | Enable pan |
+| `onMarkerClick` | `(marker: MapMarker) =&gt; void` | — | Callback when marker click |
 
 ## Example
 
 ```tsx
 import { MnMap } from "@/components/maranello"
 
-<MnMap />
+<MnMap
+  markers={[
+    { lat: 44.53, lng: 10.86, label: "Maranello" },
+    { lat: 45.46, lng: 9.19, label: "Milan" },
+  ]}
+  enableZoom
+  enablePan
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
-- Interactive graph nodes are keyboard focusable
-- Status information uses `aria-live` for dynamic updates
+- Interactive nodes are keyboard focusable
+- Status information uses `aria-live` for updates

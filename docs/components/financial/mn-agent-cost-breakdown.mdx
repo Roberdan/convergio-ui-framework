@@ -17,20 +17,32 @@ Use to itemize and attribute costs of AI agent operations.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `rows` | `AgentCostRow[]` | **required** | — |
-| `onSelect` | `(row: AgentCostRow) =&gt; void` | — | — |
-| `className` | `string` | — | — |
+| `rows` | `AgentCostRow[]` | **required** | Array of rows |
+| `currency` | `string` | `"USD"` | Currency symbol or code |
+| `period` | `string` | `"This period"` | Period text |
+| `sortable` | `boolean` | `true` | Enable column sorting |
+| `onSelect` | `(row: AgentCostRow) =&gt; void` | — | Callback when select |
+| `onBudgetAlert` | `(row: AgentCostRow) =&gt; void` | — | Callback when budget alert |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnAgentCostBreakdown } from "@/components/maranello"
 
-<MnAgentCostBreakdown rows={sampleData} />
+<MnAgentCostBreakdown
+  rows={[
+    { agent: "worker-01", model: "claude-sonnet", tokens: 124000, cost: 0.62, tasks: 14 },
+    { agent: "worker-02", model: "gpt-4o", tokens: 86000, cost: 1.72, tasks: 8 },
+    { agent: "worker-03", model: "claude-haiku", tokens: 210000, cost: 0.21, tasks: 42 },
+  ]}
+  currency="USD"
+  period="Last 7 days"
+  sortable
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Monetary values use `aria-label` for screen reader clarity
 - Tables include proper header associations

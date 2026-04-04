@@ -17,29 +17,28 @@ Use to render neural-network-style node graphs or AI pipeline topologies.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `nodes` | `NeuralNodeData[]` | — | — |
-| `connections` | `NeuralConnection[]` | — | — |
-| `nodeCount` | `number` | — | — |
-| `connectionDensity` | `number` | — | — |
-| `colors` | `string[]` | — | — |
-| `pulseSpeed` | `number` | — | — |
-| `particleCount` | `number` | — | — |
-| `interactive` | `boolean` | — | — |
-| `labels` | `boolean` | — | — |
-| `forceLayout` | `boolean` | — | — |
-| `labelFont` | `string` | — | — |
-| `onReady` | `(controller: NeuralNodesController) =&gt; void` | — | — |
+| `nodes` | `NeuralNodeData[]` | `nodeData.map((nd) => toInternal(nd` | Array of nodes |
+| `connections` | `NeuralConnection[]` | `[]; spawn(); return` | Array of connections |
+| `nodeCount` | `number` | `30` | Node Count value |
+| `connectionDensity` | `number` | `0.15` | Connection Density value |
+| `colors` | `string[]` | `DEFAULT_COLORS` | Array of colors |
+| `pulseSpeed` | `number` | `1` | Pulse Speed value |
+| `particleCount` | `number` | `2` | Particle Count value |
+| `interactive` | `boolean` | `true` | Enable interactive |
+| `labels` | `boolean` | — | Enable labels |
+| `forceLayout` | `boolean` | — | Enable force layout |
+| `labelFont` | `string` | `"monospace"` | Label Font text |
+| `onReady` | `(controller: NeuralNodesController) =&gt; void` | — | Callback when ready |
 
 ## Example
 
 ```tsx
 import { MnNeuralNodes } from "@/components/maranello"
 
-<MnNeuralNodes />
+<MnNeuralNodes nodeCount={40} connectionDensity={0.2} interactive />
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Status updates use `aria-live` for real-time announcements
 - Interactive elements support keyboard activation

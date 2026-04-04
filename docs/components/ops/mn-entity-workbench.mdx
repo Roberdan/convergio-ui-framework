@@ -17,26 +17,32 @@ Use to provide a full editing surface for a complex domain entity.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `tabs` | `EntityWorkbenchTab[]` | **required** | — |
-| `activeTabId` | `string` | — | — |
-| `onTabSelect` | `(tabId: string) =&gt; void` | — | — |
-| `onTabClose` | `(tabId: string) =&gt; void` | — | — |
-| `onTabAdd` | `() =&gt; void` | — | — |
-| `onSave` | `(tabId: string) =&gt; void` | — | — |
-| `onReorder` | `(tabIds: string[]) =&gt; void` | — | — |
-| `allowAdd` | `boolean` | — | — |
-| `renderContent` | `(tab: EntityWorkbenchTab) =&gt; React.ReactNode` | — | — |
+| `tabs` | `EntityWorkbenchTab[]` | **required** | Array of tabs |
+| `activeTabId` | `string` | `== undefined) setInternalActive(id)` | Active Tab Id text |
+| `onTabSelect` | `(tabId: string) =&gt; void` | — | Callback when tab select |
+| `onTabClose` | `(tabId: string) =&gt; void` | — | Callback when tab close |
+| `onTabAdd` | `() =&gt; void` | — | Callback when tab add |
+| `onSave` | `(tabId: string) =&gt; void` | — | Callback when save |
+| `onReorder` | `(tabIds: string[]) =&gt; void` | — | Callback when reorder |
+| `allowAdd` | `boolean` | `true` | Enable allow add |
+| `renderContent` | `(tab: EntityWorkbenchTab) =&gt; React.ReactNode` | — | Render Content |
 
 ## Example
 
 ```tsx
 import { MnEntityWorkbench } from "@/components/maranello"
 
-<MnEntityWorkbench />
+<MnEntityWorkbench
+  tabs={[
+    { id: "users", label: "Users", count: 42 },
+    { id: "teams", label: "Teams", count: 8 },
+    { id: "roles", label: "Roles", count: 5 },
+  ]}
+  allowAdd
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Data tables include proper `<th>` scope attributes
 - Drag-and-drop has keyboard alternatives

@@ -17,23 +17,30 @@ Use to track expenses or costs over time with running totals.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `labels` | `string[]` | **required** | — |
-| `series` | `CostSeries[]` | **required** | — |
-| `stacked` | `boolean` | — | — |
-| `animate` | `boolean` | — | — |
-| `unit` | `string` | — | — |
-| `onHover` | `(label: string, values: Record&lt;string, number&gt;) =&gt; void` | — | — |
+| `labels` | `string[]` | **required** | Array of labels |
+| `series` | `CostSeries[]` | **required** | Array of series |
+| `stacked` | `boolean` | `true` | Use stacked layout |
+| `animate` | `boolean` | `true` | Enable entry animation |
+| `unit` | `string` | `"$"` | Unit suffix (e.g. "%", "$", "km/h") |
+| `onHover` | `(label: string, values: Record&lt;string, number&gt;) =&gt; void` | — | Callback when hover |
 
 ## Example
 
 ```tsx
 import { MnCostTimeline } from "@/components/maranello"
 
-<MnCostTimeline />
+<MnCostTimeline
+  labels={["Jan", "Feb", "Mar", "Apr"]}
+  series={[
+    { label: "Compute", data: [1200, 1400, 1100, 1600], color: "var(--chart-1)" },
+    { label: "Storage", data: [300, 350, 320, 400], color: "var(--chart-2)" },
+  ]}
+  unit="$"
+  stacked
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Charts include `aria-label` describing the data trend
-- Color is supplemented with patterns or labels for color-blind users
+- Color is supplemented with labels for color-blind users

@@ -17,26 +17,33 @@ Use for talent reviews and succession planning discussions.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `items` | `NineBoxItem[]` | **required** | — |
-| `xLabel` | `string` | — | — |
-| `yLabel` | `string` | — | — |
-| `xAxisLabels` | `[string, string, string]` | — | — |
-| `yAxisLabels` | `[string, string, string]` | — | — |
-| `onSelect` | `(item: NineBoxItem) =&gt; void` | — | — |
-| `onMove` | `(item: NineBoxItem, performance: 0 \| 1 \| 2, potential: 0 \| 1 \| 2) =&gt; void` | — | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `items` | `NineBoxItem[]` | **required** | Array of items |
+| `xLabel` | `string` | `"Performance"` | X Label text |
+| `yLabel` | `string` | `"Potential"` | Y Label text |
+| `xAxisLabels` | `[string, string, string]` | `["Low"` | X Axis Labels |
+| `yAxisLabels` | `[string, string, string]` | `["Low"` | Y Axis Labels |
+| `onSelect` | `(item: NineBoxItem) =&gt; void` | — | Callback when select |
+| `onMove` | `(item: NineBoxItem, performance: 0 \| 1 \| 2, potential: 0 \| 1 \| 2) =&gt; void` | — | Callback when move |
+| `ariaLabel` | `string` | — | Accessible label for screen readers |
+| `className` | `string` | `{cn("flex gap-2"` | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnNineBoxMatrix } from "@/components/maranello"
 
-<MnNineBoxMatrix items={sampleData} />
+<MnNineBoxMatrix
+  items={[
+    { label: "Alice", x: 2, y: 2 },
+    { label: "Bob", x: 0, y: 1 },
+    { label: "Carol", x: 1, y: 0 },
+  ]}
+  xLabel="Performance"
+  yLabel="Potential"
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Matrix cells are keyboard navigable
 - Visual data is supplemented with text descriptions

@@ -17,21 +17,27 @@ Use to show proportional budget distribution with drill-down capability.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `items` | `TreemapItem[]` | **required** | — |
-| `total` | `number` | — | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `items` | `TreemapItem[]` | **required** | Array of items |
+| `total` | `number` | `totalProp ?? items.reduce((s` | Total budget. If omitted, sum of items is used. |
+| `ariaLabel` | `string` | `'Budget treemap'` | Accessible label |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnBudgetTreemap } from "@/components/maranello"
 
-<MnBudgetTreemap items={sampleData} />
+<MnBudgetTreemap
+  items={[
+    { label: "Engineering", value: 450000, color: "var(--chart-1)" },
+    { label: "Marketing", value: 280000, color: "var(--chart-2)" },
+    { label: "Sales", value: 320000, color: "var(--chart-3)" },
+    { label: "Operations", value: 150000, color: "var(--chart-4)" },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Charts include `aria-label` describing the data trend
-- Color is supplemented with patterns or labels for color-blind users
+- Color is supplemented with labels for color-blind users
