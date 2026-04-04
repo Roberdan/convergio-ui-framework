@@ -8,10 +8,9 @@ import { MnSectionCard } from '@/components/maranello/layout';
 import { MnDataTable, type DataTableColumn, MnBadge } from '@/components/maranello/data-display';
 import { MnOrgChart, type OrgNode } from '@/components/maranello/network';
 import { MnBudgetTreemap, type TreemapItem } from '@/components/maranello/data-viz';
-import { MnModal } from '@/components/maranello/feedback';
+import { MnModal, MnStateScaffold } from '@/components/maranello/feedback';
 import { MnFormField } from '@/components/maranello/forms';
 import { MnProgressRing } from '@/components/maranello/data-display';
-import { MnStateScaffold } from '@/components/maranello/feedback';
 
 const ORG_COLUMNS: DataTableColumn[] = [
   { key: 'name', label: 'Name', sortable: true },
@@ -24,7 +23,7 @@ const ORG_COLUMNS: DataTableColumn[] = [
 
 export default function OrgsPage() {
   const [selectedOrg, setSelectedOrg] = useState<Org | null>(null);
-  const [showCreate, setShowCreate] = useState(false);
+  const [formMode, setFormMode] = useState<null | 'create' | 'edit'>(null);
   const [formData, setFormData] = useState<OrgInput>({ name: '', budget_usd: 0 });
   const [saving, setSaving] = useState(false);
 
@@ -50,18 +49,31 @@ export default function OrgsPage() {
     [orgs],
   );
 
-  const handleCreate = useCallback(async () => {
+  const openCreate = useCallback(() => {
+    setFormData({ name: '', budget_usd: 0 });
+    setFormMode('create');
+  }, []);
+
+  const openEdit = useCallback((org: Org) => {
+    setFormData({ name: org.name, description: org.description, budget_usd: org.budget_usd });
+    setFormMode('edit');
+  }, []);
+
+  const handleSave = useCallback(async () => {
     if (!formData.name) return;
     setSaving(true);
     try {
-      await api.orgCreate(formData);
-      setShowCreate(false);
-      setFormData({ name: '', budget_usd: 0 });
+      if (formMode === 'edit' && selectedOrg) {
+        await api.orgUpdate(selectedOrg.id, formData);
+      } else {
+        await api.orgCreate(formData);
+      }
+      setFormMode(null);
       refetch();
     } finally {
       setSaving(false);
     }
-  }, [formData, refetch]);
+  }, [formData, formMode, selectedOrg, refetch]);
 
   const handleDelete = useCallback(async (org: Org) => {
     if (!confirm(`Delete organization "${org.name}"?`)) return;
@@ -78,7 +90,7 @@ export default function OrgsPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Organizations</h1>
         <button
-          onClick={() => setShowCreate(true)}
+          onClick={openCreate}
           className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
         >
           New Organization
@@ -119,12 +131,7 @@ export default function OrgsPage() {
         </MnSectionCard>
 
         {selectedOrg && (
-          <MnSectionCard
-            title={selectedOrg.name}
-            collapsible
-            defaultOpen
-            action={{ label: 'Delete', onClick: () => handleDelete(selectedOrg) }}
-          >
+          <MnSectionCard title={selectedOrg.name} collapsible defaultOpen>
             <div className="space-y-4 p-4">
               <div className="flex items-center gap-3">
                 <MnBadge tone={selectedOrg.status === 'active' ? 'success' : 'danger'}>
@@ -145,6 +152,20 @@ export default function OrgsPage() {
                   </p>
                   <p className="text-xs text-muted-foreground">{selectedOrg.agent_count} agents</p>
                 </div>
+              </div>
+              <div className="flex gap-2 pt-1">
+                <button
+                  onClick={() => openEdit(selectedOrg)}
+                  className="rounded-md border px-3 py-1.5 text-sm hover:bg-muted/50"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(selectedOrg)}
+                  className="rounded-md border border-destructive px-3 py-1.5 text-sm text-destructive hover:bg-destructive/10"
+                >
+                  Delete
+                </button>
               </div>
             </div>
           </MnSectionCard>
@@ -170,7 +191,11 @@ export default function OrgsPage() {
         )}
       </div>
 
-      <MnModal open={showCreate} onOpenChange={setShowCreate} title="New Organization">
+      <MnModal
+        open={!!formMode}
+        onOpenChange={(v) => !v && setFormMode(null)}
+        title={formMode === 'edit' ? 'Edit Organization' : 'New Organization'}
+      >
         <div className="space-y-4 p-4">
           <MnFormField label="Name" required error={!formData.name && saving ? 'Required' : undefined}>
             <input
@@ -201,18 +226,15 @@ export default function OrgsPage() {
             />
           </MnFormField>
           <div className="flex justify-end gap-2">
-            <button
-              onClick={() => setShowCreate(false)}
-              className="rounded-md border px-4 py-2 text-sm"
-            >
+            <button onClick={() => setFormMode(null)} className="rounded-md border px-4 py-2 text-sm">
               Cancel
             </button>
             <button
-              onClick={handleCreate}
+              onClick={handleSave}
               disabled={saving}
               className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
             >
-              {saving ? 'Creating...' : 'Create'}
+              {saving ? (formMode === 'edit' ? 'Saving...' : 'Creating...') : (formMode === 'edit' ? 'Save' : 'Create')}
             </button>
           </div>
         </div>
