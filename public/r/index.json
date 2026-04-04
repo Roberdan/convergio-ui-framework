@@ -157,6 +157,35 @@
     ]
   },
   {
+    "name": "mn-augmented-brain-v2",
+    "type": "registry:ui",
+    "description": "mn-augmented-brain-v2 component",
+    "dependencies": [
+      "class-variance-authority",
+      "lucide-react"
+    ],
+    "registryDependencies": [],
+    "files": [
+      "agentic/mn-augmented-brain-v2.tsx",
+      "agentic/mn-augmented-brain-v2.helpers.ts"
+    ]
+  },
+  {
+    "name": "mn-brain-3d",
+    "type": "registry:ui",
+    "description": "mn-brain-3d component",
+    "dependencies": [
+      "class-variance-authority",
+      "react-force-graph-3d"
+    ],
+    "registryDependencies": [],
+    "files": [
+      "agentic/mn-brain-3d.tsx",
+      "agentic/mn-brain-3d.helpers.ts",
+      "agentic/mn-brain-3d.types.ts"
+    ]
+  },
+  {
     "name": "mn-avatar",
     "type": "registry:ui",
     "description": "mn-avatar component",

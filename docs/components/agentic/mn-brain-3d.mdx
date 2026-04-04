@@ -1,0 +1,98 @@
+---
+title: MnBrain3D
+category: agentic
+description: "3D force-directed graph showing AI agents as glowing spheres with animated edges"
+keywords: ["brain", "3d", "graph", "cervello", "grafo", "agents", "agenti", "force", "network", "rete"]
+---
+
+# MnBrain3D
+
+3D force-directed graph showing Convergio agents as spheres and their relationships as animated edges.
+Built on `react-force-graph-3d` (Three.js + d3-force-3d). Users can zoom, pan, and orbit with mouse or touch.
+
+## When to use
+
+Use to visualize agent networks, delegation flows, and inter-agent relationships in an interactive 3D space.
+
+## Sub-types
+
+### Brain3DNode
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | `string` | Unique node identifier |
+| `label` | `string` | Display name |
+| `type` | `"core" \| "worker" \| "coordinator" \| "extension"` | Agent role (determines color) |
+| `status` | `"active" \| "idle" \| "error" \| "offline"` | Determines opacity and glow |
+| `model` | `string?` | Model name shown in tooltip (e.g. `"claude-sonnet"`) |
+| `activeTasks` | `number?` | Number of tasks — affects sphere size |
+| `group` | `string?` | Logical grouping for clustering |
+
+### Brain3DEdge
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `source` | `string` | Source node id |
+| `target` | `string` | Target node id |
+| `type` | `"delegation" \| "sync" \| "data" \| "control"` | Edge type (determines dash pattern) |
+| `strength` | `number?` | 0–1, affects edge thickness and spring force |
+| `active` | `boolean?` | Enables particle animation along the edge |
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `nodes` | `Brain3DNode[]` | **required** | Agent nodes to render |
+| `edges` | `Brain3DEdge[]` | **required** | Edges connecting agents |
+| `onNodeClick` | `(node: Brain3DNode) => void` | — | Fires when user clicks a node |
+| `onNodeHover` | `(node: Brain3DNode \| null) => void` | — | Fires on hover/unhover |
+| `autoRotate` | `boolean` | `true` | Gentle rotation around Y axis |
+| `autoRotateSpeed` | `number` | `0.5` | Rotation speed multiplier |
+| `showLabels` | `boolean` | `true` | Show floating labels on hover |
+| `height` | `number` | `500` | Canvas height in pixels |
+| `backgroundColor` | `string` | `"rgba(0,0,0,0)"` | Scene background (transparent by default) |
+| `ariaLabel` | `string` | `"3D agent network visualization"` | Accessible label for screen readers |
+| `size` | `"sm" \| "md" \| "lg" \| "fluid"` | `"md"` | Container width constraint |
+
+## Visual behavior
+
+- **Auto-rotate** stops when the user interacts and resumes after 3 seconds idle.
+- **Particle flow** animates along edges where `active: true`, visualizing data movement.
+- **Node sizing** scales with `activeTasks` — busier agents appear larger.
+- **Theme colors** are read from `--mn-*` CSS custom properties via `getComputedStyle()` and re-read on `data-theme` attribute changes.
+- **`prefers-reduced-motion`** disables auto-rotate, particle animations, and node dragging.
+
+## Example
+
+```tsx
+import { MnBrain3D } from "@/components/maranello"
+
+<MnBrain3D
+  nodes={[
+    { id: "orch", label: "Orchestrator", type: "coordinator", status: "active", activeTasks: 5 },
+    { id: "w1", label: "Worker-01", type: "worker", status: "active", model: "claude-sonnet", activeTasks: 3 },
+    { id: "w2", label: "Worker-02", type: "worker", status: "idle", model: "gpt-4o", activeTasks: 0 },
+    { id: "ext1", label: "GitHub Agent", type: "extension", status: "active", activeTasks: 1 },
+  ]}
+  edges={[
+    { source: "orch", target: "w1", type: "delegation", strength: 0.8, active: true },
+    { source: "orch", target: "w2", type: "delegation", strength: 0.3 },
+    { source: "w1", target: "ext1", type: "data", strength: 0.5, active: true },
+  ]}
+  onNodeClick={(node) => console.log("Selected:", node.label)}
+  height={600}
+  size="fluid"
+/>
+```
+
+## Accessibility
+
+- Container has `role="img"` with descriptive `aria-label` including node and edge counts
+- Keyboard-focusable via `tabIndex`
+- `prefers-reduced-motion` disables all motion (auto-rotate, particles, drag)
+- Touch-friendly: pinch-zoom, orbit, tap to select
+
+## Dependencies
+
+- `react-force-graph-3d` (Three.js + d3-force-3d)
+- Loaded via `React.lazy()` with `Suspense` fallback for SSR safety

@@ -1,4 +1,4 @@
-// Maranello component catalog data — 100 entries (single source of truth)
+// Maranello component catalog data — 102 entries (single source of truth)
 
 export interface CatalogEntry {
   name: string;
@@ -17,7 +17,7 @@ function c(name: string, slug: string, cat: string, desc: string, when: string, 
 }
 
 export const CATALOG: CatalogEntry[] = [
-  // ── agentic (7) ──
+  // ── agentic (9) ──
   c("MnActiveMissions", "mn-active-missions", "agentic",
     "Dashboard panel tracking active AI agent missions and their real-time progress",
     "Use to monitor running AI tasks, agent workflows, or background missions",
@@ -46,6 +46,14 @@ export const CATALOG: CatalogEntry[] = [
     "Interactive neural network node graph for visualizing model architectures",
     "Use to render neural-network-style node graphs or AI pipeline topologies",
     ["neural", "nodes", "network", "neurale", "nodi", "rete", "graph", "grafo", "AI"]),
+  c("MnBrain3D", "mn-brain-3d", "agentic",
+    "3D force-directed graph showing AI agents as glowing spheres with animated edges",
+    "Use to visualize agent networks, delegation flows, and inter-agent relationships in 3D",
+    ["brain", "3d", "graph", "cervello", "grafo", "agents", "agenti", "force", "network", "rete"]),
+  c("MnAugmentedBrainV2", "mn-augmented-brain-v2", "agentic",
+    "2D canvas brain visualization with hub-satellite layout, synapse particles, and stats bar",
+    "Use for an augmented brain panel showing a central hub connected to task and agent nodes",
+    ["brain", "augmented", "cervello", "aumentato", "hub", "synapse", "sinapsi", "canvas"]),
 
   // ── data-display (12) ──
   c("MnAvatar", "mn-avatar", "data-display",

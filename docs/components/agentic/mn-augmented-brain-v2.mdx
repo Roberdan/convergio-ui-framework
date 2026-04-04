@@ -1,0 +1,106 @@
+---
+title: MnAugmentedBrainV2
+category: agentic
+description: "2D canvas brain visualization with hub-satellite layout, synapse particles, and stats bar"
+keywords: ["brain", "augmented", "cervello", "aumentato", "hub", "synapse", "sinapsi", "canvas"]
+---
+
+# MnAugmentedBrainV2
+
+2D canvas visualization showing a central hub node surrounded by satellite nodes (tasks, agents, plans)
+connected by animated synapses. Includes a stats bar overlay and play/pause animation controls.
+
+## When to use
+
+Use for an augmented brain panel showing a central hub connected to task and agent nodes — ideal for
+plan overviews, agent coordination dashboards, or AI system status panels.
+
+## Sub-types
+
+### BrainV2Node
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | `string` | Unique node identifier |
+| `label` | `string` | Display name (truncated to fit) |
+| `type` | `"hub" \| "agent" \| "task" \| "plan"` | Node role (determines color and size) |
+| `status` | `"active" \| "idle" \| "completed" \| "error"` | Affects node opacity |
+| `size` | `number?` | Relative size multiplier (default `1`) |
+
+### BrainV2Synapse
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `from` | `string` | Source node id |
+| `to` | `string` | Target node id |
+| `strength` | `number` | 0–1, controls line thickness and opacity |
+| `active` | `boolean?` | Enables particle animation along the synapse |
+
+### BrainV2Stats
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `sessions` | `number?` | Session count shown in stats bar |
+| `plans` | `number?` | Plan count |
+| `tasks` | `number?` | Task count |
+| `synapses` | `number?` | Synapse count |
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `nodes` | `BrainV2Node[]` | **required** | Array of brain nodes |
+| `synapses` | `BrainV2Synapse[]` | **required** | Array of synapses connecting nodes |
+| `stats` | `BrainV2Stats` | — | Counts shown in the top stats bar |
+| `title` | `string` | `"AUGMENTED BRAIN"` | Title in the top-left of the stats bar |
+| `onNodeClick` | `(node: BrainV2Node) => void` | — | Fires when user clicks a node |
+| `showControls` | `boolean` | `true` | Show play/pause button in the stats bar |
+| `height` | `number` | `500` | Canvas height in pixels |
+| `ariaLabel` | `string` | `"Augmented brain visualization"` | Accessible label for screen readers |
+| `size` | `"sm" \| "md" \| "lg" \| "fluid"` | `"md"` | Container width constraint |
+
+## Visual behavior
+
+- **Hub nodes** render large with a radial gradient glow effect.
+- **Satellite nodes** (agent/task/plan) are positioned in a ring around the hub.
+- **Synapse particles** — small dots travel along active synapses to show data flow.
+- **Stats bar** is a `<div>` overlay (not canvas), showing session/plan/task/synapse counts.
+- **Play/pause** button uses Lucide icons; pausing stops particle animation.
+- **Label truncation** — labels exceeding 90px are truncated with ellipsis.
+- **Theme colors** are read from `--mn-*` CSS custom properties and re-read on `data-theme` changes.
+- **`prefers-reduced-motion`** disables all particle animations and uses a static layout.
+
+## Example
+
+```tsx
+import { MnAugmentedBrainV2 } from "@/components/maranello"
+
+<MnAugmentedBrainV2
+  nodes={[
+    { id: "hub1", label: "#599 Super Mesh AI Sys", type: "hub", status: "active", size: 2 },
+    { id: "t1", label: "Audit MyConvergio code", type: "task", status: "active" },
+    { id: "t2", label: "Architecture review", type: "task", status: "idle" },
+    { id: "a1", label: "aMox Agent", type: "agent", status: "active" },
+    { id: "p1", label: "Wave WS Plan", type: "plan", status: "active" },
+  ]}
+  synapses={[
+    { from: "hub1", to: "t1", strength: 0.8, active: true },
+    { from: "hub1", to: "t2", strength: 0.4 },
+    { from: "hub1", to: "a1", strength: 0.9, active: true },
+    { from: "hub1", to: "p1", strength: 0.5 },
+    { from: "a1", to: "t1", strength: 0.6, active: true },
+  ]}
+  stats={{ sessions: 12, plans: 3, tasks: 49, synapses: 92 }}
+  height={500}
+  size="fluid"
+/>
+```
+
+## Accessibility
+
+- Canvas has `role="img"` with descriptive `aria-label` including node and synapse counts
+- Keyboard-focusable via `tabIndex`
+- Play/pause button has `aria-label` announcing current state
+- Hit-testing with pointer cursor on interactive nodes
+- `prefers-reduced-motion` disables all motion
+- DPR-aware canvas rendering for sharp text on Retina displays

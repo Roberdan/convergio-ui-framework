@@ -23,6 +23,11 @@ import type {
   StripMetric,
   OrgNode,
   Step,
+  Brain3DNode,
+  Brain3DEdge,
+  BrainV2Node,
+  BrainV2Synapse,
+  BrainV2Stats,
 } from '@/components/maranello';
 
 /* ── Utilities ── */
@@ -220,4 +225,75 @@ export const orgTree: OrgNode = {
     },
     { name: 'Thor Validator', role: 'Quality Gate', status: 'active' },
   ],
+};
+
+/* ── Brain3D demo ── */
+
+export const brain3DNodes: Brain3DNode[] = [
+  { id: 'orch', label: 'Orchestrator', type: 'coordinator', status: 'active', activeTasks: 8, model: 'claude-opus' },
+  { id: 'planner', label: 'Planner', type: 'coordinator', status: 'active', activeTasks: 3, model: 'claude-sonnet' },
+  { id: 'w1', label: 'Worker-01', type: 'worker', status: 'active', model: 'claude-sonnet', activeTasks: 4 },
+  { id: 'w2', label: 'Worker-02', type: 'worker', status: 'idle', model: 'gpt-4o', activeTasks: 0 },
+  { id: 'w3', label: 'Worker-03', type: 'worker', status: 'active', model: 'claude-haiku', activeTasks: 2 },
+  { id: 'w4', label: 'Worker-04', type: 'worker', status: 'error', model: 'gpt-4o-mini', activeTasks: 0 },
+  { id: 'w5', label: 'Worker-05', type: 'worker', status: 'active', model: 'claude-sonnet', activeTasks: 1 },
+  { id: 'thor', label: 'Thor Validator', type: 'core', status: 'active', activeTasks: 6 },
+  { id: 'kernel', label: 'Kernel', type: 'core', status: 'active', activeTasks: 2 },
+  { id: 'ext-gh', label: 'GitHub Agent', type: 'extension', status: 'active', activeTasks: 1 },
+  { id: 'ext-db', label: 'DB Agent', type: 'extension', status: 'active', activeTasks: 3 },
+  { id: 'ext-search', label: 'Search Agent', type: 'extension', status: 'idle', activeTasks: 0 },
+  { id: 'ext-deploy', label: 'Deploy Agent', type: 'extension', status: 'offline', activeTasks: 0 },
+  { id: 'monitor', label: 'Monitor', type: 'core', status: 'active', activeTasks: 1 },
+];
+
+export const brain3DEdges: Brain3DEdge[] = [
+  { source: 'kernel', target: 'orch', type: 'control', strength: 0.95, active: true },
+  { source: 'kernel', target: 'thor', type: 'control', strength: 0.9, active: true },
+  { source: 'kernel', target: 'monitor', type: 'sync', strength: 0.7, active: true },
+  { source: 'orch', target: 'planner', type: 'delegation', strength: 0.85, active: true },
+  { source: 'orch', target: 'w1', type: 'delegation', strength: 0.8, active: true },
+  { source: 'orch', target: 'w2', type: 'delegation', strength: 0.3 },
+  { source: 'orch', target: 'w3', type: 'delegation', strength: 0.7, active: true },
+  { source: 'orch', target: 'w4', type: 'delegation', strength: 0.1 },
+  { source: 'planner', target: 'w5', type: 'delegation', strength: 0.6, active: true },
+  { source: 'w1', target: 'ext-gh', type: 'data', strength: 0.5, active: true },
+  { source: 'w3', target: 'ext-db', type: 'data', strength: 0.6, active: true },
+  { source: 'w5', target: 'ext-search', type: 'data', strength: 0.3 },
+  { source: 'w1', target: 'ext-deploy', type: 'data', strength: 0.2 },
+  { source: 'thor', target: 'w1', type: 'sync', strength: 0.4, active: true },
+  { source: 'thor', target: 'w3', type: 'sync', strength: 0.4, active: true },
+  { source: 'thor', target: 'w5', type: 'sync', strength: 0.3 },
+  { source: 'monitor', target: 'orch', type: 'control', strength: 0.5, active: true },
+  { source: 'ext-gh', target: 'thor', type: 'data', strength: 0.35, active: true },
+];
+
+/* ── AugmentedBrainV2 demo ── */
+
+export const brainV2Nodes: BrainV2Node[] = [
+  { id: 'hub1', label: '#599 Super Mesh AI Sys', type: 'hub', status: 'active', size: 2 },
+  { id: 't1', label: 'Audit MyConvergio code', type: 'task', status: 'active' },
+  { id: 't2', label: 'Professional GitHub Wi...', type: 'task', status: 'idle' },
+  { id: 't3', label: 'Architecture review an...', type: 'task', status: 'completed' },
+  { id: 't4', label: 'Record demo Playwright', type: 'task', status: 'active' },
+  { id: 't5', label: 'Complete documentation', type: 'task', status: 'idle' },
+  { id: 'a1', label: 'aMox Agent', type: 'agent', status: 'active' },
+  { id: 'p1', label: 'Wave WS Plan', type: 'plan', status: 'active' },
+];
+
+export const brainV2Synapses: BrainV2Synapse[] = [
+  { from: 'hub1', to: 't1', strength: 0.8, active: true },
+  { from: 'hub1', to: 't2', strength: 0.4 },
+  { from: 'hub1', to: 't3', strength: 0.6 },
+  { from: 'hub1', to: 't4', strength: 0.7, active: true },
+  { from: 'hub1', to: 't5', strength: 0.3 },
+  { from: 'hub1', to: 'a1', strength: 0.9, active: true },
+  { from: 'hub1', to: 'p1', strength: 0.5 },
+  { from: 'a1', to: 't1', strength: 0.6, active: true },
+];
+
+export const brainV2Stats: BrainV2Stats = {
+  sessions: 12,
+  plans: 3,
+  tasks: 49,
+  synapses: 92,
 };
