@@ -101,10 +101,17 @@ export default function DashboardPage() {
   );
   const { data: deepHealth, refetch: refetchHealth } =
     useApiQuery(api.healthDeep, { pollInterval: 30_000 });
-  const { data: costs } = useApiQuery(
+  const { data: costsRaw } = useApiQuery(
     () => api.inferenceCosts({}),
     { pollInterval: 30_000 },
   );
+  // API may return CostSummary[] directly or wrapped as { costs: CostSummary[] }
+  const costs: CostSummary[] = useMemo(() => {
+    if (Array.isArray(costsRaw)) return costsRaw;
+    const wrapped = costsRaw as unknown as Record<string, unknown> | null;
+    if (wrapped && Array.isArray(wrapped.costs)) return wrapped.costs as CostSummary[];
+    return [];
+  }, [costsRaw]);
 
   const services: Service[] = useMemo(
     () => (deepHealth?.components ?? []).map(healthToService),
@@ -166,7 +173,7 @@ export default function DashboardPage() {
     const cores = nodes.filter((n) => n.type === 'core');
     for (const n of nodes) {
       if (n.type !== 'core' && cores.length > 0) {
-        const hub = cores[Math.floor(Math.random() * cores.length)];
+        const hub = cores[nodes.indexOf(n) % cores.length];
         conns.push({ from: hub.id, to: n.id, strength: 0.3 });
       }
     }
@@ -174,14 +181,14 @@ export default function DashboardPage() {
   }, [agents, events]);
 
   const costLabels = useMemo(
-    () => (costs ?? []).map((c: CostSummary) => c.entity_id),
+    () => costs.map((c: CostSummary) => c.entity_id),
     [costs],
   );
   const costSeries = useMemo(
     () => [
       {
         label: 'Daily cost ($)',
-        data: (costs ?? []).map(
+        data: costs.map(
           (c: CostSummary) => c.daily_cost,
         ),
         color: 'var(--mn-accent)',
@@ -294,7 +301,7 @@ export default function DashboardPage() {
           defaultOpen
         >
           <div className="p-4">
-            {(costs ?? []).length > 0 ? (
+            {costs.length > 0 ? (
               <MnChart
                 type="bar"
                 labels={costLabels}

@@ -48,14 +48,22 @@ const BASE =
     ? (process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8420')
     : (process.env.API_URL ?? 'http://localhost:8420');
 
+const AUTH_TOKEN =
+  typeof window !== 'undefined'
+    ? (process.env.NEXT_PUBLIC_AUTH_TOKEN ?? '')
+    : (process.env.AUTH_TOKEN ?? '');
+
 async function request<T>(
   method: string,
   path: string,
   body?: unknown,
 ): Promise<T> {
+  const headers: Record<string, string> = {};
+  if (body) headers['Content-Type'] = 'application/json';
+  if (AUTH_TOKEN) headers['Authorization'] = `Bearer ${AUTH_TOKEN}`;
   const res = await fetch(`${BASE}${path}`, {
     method,
-    headers: body ? { 'Content-Type': 'application/json' } : undefined,
+    headers,
     body: body ? JSON.stringify(body) : undefined,
   });
   if (!res.ok) {
