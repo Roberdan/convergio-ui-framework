@@ -1,0 +1,43 @@
+---
+title: MnAugmentedBrainV2
+category: agentic
+description: "2D canvas brain visualization with hub-satellite layout, synapse particles, and stats bar"
+keywords: ["brain", "augmented", "cervello", "aumentato", "hub", "synapse", "sinapsi", "canvas"]
+---
+
+# MnAugmentedBrainV2
+
+2D canvas brain visualization with hub-satellite layout, synapse particles, and stats bar.
+
+## When to use
+
+Use for an augmented brain panel showing a central hub connected to task and agent nodes.
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `nodes` | `BrainV2Node[]` | **required** | Array of nodes |
+| `synapses` | `BrainV2Synapse[]` | **required** | Array of synapses |
+| `stats` | `BrainV2Stats` | `{stats` | Stats |
+| `title` | `string` | `"AUGMENTED BRAIN"` | Title text |
+| `onNodeClick` | `(node: BrainV2Node) =&gt; void` | — | Callback when node click |
+| `showControls` | `boolean` | `true` | Whether to show controls |
+| `height` | `number` | `500` | Component height in pixels |
+| `ariaLabel` | `string` | `"Augmented brain visualization"` | Accessible label for screen readers |
+
+## Example
+
+```tsx
+import { MnAugmentedBrainV2 } from "@/components/maranello"
+
+<MnAugmentedBrainV2
+  nodes={[]}
+  synapses={[]}
+/>
+```
+
+## Accessibility
+
+- Status updates use `aria-live` for real-time announcements
+- Interactive elements support keyboard activation

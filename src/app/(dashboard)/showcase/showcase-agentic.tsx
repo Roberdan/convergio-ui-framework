@@ -2,7 +2,9 @@
 
 import {
   MnAugmentedBrain,
+  MnAugmentedBrainV2,
   MnBinnacle,
+  MnBrain3D,
   MnChat,
   MnDashboardStrip,
   MnInstrumentBinnacle,
@@ -16,6 +18,11 @@ import {
   binnacleEntries,
   stripMetrics,
   orgTree,
+  brain3DNodes,
+  brain3DEdges,
+  brainV2Nodes,
+  brainV2Synapses,
+  brainV2Stats,
 } from './showcase-data';
 
 function entry(slug: string) {
@@ -99,6 +106,35 @@ export function ShowcaseAgentic() {
             </div>
           </ComponentDoc>
         </div>
+
+        <div className="md:col-span-2">
+          <ComponentDoc
+            entry={entry('mn-brain-3d')}
+            example={`<MnBrain3D nodes={nodes} edges={edges} height={500} />`}
+          >
+            <MnBrain3D
+              nodes={brain3DNodes}
+              edges={brain3DEdges}
+              height={400}
+              size="fluid"
+              ariaLabel="Agent 3D network"
+            />
+          </ComponentDoc>
+        </div>
+
+        <ComponentDoc
+          entry={entry('mn-augmented-brain-v2')}
+          example={`<MnAugmentedBrainV2 nodes={nodes} synapses={synapses} stats={stats} />`}
+        >
+          <MnAugmentedBrainV2
+            nodes={brainV2Nodes}
+            synapses={brainV2Synapses}
+            stats={brainV2Stats}
+            height={350}
+            size="fluid"
+            ariaLabel="Augmented brain V2 demo"
+          />
+        </ComponentDoc>
       </div>
     </section>
   );

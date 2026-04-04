@@ -1,0 +1,23 @@
+{
+  "name": "mn-brain-3d",
+  "type": "registry:ui",
+  "files": [
+    {
+      "path": "components/maranello/agentic/mn-brain-3d.tsx",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/maranello/agentic/mn-brain-3d.helpers.ts",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/maranello/agentic/mn-brain-3d.types.ts",
+      "type": "registry:ui"
+    }
+  ],
+  "dependencies": [
+    "class-variance-authority",
+    "react-force-graph-3d"
+  ],
+  "registryDependencies": []
+}

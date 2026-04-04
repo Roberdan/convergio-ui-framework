@@ -1,0 +1,45 @@
+---
+title: MnBrain3D
+category: agentic
+description: "3D force-directed graph showing AI agents as glowing spheres with animated edges"
+keywords: ["brain", "3d", "graph", "cervello", "grafo", "agents", "agenti", "force", "network", "rete"]
+---
+
+# MnBrain3D
+
+3D force-directed graph showing AI agents as glowing spheres with animated edges.
+
+## When to use
+
+Use to visualize agent networks, delegation flows, and inter-agent relationships in 3D.
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `nodes` | `Brain3DNode[]` | **required** | Array of nodes |
+| `edges` | `Brain3DEdge[]` | **required** | Array of edges |
+| `onNodeClick` | `(node: Brain3DNode) =&gt; void` | `{handleNodeClick` | Callback when node click |
+| `onNodeHover` | `(node: Brain3DNode \| null) =&gt; void` | `{handleNodeHover` | Callback when node hover |
+| `autoRotate` | `boolean` | `true` | Enable auto rotate |
+| `autoRotateSpeed` | `number` | `speed` | Auto Rotate Speed value |
+| `showLabels` | `boolean` | `true` | Whether to show labels |
+| `height` | `number` | `500` | Component height in pixels |
+| `backgroundColor` | `string` | `"rgba(0` | Background Color text |
+| `ariaLabel` | `string` | `"3D agent network visualization"` | Accessible label for screen readers |
+
+## Example
+
+```tsx
+import { MnBrain3D } from "@/components/maranello"
+
+<MnBrain3D
+  nodes={[]}
+  edges={[]}
+/>
+```
+
+## Accessibility
+
+- Status updates use `aria-live` for real-time announcements
+- Interactive elements support keyboard activation

@@ -1,0 +1,19 @@
+{
+  "name": "mn-augmented-brain-v2",
+  "type": "registry:ui",
+  "files": [
+    {
+      "path": "components/maranello/agentic/mn-augmented-brain-v2.tsx",
+      "type": "registry:ui"
+    },
+    {
+      "path": "components/maranello/agentic/mn-augmented-brain-v2.helpers.ts",
+      "type": "registry:ui"
+    }
+  ],
+  "dependencies": [
+    "class-variance-authority",
+    "lucide-react"
+  ],
+  "registryDependencies": []
+}
