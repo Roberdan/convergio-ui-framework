@@ -165,29 +165,33 @@ export default function DashboardPage() {
     ];
   }, [runtime]);
 
-  /* ── Neural nodes from agent catalog ── */
+  /* ── Neural nodes: only agents active in the current SSE stream ── */
   const { neuralNodes, neuralConns } = useMemo(() => {
-    const list = agents ?? [];
+    const catalog = new Map((agents ?? []).map((a) => [a.name, a]));
     const activeNames = new Set(
-      events.flatMap((e) => [e.from, e.to].filter(Boolean)),
+      events.flatMap((e) => [e.from, e.to].filter(Boolean) as string[]),
     );
-    const nodes: NeuralNodeData[] = list.map((a) => ({
-      id: a.name,
-      label: a.name,
-      sublabel: a.category ?? a.tier,
-      color: CAT_COLORS[a.category ?? ''] ?? '#6366f1',
-      group: a.category ?? 'other',
-      energy: activeNames.has(a.name) ? 1.0 : 0.2,
-      size: a.tier === 't1' ? 1.5 : a.tier === 't2' ? 1.2 : 1,
-    }));
+    if (activeNames.size === 0) {
+      return { neuralNodes: [] as NeuralNodeData[], neuralConns: [] as NeuralConnection[] };
+    }
+    const nodes: NeuralNodeData[] = [...activeNames].map((name) => {
+      const a = catalog.get(name);
+      return {
+        id: name,
+        label: name,
+        sublabel: a?.category ?? 'unknown',
+        color: CAT_COLORS[a?.category ?? ''] ?? '#6366f1',
+        group: a?.category ?? 'other',
+        energy: 1.0,
+        size: a?.tier === 't1' ? 1.5 : a?.tier === 't2' ? 1.2 : 1,
+      };
+    });
     const conns: NeuralConnection[] = [];
-    const coreNames = list
-      .filter((a) => a.category === 'core_utility')
-      .map((a) => a.name);
-    for (const a of list) {
-      if (a.category !== 'core_utility' && coreNames.length > 0) {
-        const hub = coreNames[list.indexOf(a) % coreNames.length];
-        conns.push({ from: hub, to: a.name, strength: 0.4 });
+    for (const e of events) {
+      if (e.to && activeNames.has(e.from) && activeNames.has(e.to)) {
+        if (!conns.some((c) => c.from === e.from && c.to === e.to)) {
+          conns.push({ from: e.from, to: e.to, strength: 0.6 });
+        }
       }
     }
     return { neuralNodes: nodes, neuralConns: conns };
@@ -253,19 +257,23 @@ export default function DashboardPage() {
       </div>
 
       {/* Neural network — full width */}
-      <MnSectionCard title="Agent Network" collapsible defaultOpen>
-        <div className="p-4" style={{ height: 420 }}>
-          <MnNeuralNodes
-            nodes={neuralNodes}
-            connections={neuralConns}
-            interactive
-            labels
-            forceLayout
-            pulseSpeed={0.8}
-            particleCount={2}
-            size="fluid"
-            onReady={(ctrl) => { neuralCtrl.current = ctrl; }}
-          />
+      <MnSectionCard title={`Active Agents (${neuralNodes.length})`} collapsible defaultOpen>
+        <div className="p-4" style={{ height: neuralNodes.length > 0 ? 420 : 80 }}>
+          {neuralNodes.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No agents working right now</p>
+          ) : (
+            <MnNeuralNodes
+              nodes={neuralNodes}
+              connections={neuralConns}
+              interactive
+              labels
+              forceLayout
+              pulseSpeed={0.8}
+              particleCount={2}
+              size="fluid"
+              onReady={(ctrl) => { neuralCtrl.current = ctrl; }}
+            />
+          )}
         </div>
       </MnSectionCard>
 
