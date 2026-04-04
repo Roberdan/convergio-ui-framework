@@ -72,6 +72,17 @@ git remote prune origin
 - NEVER touch files from other phases/tasks
 - If you need to change a shared file, ask the user first
 
+### Fix root causes, never shortcuts (Constitution Rule #1)
+NEVER take the quick path. ALWAYS fix the root cause.
+- Component broken? Don't hide it with CSS — fix the component.
+- API returns wrong data? Don't transform client-side — fix the backend.
+- Test fails? Don't delete the test — fix the code.
+- 3 consecutive fixes that each introduce new problems → STOP. Explain root cause, propose rebuild.
+
+### Full reference
+~/Desktop/WORKSPACE-SPLIT.md is the single source of truth for the entire project.
+READ IT for any non-trivial decision.
+
 ## Design system
 
 Components are in /src/components/maranello/ with Mn prefix.
