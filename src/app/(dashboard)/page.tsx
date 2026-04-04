@@ -391,9 +391,10 @@ export default function DashboardPage() {
         </div>
       </MnSectionCard>
 
-      {/* Brain visualizations — full width */}
-      <MnSectionCard title="Brain 3D" collapsible defaultOpen>
-        <div className="p-4">
+      {/* Brain visualizations — NOT collapsible (animated overflow-hidden
+           causes canvas clientWidth=0 during height transition) */}
+      <MnSectionCard title="Brain 3D" collapsible={false}>
+        <div className="p-4" style={{ minHeight: 500 }}>
           {brain3DNodes.length === 0 ? (
             <p className="text-sm text-muted-foreground">No active workers</p>
           ) : (
@@ -411,8 +412,8 @@ export default function DashboardPage() {
       </MnSectionCard>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <MnSectionCard title="Augmented Brain" collapsible defaultOpen>
-          <div className="p-4">
+        <MnSectionCard title="Augmented Brain" collapsible={false}>
+          <div className="p-4" style={{ minHeight: 420 }}>
             {brainNodes.length === 0 ? (
               <p className="text-sm text-muted-foreground">No active workers</p>
             ) : (
@@ -426,8 +427,8 @@ export default function DashboardPage() {
           </div>
         </MnSectionCard>
 
-        <MnSectionCard title="Brain V2 — Synaptic Map" collapsible defaultOpen>
-          <div className="p-4">
+        <MnSectionCard title="Brain V2 — Synaptic Map" collapsible={false}>
+          <div className="p-4" style={{ minHeight: 420 }}>
             {brainV2Nodes.length === 0 ? (
               <p className="text-sm text-muted-foreground">No active workers</p>
             ) : (
