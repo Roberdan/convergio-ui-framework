@@ -17,26 +17,33 @@ Use to list and manage users with role-based access information.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `users` | `AdminUser[]` | **required** | — |
-| `searchable` | `boolean` | — | — |
-| `selectable` | `boolean` | — | — |
-| `loading` | `boolean` | — | — |
-| `emptyMessage` | `string` | — | — |
-| `onSelect` | `(user: AdminUser) =&gt; void` | — | — |
-| `onAction` | `(user: AdminUser, action: UserAction) =&gt; void` | — | — |
-| `onSelectionChange` | `(selected: AdminUser[]) =&gt; void` | — | — |
+| `users` | `AdminUser[]` | **required** | Array of users |
+| `searchable` | `boolean` | `true` | Enable search/filter |
+| `selectable` | `boolean` | `true` | Enable row selection |
+| `loading` | `boolean` | `false` | Show loading state |
+| `emptyMessage` | `string` | `"No users found"` | Empty Message text |
+| `onSelect` | `(user: AdminUser) =&gt; void` | — | Callback when select |
+| `onAction` | `(user: AdminUser, action: UserAction) =&gt; void` | — | Callback when action |
+| `onSelectionChange` | `(selected: AdminUser[]) =&gt; void` | — | Callback when selection change |
 
 ## Example
 
 ```tsx
 import { MnUserTable } from "@/components/maranello"
 
-<MnUserTable />
+<MnUserTable
+  users={[
+    { id: "1", name: "Alice Smith", email: "alice@example.com", role: "Admin", status: "active" },
+    { id: "2", name: "Bob Jones", email: "bob@example.com", role: "Editor", status: "active" },
+    { id: "3", name: "Carol White", email: "carol@example.com", role: "Viewer", status: "inactive" },
+  ]}
+  searchable
+  selectable
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Color is not the only indicator — text or icons provide meaning
 - Interactive elements are keyboard accessible
-- Follows WAI-ARIA Tabs pattern with `role="tablist"` / `role="tab"` / `role="tabpanel"`
+- Follows WAI-ARIA Tabs pattern (`role="tablist"` / `role="tab"`)

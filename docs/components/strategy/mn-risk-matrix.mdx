@@ -17,23 +17,28 @@ Use to assess and prioritize risks by probability and severity.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `items` | `RiskItem[]` | **required** | — |
-| `animate` | `boolean` | — | — |
-| `onItemHover` | `(item: RiskItem \| null) =&gt; void` | — | — |
-| `onItemClick` | `(item: RiskItem) =&gt; void` | — | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `items` | `RiskItem[]` | **required** | Array of items |
+| `animate` | `boolean` | `true` | Enable entry animation |
+| `onItemHover` | `(item: RiskItem \| null) =&gt; void` | — | Callback when item hover |
+| `onItemClick` | `(item: RiskItem) =&gt; void` | — | Callback when item click |
+| `ariaLabel` | `string` | `'Risk matrix'` | Accessible label for screen readers |
+| `className` | `string` | `{cn(riskMatrixVariants({ size` | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnRiskMatrix } from "@/components/maranello"
 
-<MnRiskMatrix items={sampleData} />
+<MnRiskMatrix
+  items={[
+    { label: "Data breach", likelihood: 2, impact: 4 },
+    { label: "Service outage", likelihood: 3, impact: 3 },
+    { label: "Key person risk", likelihood: 1, impact: 2 },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Matrix cells are keyboard navigable
 - Visual data is supplemented with text descriptions

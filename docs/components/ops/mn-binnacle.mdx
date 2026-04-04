@@ -17,21 +17,26 @@ Use to unify operational signals into a single chronological view.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `entries` | `BinnacleEntry[]` | **required** | — |
-| `maxVisible` | `number` | — | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `entries` | `BinnacleEntry[]` | **required** | Array of entries |
+| `maxVisible` | `number` | `50` | Max entries to display before scrolling. Default: 50 |
+| `ariaLabel` | `string` | `'Event log'` | Accessible label for screen readers |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnBinnacle } from "@/components/maranello"
 
-<MnBinnacle />
+<MnBinnacle
+  entries={[
+    { id: "e1", timestamp: "10:32:01", level: "info", message: "Service started on port 8420" },
+    { id: "e2", timestamp: "10:32:05", level: "warn", message: "High memory usage detected (87%)" },
+    { id: "e3", timestamp: "10:33:12", level: "error", message: "Connection to DB lost, retrying..." },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Data tables include proper `<th>` scope attributes
 - Drag-and-drop has keyboard alternatives

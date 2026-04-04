@@ -17,27 +17,26 @@ Use for animated number transitions in dashboards or scoreboards.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `number` | **required** | — |
-| `digits` | `number` | — | — |
-| `decimals` | `number` | — | — |
-| `padZero` | `boolean` | — | — |
-| `prefix` | `string` | — | — |
-| `suffix` | `string` | — | — |
-| `size` | `FlipCounterSize` | — | — |
-| `animationDuration` | `number` | — | — |
-| `label` | `string` | — | — |
-| `className` | `string` | — | — |
+| `value` | `number` | **required** | Numeric value to display. |
+| `digits` | `number` | `4` | Total integer digit slots (pads with leading zeros when padZero is true). |
+| `decimals` | `number` | `0` | Number of decimal places. |
+| `padZero` | `boolean` | `true` | Pad integer part with leading zeros. |
+| `prefix` | `string` | — | Text rendered before the digits. |
+| `suffix` | `string` | — | Text rendered after the digits. |
+| `size` | `FlipCounterSize` | `"md"` | Size variant |
+| `animationDuration` | `number` | `500` | Flip transition duration in milliseconds. |
+| `label` | `string` | `{displayLabel` | Accessible label announced by screen readers. |
+| `className` | `string` | `{digitBoxVariants({ size` | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnFlipCounter } from "@/components/maranello"
 
-<MnFlipCounter label="Example" />
+<MnFlipCounter value={1234} digits={6} size="lg" />
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Color is not the only indicator — text or icons provide meaning
 - Interactive elements are keyboard accessible

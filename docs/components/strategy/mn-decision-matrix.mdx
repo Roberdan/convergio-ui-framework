@@ -17,21 +17,31 @@ Use to objectively compare alternatives with weighted scoring.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `criteria` | `DecisionCriterion[]` | **required** | — |
-| `options` | `DecisionOption[]` | **required** | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `criteria` | `DecisionCriterion[]` | **required** | Array of criteria |
+| `options` | `DecisionOption[]` | **required** | Array of options |
+| `ariaLabel` | `string` | `'Decision matrix'` | Accessible label |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnDecisionMatrix } from "@/components/maranello"
 
-<MnDecisionMatrix />
+<MnDecisionMatrix
+  criteria={[
+    { label: "Cost", weight: 0.3 },
+    { label: "Quality", weight: 0.4 },
+    { label: "Speed", weight: 0.3 },
+  ]}
+  options={[
+    { label: "Vendor A", scores: [8, 6, 9] },
+    { label: "Vendor B", scores: [5, 9, 7] },
+    { label: "Vendor C", scores: [9, 7, 5] },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Matrix cells are keyboard navigable
 - Visual data is supplemented with text descriptions

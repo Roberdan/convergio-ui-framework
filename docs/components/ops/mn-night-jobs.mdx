@@ -17,20 +17,25 @@ Use to track overnight or scheduled batch processing jobs.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `jobs` | `NightJob[]` | **required** | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `jobs` | `NightJob[]` | **required** | Array of jobs |
+| `ariaLabel` | `string` | `'Scheduled jobs'` | Accessible label for screen readers |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnNightJobs } from "@/components/maranello"
 
-<MnNightJobs />
+<MnNightJobs
+  jobs={[
+    { id: "j1", name: "DB Backup", schedule: "02:00", lastRun: "2025-01-15T02:00:00Z", status: "success", duration: "4m 32s" },
+    { id: "j2", name: "Report Gen", schedule: "03:00", lastRun: "2025-01-15T03:00:00Z", status: "success", duration: "12m 10s" },
+    { id: "j3", name: "Cache Warm", schedule: "04:00", lastRun: "2025-01-15T04:00:00Z", status: "failed", duration: "0m 45s" },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Data tables include proper `<th>` scope attributes
 - Drag-and-drop has keyboard alternatives

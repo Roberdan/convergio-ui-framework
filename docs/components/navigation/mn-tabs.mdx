@@ -17,9 +17,9 @@ Use to organize content into mutually exclusive tabbed panels.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `string` | — | — |
-| `defaultValue` | `string` | — | — |
-| `onValueChange` | `(value: string) =&gt; void` | — | — |
+| `value` | `string` | `{ctx` | Current value |
+| `defaultValue` | `string` | — | Default value for value |
+| `onValueChange` | `(value: string) =&gt; void` | — | Callback when value change |
 
 ## Example
 
@@ -31,7 +31,6 @@ import { MnTabs } from "@/components/maranello"
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Implements `aria-current` for active navigation items
 - Full keyboard navigation support with arrow keys
-- Follows WAI-ARIA Tabs pattern with `role="tablist"` / `role="tab"` / `role="tabpanel"`
+- Follows WAI-ARIA Tabs pattern (`role="tablist"` / `role="tab"`)

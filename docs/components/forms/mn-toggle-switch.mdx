@@ -17,25 +17,31 @@ Use for binary settings that take effect immediately.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `checked` | `boolean` | **required** | — |
-| `onCheckedChange` | `(checked: boolean) =&gt; void` | **required** | — |
-| `label` | `string` | — | — |
-| `disabled` | `boolean` | — | — |
-| `size` | `ToggleSize` | — | — |
-| `className` | `string` | — | — |
-| `id` | `string` | — | — |
+| `checked` | `boolean` | **required** | Whether checked is active |
+| `onCheckedChange` | `(checked: boolean) =&gt; void` | **required** | Callback when checked change |
+| `label` | `string` | `{label` | Display label |
+| `disabled` | `boolean` | `false` | Disable the component |
+| `size` | `ToggleSize` | `"md"` | Size variant |
+| `className` | `string` | `{cn("inline-flex items-center gap-2"` | Additional CSS classes |
+| `id` | `string` | `{switchId` | Id text |
 
 ## Example
 
 ```tsx
 import { MnToggleSwitch } from "@/components/maranello"
 
-<MnToggleSwitch label="Example" />
+const [enabled, setEnabled] = useState(false)
+
+<MnToggleSwitch
+  checked={enabled}
+  onCheckedChange={setEnabled}
+  label="Enable notifications"
+  size="md"
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Form controls are associated with labels via `htmlFor`/`id`
 - Validation errors are announced to screen readers
 - Supports keyboard navigation between fields

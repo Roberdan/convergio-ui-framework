@@ -17,13 +17,13 @@ Use to select start and end dates for reporting or filtering.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `DateRange` | — | — |
-| `onChange` | `(range: DateRange) =&gt; void` | — | — |
-| `min` | `string` | — | — |
-| `max` | `string` | — | — |
-| `placeholder` | `string` | — | — |
-| `disabled` | `boolean` | — | — |
-| `className` | `string` | — | — |
+| `value` | `DateRange` | — | Current value |
+| `onChange` | `(range: DateRange) =&gt; void` | — | Change event handler |
+| `min` | `string` | `{min` | Minimum value |
+| `max` | `string` | `{max` | Maximum value |
+| `placeholder` | `string` | `"Select date range"` | Placeholder text |
+| `disabled` | `boolean` | `{isDis || undefined` | Disable the component |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
@@ -35,7 +35,6 @@ import { MnDateRangePicker } from "@/components/maranello"
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Form controls are associated with labels via `htmlFor`/`id`
 - Validation errors are announced to screen readers
 - Supports keyboard navigation between fields

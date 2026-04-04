@@ -17,11 +17,11 @@ Use as the top-level header for all application pages.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `sections` | `HeaderShellSectionDef[]` | — | — |
-| `callbacks` | `HeaderShellCallbacks` | — | — |
-| `brand` | `React.ReactNode` | — | — |
-| `nav` | `React.ReactNode` | — | — |
-| `actions` | `React.ReactNode` | — | — |
+| `sections` | `HeaderShellSectionDef[]` | — | Array of sections |
+| `callbacks` | `HeaderShellCallbacks` | — | Callbacks |
+| `brand` | `React.ReactNode` | — | Brand |
+| `nav` | `React.ReactNode` | — | Nav |
+| `actions` | `React.ReactNode` | — | Actions |
 
 ## Example
 
@@ -33,6 +33,5 @@ import { MnHeaderShell } from "@/components/maranello"
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
-- Landmarks (`<main>`, `<nav>`, `<aside>`) structure the layout
+- Uses semantic landmarks (`<main>`, `<nav>`, `<aside>`)
 - Skip-to-content link is supported

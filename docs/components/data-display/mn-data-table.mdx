@@ -17,26 +17,43 @@ Use to display structured tabular data with interactive column controls.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `columns` | `DataTableColumn&lt;T&gt;[]` | **required** | — |
-| `groupBy` | `string` | — | — |
-| `loading` | `boolean` | — | — |
-| `onRowClick` | `(row: T, index: number) =&gt; void` | — | — |
-| `onSort` | `(key: string, direction: SortDir) =&gt; void` | — | — |
-| `onFilter` | `(filters: Record&lt;string, string&gt;) =&gt; void` | — | — |
-| `onSelectionChange` | `(selected: T[]) =&gt; void` | — | — |
-| `onAction` | `(actionId: string, row: T) =&gt; void` | — | — |
+| `columns` | `DataTableColumn&lt;T&gt;[]` | **required** | Array of columns |
+| `data` | `T[]` | **required** | Array of data |
+| `pageSize` | `number` | `0` | Page Size value |
+| `groupBy` | `string` | — | Group By text |
+| `selectable` | `SelectionMode` | — | Enable row selection |
+| `compact` | `boolean` | `false` | Use compact/dense layout |
+| `loading` | `boolean` | `false` | Show loading state |
+| `emptyMessage` | `string` | `"No data found"` | Empty Message text |
+| `onRowClick` | `(row: T, index: number) =&gt; void` | — | Callback when row click |
+| `onSort` | `(key: string, direction: SortDir) =&gt; void` | — | Callback when sort |
+| `onFilter` | `(filters: Record&lt;string, string&gt;) =&gt; void` | — | Callback when filter |
+| `onSelectionChange` | `(selected: T[]) =&gt; void` | — | Callback when selection change |
+| `onAction` | `(actionId: string, row: T) =&gt; void` | `{onAction as ((id: string` | Callback when action |
 
 ## Example
 
 ```tsx
 import { MnDataTable } from "@/components/maranello"
 
-<MnDataTable />
+<MnDataTable
+  columns={[
+    { key: "name", label: "Name", sortable: true },
+    { key: "role", label: "Role" },
+    { key: "status", label: "Status" },
+    { key: "tasks", label: "Tasks", align: "right" },
+  ]}
+  data={[
+    { name: "Alice", role: "Engineer", status: "Active", tasks: 12 },
+    { name: "Bob", role: "Designer", status: "Active", tasks: 8 },
+    { name: "Carol", role: "PM", status: "Away", tasks: 5 },
+  ]}
+  pageSize={10}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Color is not the only indicator — text or icons provide meaning
 - Interactive elements are keyboard accessible
-- Follows WAI-ARIA Tabs pattern with `role="tablist"` / `role="tab"` / `role="tabpanel"`
+- Follows WAI-ARIA Tabs pattern (`role="tablist"` / `role="tab"`)

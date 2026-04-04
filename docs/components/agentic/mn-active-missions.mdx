@@ -17,20 +17,25 @@ Use to monitor running AI tasks, agent workflows, or background missions.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `missions` | `Mission[]` | **required** | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `missions` | `Mission[]` | **required** | Array of missions |
+| `ariaLabel` | `string` | `'Active missions'` | Accessible label for screen readers |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnActiveMissions } from "@/components/maranello"
 
-<MnActiveMissions />
+<MnActiveMissions
+  missions={[
+    { id: "m1", name: "Data Pipeline Sync", agent: "worker-01", status: "running", progress: 72 },
+    { id: "m2", name: "Report Generation", agent: "worker-02", status: "completed", progress: 100 },
+    { id: "m3", name: "Model Training", agent: "worker-03", status: "queued", progress: 0 },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Status updates use `aria-live` for real-time announcements
 - Interactive elements support keyboard activation

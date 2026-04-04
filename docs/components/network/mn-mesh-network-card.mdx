@@ -17,21 +17,22 @@ Use to display metadata and status of an individual mesh network node.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `node` | `MeshNode` | **required** | — |
-| `selected` | `boolean` | — | — |
-| `onSelect` | `(node: MeshNode) =&gt; void` | — | — |
-| `onAction` | `(node: MeshNode, action: string) =&gt; void` | — | — |
+| `node` | `MeshNode` | **required** | Node |
+| `selected` | `boolean` | — | Enable selected |
+| `onSelect` | `(node: MeshNode) =&gt; void` | — | Callback when select |
+| `onAction` | `(node: MeshNode, action: string) =&gt; void` | — | Callback when action |
 
 ## Example
 
 ```tsx
 import { MnMeshNetworkCard } from "@/components/maranello"
 
-<MnMeshNetworkCard />
+<MnMeshNetworkCard
+  node={/* MeshNode */}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
-- Interactive graph nodes are keyboard focusable
-- Status information uses `aria-live` for dynamic updates
+- Interactive nodes are keyboard focusable
+- Status information uses `aria-live` for updates

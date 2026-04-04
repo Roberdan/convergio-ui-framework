@@ -17,21 +17,26 @@ Use to visualize user cohort retention or temporal behavior patterns.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `rows` | `CohortRow[]` | **required** | — |
-| `periodLabels` | `string[]` | — | — |
-| `showAbsolute` | `boolean` | — | — |
-| `onCellHover` | `(row: CohortRow, periodIdx: number, value: number) =&gt; void` | — | — |
+| `rows` | `CohortRow[]` | **required** | Array of rows |
+| `periodLabels` | `string[]` | — | Array of periodLabels |
+| `showAbsolute` | `boolean` | `false` | Show absolute user counts instead of percentages. |
+| `onCellHover` | `(row: CohortRow, periodIdx: number, value: number) =&gt; void` | — | Called when the user hovers a retention cell. |
 
 ## Example
 
 ```tsx
 import { MnCohortGrid } from "@/components/maranello"
 
-<MnCohortGrid rows={sampleData} />
+<MnCohortGrid
+  rows={[
+    { label: "Jan 2025", values: [100, 85, 72, 68, 61] },
+    { label: "Feb 2025", values: [120, 98, 80, 74] },
+    { label: "Mar 2025", values: [95, 82, 70] },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Charts include `aria-label` describing the data trend
-- Color is supplemented with patterns or labels for color-blind users
+- Color is supplemented with labels for color-blind users

@@ -17,25 +17,38 @@ Use to display real-time or historical network message traffic.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `nodes` | `NetNode[]` | **required** | — |
-| `connections` | `NetConnection[]` | **required** | — |
-| `width` | `number` | — | — |
-| `height` | `number` | — | — |
-| `particleTrail` | `boolean` | — | — |
-| `glowEffect` | `boolean` | — | — |
-| `onNodeClick` | `(node: NetNode) =&gt; void` | — | — |
-| `controllerRef` | `{ current: NetworkMessagesController \| null` | — | — |
+| `nodes` | `NetNode[]` | **required** | Array of nodes |
+| `connections` | `NetConnection[]` | **required** | Array of connections |
+| `width` | `number` | — | Width value |
+| `height` | `number` | — | Component height in pixels |
+| `particleTrail` | `boolean` | `true` | Enable particle trail |
+| `glowEffect` | `boolean` | `true` | Enable glow effect |
+| `onNodeClick` | `(node: NetNode) =&gt; void` | — | Callback when node click |
+| `controllerRef` | `{ current: NetworkMessagesController \| null }` | — | Controller Ref |
+| `nodeColor` | `string` | — | Default node fill color (hex). |
+| `accentColor` | `string` | — | Accent / gradient-end color (hex). |
+| `labelColor` | `string` | — | Node label color (hex or rgba). |
+| `bgOverlay` | `string` | `"rgba(3` | Canvas background overlay. |
 
 ## Example
 
 ```tsx
 import { MnNetworkMessages } from "@/components/maranello"
 
-<MnNetworkMessages />
+<MnNetworkMessages
+  nodes={[
+    { id: "a", label: "Client", x: 50, y: 150 },
+    { id: "b", label: "Server", x: 250, y: 150 },
+    { id: "c", label: "Database", x: 450, y: 150 },
+  ]}
+  connections={[
+    { from: "a", to: "b", label: "HTTP" },
+    { from: "b", to: "c", label: "SQL" },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
-- Interactive graph nodes are keyboard focusable
-- Status information uses `aria-live` for dynamic updates
+- Interactive nodes are keyboard focusable
+- Status information uses `aria-live` for updates

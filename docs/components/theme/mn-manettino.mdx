@@ -17,8 +17,10 @@ Use as a themed mode or level selector with rotary dial interaction.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `positions` | `string[]` | — | — |
-| `onChange` | `(index: number, label: string) =&gt; void` | — | — |
+| `positions` | `string[]` | `["WET"` | Array of positions |
+| `value` | `number` | — | Current value |
+| `defaultValue` | `number` | `2` | Default value for value |
+| `onChange` | `(index: number, label: string) =&gt; void` | — | Change event handler |
 
 ## Example
 
@@ -30,6 +32,5 @@ import { MnManettino } from "@/components/maranello"
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Theme changes are announced via `aria-live`
-- All controls meet WCAG 2.1 contrast requirements
+- All controls meet WCAG 2.2 AA contrast requirements

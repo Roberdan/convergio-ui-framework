@@ -17,21 +17,25 @@ Use to let analysts slice data by multiple facets simultaneously.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `groups` | `FacetGroup[]` | **required** | — |
-| `filters` | `FacetFilters` | — | — |
-| `onFilterChange` | `(filters: FacetFilters) =&gt; void` | — | — |
-| `clearAllLabel` | `string` | — | — |
+| `groups` | `FacetGroup[]` | **required** | Array of groups |
+| `filters` | `FacetFilters` | — | Filters |
+| `onFilterChange` | `(filters: FacetFilters) =&gt; void` | — | Callback when filter change |
+| `clearAllLabel` | `string` | `"Clear all"` | Clear All Label text |
 
 ## Example
 
 ```tsx
 import { MnFacetWorkbench } from "@/components/maranello"
 
-<MnFacetWorkbench />
+<MnFacetWorkbench
+  groups={[
+    { label: "Status", options: [{ label: "Active", value: "active" }, { label: "Inactive", value: "inactive" }] },
+    { label: "Role", options: [{ label: "Admin", value: "admin" }, { label: "Editor", value: "editor" }] },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Data tables include proper `<th>` scope attributes
 - Drag-and-drop has keyboard alternatives

@@ -21,14 +21,18 @@ _This component extends native HTML attributes. See source for full type details
 ## Example
 
 ```tsx
-import { MnToast } from "@/components/maranello"
+import { MnToast, toast } from "@/components/maranello"
 
+{/* Trigger a toast */}
+toast.success("Changes saved successfully")
+toast.error("Failed to connect to server")
+toast.info("New version available")
+
+{/* Toast container (add once in your layout) */}
 <MnToast />
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Uses `role="alert"` or `aria-live` regions for dynamic content
-- Focus is managed appropriately when content appears/disappears
-- Auto-dismissed after timeout with configurable duration
+- Focus is managed when content appears/disappears

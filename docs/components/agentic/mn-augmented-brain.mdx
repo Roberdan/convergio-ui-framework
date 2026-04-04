@@ -17,22 +17,32 @@ Use to display the interplay between human insight and AI suggestions.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `nodes` | `BrainNode[]` | **required** | — |
-| `connections` | `BrainConnection[]` | **required** | — |
-| `onNodeClick` | `(node: BrainNode) =&gt; void` | — | — |
-| `ariaLabel` | `string` | — | — |
-| `height` | `number` | — | — |
+| `nodes` | `BrainNode[]` | **required** | Array of nodes |
+| `connections` | `BrainConnection[]` | **required** | Array of connections |
+| `onNodeClick` | `(node: BrainNode) =&gt; void` | — | Callback when node click |
+| `ariaLabel` | `string` | `"AI brain visualization"` | Accessible label for screen readers |
+| `height` | `number` | `400` | Component height in pixels |
 
 ## Example
 
 ```tsx
 import { MnAugmentedBrain } from "@/components/maranello"
 
-<MnAugmentedBrain />
+<MnAugmentedBrain
+  nodes={[
+    { id: "n1", label: "Planning", value: 0.8 },
+    { id: "n2", label: "Reasoning", value: 0.6 },
+    { id: "n3", label: "Memory", value: 0.9 },
+  ]}
+  connections={[
+    { from: "n1", to: "n2", strength: 0.7 },
+    { from: "n2", to: "n3", strength: 0.5 },
+  ]}
+  height={400}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Status updates use `aria-live` for real-time announcements
 - Interactive elements support keyboard activation

@@ -17,21 +17,28 @@ Use to show a central entity connected to multiple peripheral entities.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `hub` | `HubSpokeHub` | **required** | — |
-| `spokes` | `HubSpokeSpoke[]` | **required** | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `hub` | `HubSpokeHub` | **required** | Hub |
+| `spokes` | `HubSpokeSpoke[]` | **required** | Array of spokes |
+| `ariaLabel` | `string` | `'Hub and spoke network'` | Accessible label for screen readers |
+| `className` | `string` | `{cn('rounded-lg border bg-card p-4'` | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnHubSpoke } from "@/components/maranello"
 
-<MnHubSpoke />
+<MnHubSpoke
+  hub={{ id: "orchestrator", label: "Orchestrator", status: "active" }}
+  spokes={[
+    { id: "s1", label: "Worker 1", status: "active", load: 72 },
+    { id: "s2", label: "Worker 2", status: "active", load: 45 },
+    { id: "s3", label: "Worker 3", status: "idle", load: 0 },
+    { id: "s4", label: "Worker 4", status: "error", load: 0 },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Status updates use `aria-live` for real-time announcements
 - Interactive elements support keyboard activation

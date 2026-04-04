@@ -17,21 +17,22 @@ Use to render user-configured dashboards from a JSON widget definition.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `schema` | `RendererSchema` | **required** | — |
-| `data` | `Record&lt;string, unknown&gt;` | — | — |
-| `renderWidget` | `RenderWidgetFn` | — | — |
-| `onRetry` | `(dataKey: string) =&gt; void` | — | — |
+| `schema` | `RendererSchema` | **required** | Grid schema describing rows and widget columns. |
+| `data` | `Record&lt;string, unknown&gt;` | — | Map of dataKey to widget data. |
+| `renderWidget` | `RenderWidgetFn` | `{renderWidget` | Custom widget render function. |
+| `onRetry` | `(dataKey: string) =&gt; void` | — | Called when a widget retry button is clicked. |
 
 ## Example
 
 ```tsx
 import { MnDashboardRenderer } from "@/components/maranello"
 
-<MnDashboardRenderer data={sampleData} />
+<MnDashboardRenderer
+  schema={/* RendererSchema */}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
-- Landmarks (`<main>`, `<nav>`, `<aside>`) structure the layout
+- Uses semantic landmarks (`<main>`, `<nav>`, `<aside>`)
 - Skip-to-content link is supported

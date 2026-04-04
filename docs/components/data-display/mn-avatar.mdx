@@ -17,10 +17,10 @@ Use to represent users or entities with photo, initials, or icon.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `src` | `string` | — | — |
-| `alt` | `string` | — | — |
-| `initials` | `string` | — | — |
-| `status` | `AvatarStatus` | — | — |
+| `src` | `string` | `{src` | URL for the avatar image |
+| `alt` | `string` | `""` | Alt text for image (required when src is provided) |
+| `initials` | `string` | — | Initials to display when no image is provided (1-2 chars) |
+| `status` | `AvatarStatus` | — | Online status indicator |
 
 ## Example
 
@@ -32,6 +32,5 @@ import { MnAvatar } from "@/components/maranello"
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Color is not the only indicator — text or icons provide meaning
 - Interactive elements are keyboard accessible

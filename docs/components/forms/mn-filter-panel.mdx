@@ -17,22 +17,29 @@ Use to provide advanced multi-criteria filtering for data views.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `sections` | `FilterSection[]` | **required** | — |
-| `onFilterChange` | `(filters: ActiveFilters) =&gt; void` | — | — |
-| `onApply` | `(filters: ActiveFilters) =&gt; void` | — | — |
-| `clearAllLabel` | `string` | — | — |
+| `sections` | `FilterSection[]` | **required** | Array of sections |
+| `filters` | `ActiveFilters` | — | Filters |
+| `onFilterChange` | `(filters: ActiveFilters) =&gt; void` | — | Callback when filter change |
+| `onApply` | `(filters: ActiveFilters) =&gt; void` | — | Callback when apply |
+| `clearAllLabel` | `string` | `"Clear all"` | Clear All Label text |
+| `applyLabel` | `string` | `"Apply filters"` | Apply Label text |
 
 ## Example
 
 ```tsx
 import { MnFilterPanel } from "@/components/maranello"
 
-<MnFilterPanel />
+<MnFilterPanel
+  sections={[
+    { label: "Status", type: "checkbox", options: [{ label: "Active", value: "active" }, { label: "Inactive", value: "inactive" }] },
+    { label: "Role", type: "select", options: [{ label: "Admin", value: "admin" }, { label: "User", value: "user" }] },
+  ]}
+  onApply={(filters) => console.log(filters)}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Form controls are associated with labels via `htmlFor`/`id`
 - Validation errors are announced to screen readers
 - Supports keyboard navigation between fields

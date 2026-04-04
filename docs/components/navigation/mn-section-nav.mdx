@@ -17,21 +17,27 @@ Use for intra-page or intra-module vertical navigation menus.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `items` | `SectionNavItem[]` | **required** | — |
-| `current` | `string` | **required** | — |
-| `position` | `SectionNavPosition` | — | — |
-| `onNavigate` | `(id: string) =&gt; void` | — | — |
+| `items` | `SectionNavItem[]` | **required** | Ordered list of navigable sections. |
+| `current` | `string` | **required** | The `id` of the currently active section. |
+| `position` | `SectionNavPosition` | — | Controls which edge gets the accent border. |
+| `onNavigate` | `(id: string) =&gt; void` | — | Called when the user navigates to a different section. |
 
 ## Example
 
 ```tsx
 import { MnSectionNav } from "@/components/maranello"
 
-<MnSectionNav items={sampleData} />
+<MnSectionNav
+  items={[
+    { id: "overview", label: "Overview" },
+    { id: "details", label: "Details" },
+    { id: "settings", label: "Settings" },
+  ]}
+  current="overview"
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Implements `aria-current` for active navigation items
 - Full keyboard navigation support with arrow keys

@@ -17,20 +17,26 @@ Use for a compact, linear view of key customer interaction stages.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `phases` | `JourneyPhase[]` | **required** | — |
-| `selected` | `string \| null` | — | — |
-| `onSelect` | `(engagement: JourneyEngagement) =&gt; void` | — | — |
+| `phases` | `JourneyPhase[]` | **required** | Phase data for the journey swimlane. |
+| `selected` | `string \| null` | — | ID of the currently-selected engagement. |
+| `onSelect` | `(engagement: JourneyEngagement) =&gt; void` | `{handleSelect` | Called when an engagement card is clicked. |
 
 ## Example
 
 ```tsx
 import { MnCustomerJourney } from "@/components/maranello"
 
-<MnCustomerJourney />
+<MnCustomerJourney
+  phases={[
+    { label: "Awareness", touchpoints: ["Social media", "Blog post"], sentiment: "neutral" },
+    { label: "Consideration", touchpoints: ["Demo", "Pricing page"], sentiment: "positive" },
+    { label: "Purchase", touchpoints: ["Checkout", "Onboarding"], sentiment: "positive" },
+    { label: "Retention", touchpoints: ["Support", "Newsletter"], sentiment: "neutral" },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Matrix cells are keyboard navigable
 - Visual data is supplemented with text descriptions

@@ -17,24 +17,35 @@ Use to render a complete mesh network topology with interactive controls.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `nodes` | `MeshNode[]` | **required** | — |
-| `edges` | `MeshEdge[]` | **required** | — |
-| `onNodeSelect` | `(node: MeshNode) =&gt; void` | — | — |
-| `onAction` | `(action: MeshAction) =&gt; void` | — | — |
-| `onNodeAction` | `(node: MeshNode, action: string) =&gt; void` | — | — |
-| `ariaLabel` | `string` | — | — |
-| `maxParticles` | `number` | — | — |
+| `nodes` | `MeshNode[]` | **required** | Array of nodes |
+| `edges` | `MeshEdge[]` | **required** | Array of edges |
+| `onNodeSelect` | `(node: MeshNode) =&gt; void` | — | Callback when node select |
+| `onAction` | `(action: MeshAction) =&gt; void` | `{onAction` | Callback when action |
+| `onNodeAction` | `(node: MeshNode, action: string) =&gt; void` | — | Callback when node action |
+| `ariaLabel` | `string` | `"Mesh network topology"` | Accessible label for screen readers |
+| `maxParticles` | `number` | `12` | Maximum simultaneous data-flow particles (canvas mode). |
 
 ## Example
 
 ```tsx
 import { MnMeshNetwork } from "@/components/maranello"
 
-<MnMeshNetwork />
+<MnMeshNetwork
+  nodes={[
+    { id: "n1", label: "API Gateway", status: "online", x: 100, y: 100 },
+    { id: "n2", label: "Auth Service", status: "online", x: 300, y: 50 },
+    { id: "n3", label: "DB Primary", status: "online", x: 300, y: 200 },
+    { id: "n4", label: "Cache", status: "degraded", x: 500, y: 100 },
+  ]}
+  edges={[
+    { from: "n1", to: "n2" },
+    { from: "n1", to: "n3" },
+    { from: "n2", to: "n4" },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
-- Interactive graph nodes are keyboard focusable
-- Status information uses `aria-live` for dynamic updates
+- Interactive nodes are keyboard focusable
+- Status information uses `aria-live` for updates

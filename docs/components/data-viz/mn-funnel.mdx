@@ -17,19 +17,33 @@ Use to visualize sales, conversion, or pipeline funnels.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `data` | `FunnelData \| null` | **required** | — |
-| `onStageClick` | `(stage: FunnelStage, index: number) =&gt; void` | — | — |
+| `data` | `FunnelData \| null` | **required** | Data |
+| `showConversion` | `boolean` | — | Whether to show conversion |
+| `animate` | `boolean` | `true` | Enable entry animation |
+| `onStageClick` | `(stage: FunnelStage, index: number) =&gt; void` | — | Callback when stage click |
 
 ## Example
 
 ```tsx
 import { MnFunnel } from "@/components/maranello"
 
-<MnFunnel data={sampleData} />
+<MnFunnel
+  data={{
+    pipeline: [
+      { label: "Visitors", count: 10000 },
+      { label: "Leads", count: 3200 },
+      { label: "Qualified", count: 1100 },
+      { label: "Proposals", count: 450 },
+      { label: "Closed", count: 120 },
+    ],
+    total: 10000,
+  }}
+  animate
+  size="md"
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Charts include `aria-label` describing the data trend
-- Color is supplemented with patterns or labels for color-blind users
+- Color is supplemented with labels for color-blind users

@@ -17,25 +17,26 @@ Use for selects that load options from an API as the user types.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `provider` | `AsyncSelectProvider` | **required** | — |
-| `placeholder` | `string` | — | — |
-| `minChars` | `number` | — | — |
-| `debounce` | `number` | — | — |
-| `onSelect` | `(item: AsyncSelectItem) =&gt; void` | — | — |
-| `disabled` | `boolean` | — | — |
-| `className` | `string` | — | — |
+| `provider` | `AsyncSelectProvider` | **required** | Provider |
+| `placeholder` | `string` | `"Search…"` | Placeholder text |
+| `minChars` | `number` | `1` | Minimum characters before triggering search. @default 1 |
+| `debounce` | `number` | — | Debounce delay in ms. @default 300 |
+| `onSelect` | `(item: AsyncSelectItem) =&gt; void` | — | Callback when select |
+| `disabled` | `boolean` | `{disabled` | Disable the component |
+| `className` | `string` | `{cn(asyncSelectVariants({ size` | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnAsyncSelect } from "@/components/maranello"
 
-<MnAsyncSelect />
+<MnAsyncSelect
+  provider={/* AsyncSelectProvider */}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Form controls are associated with labels via `htmlFor`/`id`
 - Validation errors are announced to screen readers
 - Supports keyboard navigation between fields

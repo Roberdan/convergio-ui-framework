@@ -17,24 +17,23 @@ Use to show completion percentage of a task or process.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `number` | — | — |
-| `max` | `number` | — | — |
-| `size` | `ProgressRingSize` | — | — |
-| `variant` | `ProgressRingVariant` | — | — |
-| `animate` | `boolean` | — | — |
-| `label` | `string` | — | — |
-| `className` | `string` | — | — |
+| `value` | `number` | `0` | Current progress value (clamped between 0 and max). |
+| `max` | `number` | `100` | Maximum value representing 100%. |
+| `size` | `ProgressRingSize` | `"md"` | Size variant |
+| `variant` | `ProgressRingVariant` | `"primary"` | Visual variant |
+| `animate` | `boolean` | `true` | Animate from zero on mount and transitions on value change. |
+| `label` | `string` | `{label ?? `${percentage` | Accessible label for the progress ring. |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnProgressRing } from "@/components/maranello"
 
-<MnProgressRing label="Example" />
+<MnProgressRing value={73} max={100} size="md" variant="primary" />
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Color is not the only indicator — text or icons provide meaning
 - Interactive elements are keyboard accessible

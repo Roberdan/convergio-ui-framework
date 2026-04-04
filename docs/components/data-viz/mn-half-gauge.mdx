@@ -17,26 +17,25 @@ Use when a full gauge is too large and a half-circle fits the layout.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `number` | — | — |
-| `min` | `number` | — | — |
-| `max` | `number` | — | — |
-| `unit` | `string` | — | — |
-| `label` | `string` | — | — |
-| `colors` | `HalfGaugeColorStop[]` | — | — |
-| `trackColor` | `string` | — | — |
-| `thickness` | `number` | — | — |
-| `animate` | `boolean` | — | — |
+| `value` | `number` | `0` | Current value |
+| `min` | `number` | `0` | Minimum value |
+| `max` | `number` | `100` | Maximum value |
+| `unit` | `string` | — | Unit suffix (e.g. "%", "$", "km/h") |
+| `label` | `string` | `{label ?? `Gauge: ${value` | Display label |
+| `colors` | `HalfGaugeColorStop[]` | `DEFAULT_COLORS` | Array of colors |
+| `trackColor` | `string` | `P.track` | Track Color text |
+| `thickness` | `number` | `0.18` | Thickness value |
+| `animate` | `boolean` | `true` | Enable entry animation |
 
 ## Example
 
 ```tsx
 import { MnHalfGauge } from "@/components/maranello"
 
-<MnHalfGauge label="Example" />
+<MnHalfGauge value={65} min={0} max={100} size="md" animate />
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Charts include `aria-label` describing the data trend
-- Color is supplemented with patterns or labels for color-blind users
+- Color is supplemented with labels for color-blind users

@@ -17,25 +17,30 @@ Use to display performance metrics against qualitative thresholds.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `number` | **required** | — |
-| `target` | `number` | **required** | — |
-| `max` | `number` | **required** | — |
-| `label` | `string` | — | — |
-| `unit` | `string` | — | — |
-| `ranges` | `BulletRange[]` | — | — |
-| `trackHeight` | `number` | — | — |
-| `animate` | `boolean` | — | — |
+| `value` | `number` | **required** | Current value |
+| `target` | `number` | **required** | Target value |
+| `max` | `number` | **required** | Maximum value |
+| `label` | `string` | `{label ? `${label` | Display label |
+| `unit` | `string` | — | Unit suffix (e.g. "%", "$", "km/h") |
+| `ranges` | `BulletRange[]` | — | Array of ranges |
+| `trackHeight` | `number` | `32` | Track Height value |
+| `animate` | `boolean` | `true` | Enable entry animation |
 
 ## Example
 
 ```tsx
 import { MnBulletChart } from "@/components/maranello"
 
-<MnBulletChart label="Example" />
+<MnBulletChart
+  value={280}
+  target={300}
+  max={400}
+  label="Revenue ($K)"
+  animate
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Charts include `aria-label` describing the data trend
-- Color is supplemented with patterns or labels for color-blind users
+- Color is supplemented with labels for color-blind users

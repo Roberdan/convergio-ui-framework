@@ -17,21 +17,31 @@ Use to classify business units or products by growth and market share.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `items` | `BCGItem[]` | — | — |
-| `shareThreshold` | `number` | — | — |
-| `onItemHover` | `(item: BCGItem \| null) =&gt; void` | — | — |
-| `onItemClick` | `(item: BCGItem) =&gt; void` | — | — |
+| `items` | `BCGItem[]` | `[]` | Array of items |
+| `height` | `number` | `320` | Component height in pixels |
+| `shareThreshold` | `number` | `0.5` | Share Threshold value |
+| `growthThreshold` | `number` | `10` | Growth Threshold value |
+| `animate` | `boolean` | `true` | Enable entry animation |
+| `onItemHover` | `(item: BCGItem \| null) =&gt; void` | — | Callback when item hover |
+| `onItemClick` | `(item: BCGItem) =&gt; void` | — | Callback when item click |
 
 ## Example
 
 ```tsx
 import { MnBcgMatrix } from "@/components/maranello"
 
-<MnBcgMatrix items={sampleData} />
+<MnBcgMatrix
+  items={[
+    { label: "Product A", share: 0.7, growth: 15 },
+    { label: "Product B", share: 0.3, growth: 20 },
+    { label: "Product C", share: 0.8, growth: -5 },
+    { label: "Product D", share: 0.2, growth: 2 },
+  ]}
+  height={400}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Matrix cells are keyboard navigable
 - Visual data is supplemented with text descriptions

@@ -17,21 +17,27 @@ Use for a high-impact single-value gauge with automotive aesthetics.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `value` | `number` | — | — |
-| `ticks` | `number[]` | — | — |
-| `arcStart` | `number` | — | — |
-| `subLabel` | `string \| null` | — | — |
+| `value` | `number` | `0` | Current value |
+| `min` | `number` | `0` | Minimum value |
+| `max` | `number` | `320` | Maximum value |
+| `unit` | `string` | `"km/h"` | Unit suffix (e.g. "%", "$", "km/h") |
+| `ticks` | `number[]` | `useMemo(() => ticksProp ?? autoTicks(min` | Array of ticks |
+| `minorTicks` | `number` | `4` | Minor Ticks value |
+| `animate` | `boolean` | `true` | Enable entry animation |
+| `arcStart` | `number` | `0` | Arc Start value |
+| `arcEnd` | `number \| null` | `null` | Arc End |
+| `subLabel` | `string \| null` | `null` | Sub Label |
+| `bar` | `BarOptions \| null` | `null` | Bar |
 
 ## Example
 
 ```tsx
 import { MnSpeedometer } from "@/components/maranello"
 
-<MnSpeedometer />
+<MnSpeedometer value={180} min={0} max={320} unit="km/h" animate />
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Charts include `aria-label` describing the data trend
-- Color is supplemented with patterns or labels for color-blind users
+- Color is supplemented with labels for color-blind users

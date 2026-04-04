@@ -17,20 +17,27 @@ Use to break down how incremental values contribute to a total.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `steps` | `WaterfallStep[]` | **required** | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `steps` | `WaterfallStep[]` | **required** | Array of steps |
+| `ariaLabel` | `string` | `'Waterfall chart'` | Accessible label |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnWaterfall } from "@/components/maranello"
 
-<MnWaterfall />
+<MnWaterfall
+  steps={[
+    { label: "Revenue", value: 50000 },
+    { label: "COGS", value: -18000 },
+    { label: "OpEx", value: -12000 },
+    { label: "Tax", value: -5000 },
+    { label: "Net Profit", value: 15000, isTotal: true },
+  ]}
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Charts include `aria-label` describing the data trend
-- Color is supplemented with patterns or labels for color-blind users
+- Color is supplemented with labels for color-blind users

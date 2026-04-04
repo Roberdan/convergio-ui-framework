@@ -17,23 +17,28 @@ Use to present data sources, integrations, or API connections as cards.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `cards` | `SourceCard[]` | **required** | — |
-| `onSelect` | `(card: SourceCard) =&gt; void` | — | — |
-| `maxVisible` | `number` | — | — |
-| `layout` | `SourceCardLayout` | — | — |
-| `ariaLabel` | `string` | — | — |
-| `className` | `string` | — | — |
+| `cards` | `SourceCard[]` | **required** | Array of cards |
+| `onSelect` | `(card: SourceCard) =&gt; void` | `{onSelect` | Callback when select |
+| `maxVisible` | `number` | — | Maximum number of visible items |
+| `layout` | `SourceCardLayout` | `'list'` | Layout |
+| `ariaLabel` | `string` | `[` | Accessible label for screen readers |
+| `className` | `string` | `{cn(` | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnSourceCards } from "@/components/maranello"
 
-<MnSourceCards />
+<MnSourceCards
+  cards={[
+    { title: "API Documentation", url: "https://docs.example.com", snippet: "REST endpoints for user management..." },
+    { title: "Architecture Guide", url: "https://wiki.example.com", snippet: "Microservice communication patterns..." },
+  ]}
+  layout="grid"
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Color is not the only indicator — text or icons provide meaning
 - Interactive elements are keyboard accessible

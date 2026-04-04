@@ -17,19 +17,18 @@ Use to switch between light, dark, and system color schemes.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `showLabel` | `boolean` | — | — |
+| `showLabel` | `boolean` | `false` | Show the theme label next to the icon. |
 
 ## Example
 
 ```tsx
 import { MnThemeToggle } from "@/components/maranello"
 
-<MnThemeToggle />
+<MnThemeToggle showLabel />
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Theme changes are announced via `aria-live`
-- All controls meet WCAG 2.1 contrast requirements
+- All controls meet WCAG 2.2 AA contrast requirements
 - Uses `role="switch"` with `aria-checked` state

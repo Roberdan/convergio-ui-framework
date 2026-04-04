@@ -17,21 +17,22 @@ Use to indicate loading or processing state in any context.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `size` | `SpinnerSize` | — | — |
-| `variant` | `SpinnerVariant` | — | — |
-| `label` | `string` | — | — |
-| `className` | `string` | — | — |
+| `size` | `SpinnerSize` | `"md"` | Size variant |
+| `variant` | `SpinnerVariant` | `"primary"` | Visual variant |
+| `label` | `string` | `"Loading"` | Display label |
+| `className` | `string` | — | Additional CSS classes |
 
 ## Example
 
 ```tsx
 import { MnSpinner } from "@/components/maranello"
 
-<MnSpinner label="Example" />
+<MnSpinner
+  size="md"
+/>
 ```
 
 ## Accessibility
 
-- Uses semantic HTML elements for proper document structure
 - Color is not the only indicator — text or icons provide meaning
 - Interactive elements are keyboard accessible
