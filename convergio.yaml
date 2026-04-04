@@ -1,40 +1,24 @@
-# ============================================================================
-# convergio.yaml — Single configuration file for the entire frontend.
-#
-# This file defines: branding, themes, navigation, pages, AI agents, and API.
-# An AI agent can read your backend and auto-generate this file.
-# The frontend reads this at build time and constructs the entire app.
-#
-# To customize: edit this file and restart the dev server.
-# To rebrand: change app.name, app.logo, and theme.default.
-# To add pages: add entries under `pages` with block definitions.
-# To add AI agents: add entries under `ai.agents`.
-# ============================================================================
+# convergio.yaml — Cockpit UI configuration
+# Branding, themes, navigation, AI agents, API connection.
 
-# ── App identity ──
 app:
   name: Convergio
-  description: Operational product shell
+  description: Cockpit UI for the Convergio daemon
   # logo: /logo.svg
 
-# ── Theme ──
 theme:
-  default: navy          # light | dark | navy | colorblind
+  default: navy
   storageKey: convergio-theme
 
-# ── API connection ──
 api:
   baseUrl: http://localhost:8420
-  # authHeader: Authorization
-  # authScheme: Bearer
 
-# ── AI Agents ──
 ai:
   defaultAgent: jervis
   agents:
     - id: jervis
       name: Jervis
-      description: Convergio platform orchestrator — manages plans, agents, and workspaces
+      description: Convergio platform orchestrator
       provider: openai
       model: gpt-4o
       systemPrompt: |
@@ -47,7 +31,7 @@ ai:
 
     - id: nasra
       name: NaSra
-      description: Design system expert — tokens, themes, WCAG, components, layouts
+      description: Design system expert
       provider: openai
       model: gpt-4o
       systemPrompt: |
@@ -58,237 +42,30 @@ ai:
       avatar: N
       maxTokens: 2048
 
-# ── Navigation ──
+# 10 cockpit sections matching the daemon API surface
 navigation:
   sections:
     - label: Overview
       items:
-        - id: dashboard
-          label: Dashboard
-          href: /dashboard
-          icon: LayoutDashboard
-
-        - id: plans
-          label: Plans
-          href: /plans
-          icon: ClipboardList
-
-        - id: agents
-          label: Agents
-          href: /agents
-          icon: Users
-
-        - id: ideas
-          label: Ideas
-          href: /ideas
-          icon: Lightbulb
+        - { id: dashboard, label: Dashboard, href: /, icon: LayoutDashboard }
+        - { id: agents, label: Agents, href: /agents, icon: Users }
+        - { id: plans, label: Plans, href: /plans, icon: ClipboardList }
 
     - label: Infrastructure
       items:
-        - id: orgs
-          label: Organizations
-          href: /orgs
-          icon: Building2
+        - { id: orgs, label: Organizations, href: /orgs, icon: Building2 }
+        - { id: mesh, label: Mesh, href: /mesh, icon: Network }
+        - { id: inference, label: Inference, href: /inference, icon: Brain }
 
-        - id: mesh
-          label: Mesh
-          href: /mesh
-          icon: Network
-
-        - id: operations
-          label: Operations
-          href: /operations
-          icon: Activity
-
-    - label: Intelligence
+    - label: Operations
       items:
-        - id: chat
-          label: AI Chat
-          href: /chat
-          icon: MessageSquare
-
-        - id: strategy
-          label: Strategy
-          href: /strategy
-          icon: Target
+        - { id: billing, label: Billing, href: /billing, icon: Receipt }
+        - { id: observatory, label: Observatory, href: /observatory, icon: Activity }
+        - { id: prompts, label: Prompt Studio, href: /prompts, icon: Terminal }
 
     - label: System
       items:
-        - id: settings
-          label: Settings
-          href: /settings
-          icon: Settings
+        - { id: settings, label: Settings, href: /settings, icon: Settings }
+        - { id: showcase, label: Components, href: /showcase, icon: Palette }
 
-        - id: docs
-          label: Documentation
-          href: /docs
-          icon: FileText
-
-    - label: Design System
-      items:
-        - id: showcase
-          label: Component Showcase
-          href: /showcase
-          icon: Palette
-
-
-# ── Pages ──
-# Each page is defined by its route and a list of block rows.
-# Available block types: kpi-card, data-table, activity-feed, stat-list, empty-state, ai-chat,
-#   gauge-block, chart-block, gantt-block, kanban-block, funnel-block, hbar-block,
-#   speedometer-block, map-block, okr-block, system-status-block, data-table-maranello
-pages:
-  /:
-    title: Dashboard
-    description: Platform overview and recent activity.
-    rows:
-      - columns: 4
-        blocks:
-          - type: kpi-card
-            label: Active Agents
-            value: "12"
-            change: "+2"
-            trend: up
-
-          - type: kpi-card
-            label: Running Plans
-            value: "3"
-            change: "0"
-            trend: flat
-
-          - type: kpi-card
-            label: Tasks Completed
-            value: "847"
-            change: "+23"
-            trend: up
-
-          - type: kpi-card
-            label: Uptime
-            value: 99.7%
-            change: "+0.1%"
-            trend: up
-
-      - columns: 2
-        blocks:
-          - type: activity-feed
-            items:
-              - time: 2m ago
-                text: Agent worker-01 completed task T3-04 in deployment pipeline
-                status: success
-              - time: 8m ago
-                text: Batch job sync-reports validated and queued
-                status: info
-              - time: 14m ago
-                text: Workspace env-staging provisioned successfully
-                status: info
-              - time: 1h ago
-                text: Build failed on feature/api-gateway-patch
-                status: error
-
-          - type: data-table
-            columns:
-              - key: agent
-                label: Agent
-                mono: true
-              - key: status
-                label: Status
-              - key: model
-                label: Model
-              - key: tasks
-                label: Tasks
-                align: right
-            rows:
-              - agent: worker-01
-                status: active
-                model: claude-sonnet
-                tasks: 4
-              - agent: worker-02
-                status: active
-                model: copilot
-                tasks: 2
-              - agent: worker-03
-                status: active
-                model: claude-sonnet
-                tasks: 1
-              - agent: worker-04
-                status: idle
-                model: copilot
-                tasks: 0
-
-      - columns: 1
-        blocks:
-          - type: ai-chat
-            agentId: jervis
-
-      # ── Maranello visual blocks ──
-      - columns: 3
-        blocks:
-          - type: gauge-block
-            value: 73
-            min: 0
-            max: 100
-            unit: "%"
-            label: CPU Load
-            animate: true
-            size: md
-
-          - type: chart-block
-            chartType: bar
-            labels: [Mon, Tue, Wed, Thu, Fri]
-            series:
-              - label: Deployments
-                data: [4, 7, 3, 8, 5]
-                color: "var(--mn-accent)"
-              - label: Rollbacks
-                data: [1, 0, 2, 1, 0]
-                color: "var(--mn-danger)"
-            showLegend: true
-            animate: true
-
-          - type: funnel-block
-            data:
-              pipeline:
-                - label: Leads
-                  count: 1200
-                - label: Qualified
-                  count: 640
-                - label: Proposal
-                  count: 310
-                - label: Closed
-                  count: 120
-              total: 1200
-            animate: true
-            size: md
-
-      - columns: 1
-        blocks:
-          - type: system-status-block
-            services:
-              - id: api
-                name: API Gateway
-                status: operational
-                uptime: 99.98
-                latencyMs: 42
-              - id: db
-                name: Primary Database
-                status: operational
-                uptime: 99.95
-                latencyMs: 8
-              - id: queue
-                name: Task Queue
-                status: degraded
-                uptime: 98.7
-                latencyMs: 230
-              - id: cdn
-                name: CDN / Static Assets
-                status: operational
-                uptime: 100
-                latencyMs: 12
-            incidents:
-              - id: inc-01
-                title: Task queue elevated latency
-                date: "2025-07-14T09:22:00Z"
-                severity: degraded
-                resolved: false
-            version: 2.4.1
-            environment: production
+pages: {}
