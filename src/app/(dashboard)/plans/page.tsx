@@ -1,9 +1,9 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useApiQuery } from '@/hooks/use-api-query';
-import * as api from '@/lib/api';
-import type { Plan, PlanInput, Wave, Task } from '@/lib/types';
+import type { PlanDb, ExecutionTree } from '@/lib/types';
+import { planDbList, planDbCreate, planDbExecutionTree } from '@/lib/api-ext';
 import { MnSectionCard } from '@/components/maranello/layout';
 import { MnDataTable, type DataTableColumn, MnBadge, MnProgressRing } from '@/components/maranello/data-display';
 import { MnModal, MnStateScaffold } from '@/components/maranello/feedback';
@@ -11,37 +11,32 @@ import { MnFormField } from '@/components/maranello/forms';
 
 const PLAN_COLS: DataTableColumn[] = [
   { key: 'name', label: 'Plan', sortable: true },
+  { key: 'project_id', label: 'Project', sortable: true },
   { key: 'status', label: 'Status', type: 'status' },
-  { key: 'wave_count', label: 'Waves', sortable: true },
-  { key: 'task_count', label: 'Tasks', sortable: true },
-  { key: 'completed_tasks', label: 'Done', sortable: true },
+  { key: 'tasks_done', label: 'Done', sortable: true },
+  { key: 'tasks_total', label: 'Total', sortable: true },
   { key: 'created_at', label: 'Created', sortable: true },
 ];
 
 const STATUS_TONE: Record<string, 'success' | 'warning' | 'danger' | 'info' | 'neutral'> = {
   done: 'success', completed: 'success', in_progress: 'info', pending: 'neutral',
-  submitted: 'warning', failed: 'danger',
+  submitted: 'warning', failed: 'danger', cancelled: 'danger',
 };
 
 export default function PlansPage() {
-  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<PlanDb | null>(null);
   const [showCreate, setShowCreate] = useState(false);
-  const [formData, setFormData] = useState<PlanInput>({ name: '' });
+  const [formData, setFormData] = useState({ name: '', project_id: 'default' });
   const [saving, setSaving] = useState(false);
-  const [expandedWaves, setExpandedWaves] = useState<Set<string>>(new Set());
+  const [expandedWaves, setExpandedWaves] = useState<Set<number>>(new Set());
 
-  const { data: plans, loading, error, refetch } = useApiQuery<Plan[]>(() => api.planList());
-  const { data: waves } = useApiQuery<Wave[]>(
-    () => selectedPlan ? api.planWaves(selectedPlan.id) : Promise.resolve([]),
+  const { data: plans, loading, error, refetch } = useApiQuery<PlanDb[]>(() => planDbList());
+  const { data: tree } = useApiQuery<ExecutionTree>(
+    () => selectedPlan ? planDbExecutionTree(selectedPlan.id) : Promise.resolve(null as unknown as ExecutionTree),
     { enabled: !!selectedPlan },
   );
 
-  const staleTasks: Task[] = useMemo(
-    () => (waves ?? []).flatMap((w) => w.tasks).filter((t) => t.status === 'in_progress' && !t.assignee),
-    [waves],
-  );
-
-  const toggleWave = useCallback((id: string) => {
+  const toggleWave = useCallback((id: number) => {
     setExpandedWaves((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id); else next.add(id);
@@ -53,9 +48,9 @@ export default function PlansPage() {
     if (!formData.name) return;
     setSaving(true);
     try {
-      await api.planCreate(formData);
+      await planDbCreate(formData.name, formData.project_id || 'default');
       setShowCreate(false);
-      setFormData({ name: '' });
+      setFormData({ name: '', project_id: 'default' });
       refetch();
     } finally {
       setSaving(false);
@@ -79,55 +74,39 @@ export default function PlansPage() {
         <MnDataTable
           columns={PLAN_COLS}
           data={(plans ?? []) as unknown as Record<string, unknown>[]}
-          onRowClick={(row) => { setSelectedPlan(row as unknown as Plan); setExpandedWaves(new Set()); }}
+          onRowClick={(row) => { setSelectedPlan(row as unknown as PlanDb); setExpandedWaves(new Set()); }}
           emptyMessage="No plans found"
         />
       </MnSectionCard>
 
-      {selectedPlan && (
-        <MnSectionCard title={`${selectedPlan.name} — Execution Tree`} collapsible defaultOpen>
+      {selectedPlan && tree && (
+        <MnSectionCard title={`${tree.plan.name} — Execution Tree`} collapsible defaultOpen>
           <div className="space-y-1 p-4">
             <div className="mb-3 flex items-center gap-3">
-              <MnProgressRing value={selectedPlan.completed_tasks} max={selectedPlan.task_count} size="sm" label="Progress" />
-              <span className="text-sm">{selectedPlan.completed_tasks}/{selectedPlan.task_count} tasks</span>
-              <MnBadge tone={STATUS_TONE[selectedPlan.status] ?? 'neutral'}>{selectedPlan.status}</MnBadge>
+              <MnProgressRing value={tree.plan.tasks_done} max={tree.plan.tasks_total || 1} size="sm" label="Progress" />
+              <span className="text-sm">{tree.plan.tasks_done}/{tree.plan.tasks_total} tasks</span>
+              <MnBadge tone={STATUS_TONE[tree.plan.status] ?? 'neutral'}>{tree.plan.status}</MnBadge>
             </div>
-            {(waves ?? []).map((wave) => (
+            {tree.waves.map((wave) => (
               <div key={wave.id} className="rounded-md border">
                 <button onClick={() => toggleWave(wave.id)}
                   className="flex w-full items-center justify-between p-3 text-left hover:bg-muted/50">
-                  <span className="text-sm font-medium">Wave {wave.index + 1}</span>
+                  <span className="text-sm font-medium">{wave.name || `Wave ${wave.wave_id}`}</span>
                   <div className="flex items-center gap-2">
                     <MnBadge tone={STATUS_TONE[wave.status] ?? 'neutral'}>{wave.status}</MnBadge>
-                    <span className="text-xs text-muted-foreground">{wave.tasks.length} tasks</span>
                     <span className="text-xs">{expandedWaves.has(wave.id) ? '▼' : '▶'}</span>
                   </div>
                 </button>
                 {expandedWaves.has(wave.id) && (
-                  <div className="border-t">
-                    {wave.tasks.map((task) => (
-                      <TaskRow key={task.id} task={task} />
-                    ))}
+                  <div className="border-t p-3">
+                    <p className="text-xs text-muted-foreground">ID: {wave.wave_id}</p>
                   </div>
                 )}
               </div>
             ))}
-            {(waves ?? []).length === 0 && (
-              <p className="text-sm text-muted-foreground">No waves loaded</p>
+            {tree.waves.length === 0 && (
+              <p className="text-sm text-muted-foreground">No waves in this plan</p>
             )}
-          </div>
-        </MnSectionCard>
-      )}
-
-      {staleTasks.length > 0 && (
-        <MnSectionCard title="Reaper — Stale Tasks" collapsible defaultOpen>
-          <div className="space-y-2 p-4">
-            {staleTasks.map((t) => (
-              <div key={t.id} className="flex items-center justify-between border-b border-border py-2 last:border-0">
-                <span className="text-sm">{t.name}</span>
-                <MnBadge tone="danger">No assignee</MnBadge>
-              </div>
-            ))}
           </div>
         </MnSectionCard>
       )}
@@ -139,10 +118,10 @@ export default function PlansPage() {
               onChange={(e) => setFormData((f) => ({ ...f, name: e.target.value }))}
               className="w-full rounded-md border bg-background px-3 py-2 text-sm" placeholder="e.g. Q2 Migration" />
           </MnFormField>
-          <MnFormField label="Description">
-            <input type="text" value={formData.description ?? ''}
-              onChange={(e) => setFormData((f) => ({ ...f, description: e.target.value }))}
-              className="w-full rounded-md border bg-background px-3 py-2 text-sm" />
+          <MnFormField label="Project ID">
+            <input type="text" value={formData.project_id}
+              onChange={(e) => setFormData((f) => ({ ...f, project_id: e.target.value }))}
+              className="w-full rounded-md border bg-background px-3 py-2 text-sm" placeholder="default" />
           </MnFormField>
           <div className="flex justify-end gap-2">
             <button onClick={() => setShowCreate(false)} className="rounded-md border px-4 py-2 text-sm">Cancel</button>
@@ -153,36 +132,6 @@ export default function PlansPage() {
           </div>
         </div>
       </MnModal>
-    </div>
-  );
-}
-
-function TaskRow({ task }: { task: Task }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div className="border-b last:border-0">
-      <button onClick={() => setOpen(!open)}
-        className="flex w-full items-center gap-3 px-4 py-2 text-left hover:bg-muted/30">
-        <span className="text-xs">{open ? '▼' : '▶'}</span>
-        <span className="flex-1 text-sm">{task.name}</span>
-        <MnBadge tone={STATUS_TONE[task.status] ?? 'neutral'}>{task.status}</MnBadge>
-        {task.assignee && <span className="text-xs text-muted-foreground">{task.assignee}</span>}
-        {task.thor_validated && <MnBadge tone="success">Thor ✓</MnBadge>}
-      </button>
-      {open && (
-        <div className="space-y-2 border-t bg-muted/20 px-6 py-3">
-          <div className="text-xs"><strong>Assignee:</strong> {task.assignee ?? 'Unassigned'}</div>
-          <div className="text-xs"><strong>Thor validated:</strong> {task.thor_validated ? 'Yes' : 'No'}</div>
-          {task.evidence && task.evidence.length > 0 && (
-            <div className="text-xs">
-              <strong>Evidence ({task.evidence.length}):</strong>
-              <ul className="mt-1 list-inside list-disc">
-                {task.evidence.map((e, i) => <li key={i}>{e}</li>)}
-              </ul>
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 }

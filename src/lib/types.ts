@@ -184,6 +184,8 @@ export interface Task {
   thor_validated?: boolean;
   created_at: string;
 }
+export interface PlanDb { id: number; project_id: string; name: string; status: string; tasks_done: number; tasks_total: number; created_at: string; updated_at: string }
+export interface ExecutionTree { plan: { id: number; name: string; status: string; tasks_done: number; tasks_total: number }; waves: Array<{ id: number; wave_id: string; name: string; status: string }> }
 
 /* ── Mesh ── */
 export interface MeshNode {
@@ -195,6 +197,8 @@ export interface MeshNode {
   schema_version?: string;
   latency_ms?: number;
 }
+export interface MeshPeer { peer: string; last_seen: number; version?: string; status: 'online' | 'offline' }
+export interface MeshStatus { peers_online: number; total_synced: number }
 
 /* ── Multitenancy ���─ */
 export interface PeerEntry { peer_name: string; peer_url?: string; allowed: boolean }

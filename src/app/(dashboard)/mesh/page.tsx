@@ -2,67 +2,73 @@
 
 import { useMemo } from 'react';
 import { useApiQuery } from '@/hooks/use-api-query';
-import * as api from '@/lib/api';
-import type { MeshNode } from '@/lib/types';
+import type { MeshPeer, MeshStatus } from '@/lib/types';
+import { meshPeers, meshStatus } from '@/lib/api-ext';
 import { MnSectionCard } from '@/components/maranello/layout';
 import { MnDataTable, type DataTableColumn, MnBadge } from '@/components/maranello/data-display';
 import { MnHubSpoke, type HubSpokeHub, type HubSpokeSpoke } from '@/components/maranello/agentic';
 import { MnStateScaffold } from '@/components/maranello/feedback';
 
-const NODE_COLS: DataTableColumn[] = [
-  { key: 'name', label: 'Node', sortable: true },
-  { key: 'url', label: 'URL' },
+const PEER_COLS: DataTableColumn[] = [
+  { key: 'peer', label: 'Peer', sortable: true },
+  { key: 'version', label: 'Version', sortable: true },
   { key: 'status', label: 'Status', type: 'status' },
-  { key: 'schema_version', label: 'Schema', sortable: true },
-  { key: 'latency_ms', label: 'Latency (ms)', sortable: true },
-  { key: 'last_sync', label: 'Last Sync', sortable: true },
+  { key: 'last_seen_str', label: 'Last Seen', sortable: true },
 ];
 
-const STATUS_TONE: Record<string, 'success' | 'warning' | 'danger'> = {
-  online: 'success', syncing: 'warning', offline: 'danger',
+const STATUS_TONE: Record<string, 'success' | 'danger'> = {
+  online: 'success', offline: 'danger',
 };
 
 export default function MeshPage() {
-  const { data: nodes, loading, error, refetch } = useApiQuery<MeshNode[]>(
-    api.meshNodes,
+  const { data: peers, loading, error, refetch } = useApiQuery<MeshPeer[]>(
+    meshPeers,
     { pollInterval: 15_000 },
+  );
+  const { data: status } = useApiQuery<MeshStatus>(
+    meshStatus,
+    { pollInterval: 15_000 },
+  );
+
+  const tableData = useMemo(
+    () => (peers ?? []).map((p) => ({
+      ...p,
+      last_seen_str: new Date(p.last_seen * 1000).toLocaleString(),
+    })),
+    [peers],
   );
 
   const hub: HubSpokeHub = { label: 'This Node', status: 'online' };
   const spokes: HubSpokeSpoke[] = useMemo(
-    () => (nodes ?? []).map((n) => ({
-      label: n.name,
-      status: n.status === 'online' ? 'online' as const : n.status === 'syncing' ? 'degraded' as const : 'offline' as const,
-      connected: n.status !== 'offline',
+    () => (peers ?? []).map((p) => ({
+      label: p.peer,
+      status: p.status === 'online' ? ('online' as const) : ('offline' as const),
+      connected: p.status === 'online',
     })),
-    [nodes],
+    [peers],
   );
 
-  const schemaVersions = useMemo(() => {
-    const versions = new Set((nodes ?? []).map((n) => n.schema_version).filter(Boolean));
-    return [...versions];
-  }, [nodes]);
+  const onlinePeers = (peers ?? []).filter((p) => p.status === 'online').length;
+  const totalPeers = (peers ?? []).length;
 
-  const hasMismatch = schemaVersions.length > 1;
-
-  if (loading) return <MnStateScaffold state="loading" message="Loading mesh nodes..." />;
+  if (loading) return <MnStateScaffold state="loading" message="Loading mesh peers..." />;
   if (error) return <MnStateScaffold state="error" message={error} onRetry={refetch} />;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
         <h1 className="text-2xl font-bold">Mesh Network</h1>
-        <MnBadge tone={(nodes ?? []).some((n) => n.status === 'offline') ? 'warning' : 'success'}>
-          {(nodes ?? []).filter((n) => n.status === 'online').length}/{(nodes ?? []).length} online
+        <MnBadge tone={(peers ?? []).some((p) => p.status === 'offline') ? 'warning' : 'success'}>
+          {onlinePeers}/{totalPeers} online
         </MnBadge>
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <KpiCard label="Total Nodes" value={(nodes ?? []).length} />
-        <KpiCard label="Online" value={(nodes ?? []).filter((n) => n.status === 'online').length} />
-        <KpiCard label="Syncing" value={(nodes ?? []).filter((n) => n.status === 'syncing').length} />
-        <KpiCard label="Offline" value={(nodes ?? []).filter((n) => n.status === 'offline').length}
-          warn={(nodes ?? []).some((n) => n.status === 'offline')} />
+        <KpiCard label="Total Peers" value={totalPeers} />
+        <KpiCard label="Online" value={onlinePeers} />
+        <KpiCard label="Offline" value={totalPeers - onlinePeers}
+          warn={totalPeers > 0 && onlinePeers < totalPeers} />
+        <KpiCard label="Total Synced" value={status?.total_synced ?? 0} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -72,59 +78,48 @@ export default function MeshPage() {
           </div>
         </MnSectionCard>
 
-        <MnSectionCard title="Schema Versions" collapsible defaultOpen>
+        <MnSectionCard title="Peer Versions" collapsible defaultOpen>
           <div className="space-y-2 p-4">
-            {hasMismatch && (
-              <div className="mb-3 rounded-md border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">
-                Schema version mismatch detected across nodes
-              </div>
-            )}
-            {(nodes ?? []).map((n) => (
-              <div key={n.id} className="flex items-center justify-between border-b border-border py-2 last:border-0">
-                <span className="text-sm font-medium">{n.name}</span>
+            {(peers ?? []).map((p) => (
+              <div key={p.peer} className="flex items-center justify-between border-b border-border py-2 last:border-0">
+                <span className="text-sm font-medium">{p.peer}</span>
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs">{n.schema_version ?? 'unknown'}</span>
-                  <MnBadge tone={STATUS_TONE[n.status] ?? 'danger'}>{n.status}</MnBadge>
+                  <span className="font-mono text-xs">{p.version ?? 'unknown'}</span>
+                  <MnBadge tone={STATUS_TONE[p.status] ?? 'danger'}>{p.status}</MnBadge>
                 </div>
               </div>
             ))}
-            {(nodes ?? []).length === 0 && (
-              <p className="text-sm text-muted-foreground">No nodes discovered</p>
+            {(peers ?? []).length === 0 && (
+              <p className="text-sm text-muted-foreground">No peers discovered</p>
             )}
           </div>
         </MnSectionCard>
       </div>
 
-      <MnSectionCard title="All Nodes" badge={(nodes ?? []).length} collapsible defaultOpen>
+      <MnSectionCard title="All Peers" badge={totalPeers} collapsible defaultOpen>
         <MnDataTable
-          columns={NODE_COLS}
-          data={(nodes ?? []) as unknown as Record<string, unknown>[]}
-          onRowClick={(row) => {
-            const node = row as unknown as MeshNode;
-            alert(`Node: ${node.name}\nURL: ${node.url}\nLast sync: ${node.last_sync ?? 'never'}`);
-          }}
-          emptyMessage="No mesh nodes"
+          columns={PEER_COLS}
+          data={tableData as unknown as Record<string, unknown>[]}
+          emptyMessage="No mesh peers"
         />
       </MnSectionCard>
 
-      <MnSectionCard title="Sync Timeline" collapsible defaultOpen>
+      <MnSectionCard title="Recent Activity" collapsible defaultOpen>
         <div className="space-y-2 p-4">
-          {(nodes ?? []).filter((n) => n.last_sync).sort((a, b) =>
-            new Date(b.last_sync!).getTime() - new Date(a.last_sync!).getTime()
-          ).map((n) => (
-            <div key={n.id} className="flex items-center gap-3 border-b border-border py-2 last:border-0">
-              <MnBadge tone={STATUS_TONE[n.status] ?? 'danger'}>{n.status}</MnBadge>
-              <span className="text-sm font-medium">{n.name}</span>
+          {(peers ?? []).sort((a, b) => b.last_seen - a.last_seen).map((p) => (
+            <div key={p.peer} className="flex items-center gap-3 border-b border-border py-2 last:border-0">
+              <MnBadge tone={STATUS_TONE[p.status] ?? 'danger'}>{p.status}</MnBadge>
+              <span className="text-sm font-medium">{p.peer}</span>
               <span className="ml-auto text-xs text-muted-foreground">
-                {new Date(n.last_sync!).toLocaleString()}
+                {new Date(p.last_seen * 1000).toLocaleString()}
               </span>
-              {n.latency_ms != null && (
-                <span className="text-xs tabular-nums text-muted-foreground">{n.latency_ms}ms</span>
+              {p.version && (
+                <span className="font-mono text-xs text-muted-foreground">{p.version}</span>
               )}
             </div>
           ))}
-          {(nodes ?? []).filter((n) => n.last_sync).length === 0 && (
-            <p className="text-sm text-muted-foreground">No sync events</p>
+          {(peers ?? []).length === 0 && (
+            <p className="text-sm text-muted-foreground">No peer activity</p>
           )}
         </div>
       </MnSectionCard>
