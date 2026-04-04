@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useApiQuery } from '@/hooks/use-api-query';
 import { useSse } from '@/hooks/use-sse';
 import * as api from '@/lib/api';
@@ -22,11 +22,13 @@ import {
 import {
   MnActiveMissions,
   type Mission,
-} from '@/components/maranello/agentic';
-import {
-  MnAugmentedBrain,
-  type BrainNode,
-  type BrainConnection,
+  MnNeuralNodes,
+  type NeuralNodesController,
+  type NeuralNodeData,
+  type NeuralConnection,
+  MnHubSpoke,
+  type HubSpokeHub,
+  type HubSpokeSpoke,
 } from '@/components/maranello/agentic';
 import { MnBadge } from '@/components/maranello/data-display';
 import { MnChart } from '@/components/maranello/data-viz';
@@ -47,6 +49,18 @@ const FILTERS: { label: string; value: EventFilter }[] = [
   { label: 'Completed', value: 'TaskCompleted' },
   { label: 'Delegations', value: 'DelegationStarted' },
 ];
+
+const CAT_COLORS: Record<string, string> = {
+  core_utility: '#6366f1',
+  technical_development: '#22c55e',
+  business_operations: '#f59e0b',
+  leadership_strategy: '#ec4899',
+  compliance_legal: '#8b5cf6',
+  specialized_experts: '#14b8a6',
+  design_ux: '#f97316',
+  release_management: '#06b6d4',
+  research_report: '#a855f7',
+};
 
 /* ── Helpers ── */
 
@@ -85,9 +99,14 @@ function eventToActivity(e: IpcEvent): ActivityItem {
 export default function DashboardPage() {
   const [filter, setFilter] = useState<EventFilter>('');
   const [events, setEvents] = useState<IpcEvent[]>([]);
+  const neuralCtrl = useRef<NeuralNodesController | null>(null);
 
   const onMessage = useCallback((event: IpcEvent) => {
     setEvents((prev) => [event, ...prev].slice(0, 200));
+    if (neuralCtrl.current) {
+      neuralCtrl.current.pulse(event.from);
+      if (event.to) neuralCtrl.current.highlightNode(event.to);
+    }
   }, []);
 
   const { connected } = useSse({
@@ -105,13 +124,17 @@ export default function DashboardPage() {
     () => api.inferenceCosts({}),
     { pollInterval: 30_000 },
   );
-  // API may return CostSummary[] directly or wrapped as { costs: CostSummary[] }
   const costs: CostSummary[] = useMemo(() => {
     if (Array.isArray(costsRaw)) return costsRaw;
     const wrapped = costsRaw as unknown as Record<string, unknown> | null;
     if (wrapped && Array.isArray(wrapped.costs)) return wrapped.costs as CostSummary[];
     return [];
   }, [costsRaw]);
+
+  const { data: agents } = useApiQuery<Agent[]>(
+    api.agentList,
+    { pollInterval: 30_000 },
+  );
 
   const services: Service[] = useMemo(
     () => (deepHealth?.components ?? []).map(healthToService),
@@ -128,8 +151,7 @@ export default function DashboardPage() {
     const pct =
       runtime.total_budget_usd > 0
         ? Math.round(
-            (runtime.total_spent_usd / runtime.total_budget_usd) *
-              100,
+            (runtime.total_spent_usd / runtime.total_budget_usd) * 100,
           )
         : 0;
     return [
@@ -143,42 +165,53 @@ export default function DashboardPage() {
     ];
   }, [runtime]);
 
-  const { data: agents } = useApiQuery<Agent[]>(
-    api.agentList,
-    { pollInterval: 30_000 },
-  );
-
-  const brainData = useMemo(() => {
-    const catToType: Record<string, BrainNode['type']> = {
-      core_utility: 'core',
-      technical_development: 'skill',
-      business_operations: 'memory',
-      leadership_strategy: 'core',
-      compliance_legal: 'sense',
-      specialized_experts: 'skill',
-      design_ux: 'sense',
-      release_management: 'skill',
-      research_report: 'memory',
-    };
+  /* ── Neural nodes from agent catalog ── */
+  const { neuralNodes, neuralConns } = useMemo(() => {
     const list = agents ?? [];
-    const nodes: BrainNode[] = list.map((a) => ({
+    const activeNames = new Set(
+      events.flatMap((e) => [e.from, e.to].filter(Boolean)),
+    );
+    const nodes: NeuralNodeData[] = list.map((a) => ({
       id: a.name,
-      label: a.name.split('-').slice(0, 2).join('-'),
-      type: catToType[a.category ?? ''] ?? 'skill',
-      active: events.some(
-        (e) => e.from === a.name || e.to === a.name,
-      ),
+      label: a.name,
+      sublabel: a.category ?? a.tier,
+      color: CAT_COLORS[a.category ?? ''] ?? '#6366f1',
+      group: a.category ?? 'other',
+      energy: activeNames.has(a.name) ? 1.0 : 0.2,
+      size: a.tier === 't1' ? 1.5 : a.tier === 't2' ? 1.2 : 1,
     }));
-    const conns: BrainConnection[] = [];
-    const cores = nodes.filter((n) => n.type === 'core');
-    for (const n of nodes) {
-      if (n.type !== 'core' && cores.length > 0) {
-        const hub = cores[nodes.indexOf(n) % cores.length];
-        conns.push({ from: hub.id, to: n.id, strength: 0.3 });
+    const conns: NeuralConnection[] = [];
+    const coreNames = list
+      .filter((a) => a.category === 'core_utility')
+      .map((a) => a.name);
+    for (const a of list) {
+      if (a.category !== 'core_utility' && coreNames.length > 0) {
+        const hub = coreNames[list.indexOf(a) % coreNames.length];
+        conns.push({ from: hub, to: a.name, strength: 0.4 });
       }
     }
-    return { nodes, connections: conns };
+    return { neuralNodes: nodes, neuralConns: conns };
   }, [agents, events]);
+
+  /* ── Hub/spoke for services ── */
+  const hubData: HubSpokeHub = {
+    label: 'Convergio',
+    status: 'online',
+  };
+  const spokeData: HubSpokeSpoke[] = useMemo(
+    () =>
+      services.slice(0, 8).map((s) => ({
+        label: s.name,
+        status:
+          s.status === 'operational'
+            ? ('online' as const)
+            : s.status === 'degraded'
+              ? ('degraded' as const)
+              : ('offline' as const),
+        connected: s.status !== 'outage',
+      })),
+    [services],
+  );
 
   const costLabels = useMemo(
     () => costs.map((c: CostSummary) => c.entity_id),
@@ -188,9 +221,7 @@ export default function DashboardPage() {
     () => [
       {
         label: 'Daily cost ($)',
-        data: costs.map(
-          (c: CostSummary) => c.daily_cost,
-        ),
+        data: costs.map((c: CostSummary) => c.daily_cost),
         color: 'var(--mn-accent)',
       },
     ],
@@ -207,14 +238,8 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <KpiCard
-          label="Active Agents"
-          value={runtime?.active_agents ?? 0}
-        />
-        <KpiCard
-          label="Queue Depth"
-          value={runtime?.queue_depth ?? 0}
-        />
+        <KpiCard label="Active Agents" value={runtime?.active_agents ?? 0} />
+        <KpiCard label="Queue Depth" value={runtime?.queue_depth ?? 0} />
         <KpiCard
           label="Budget Spent"
           value={`$${(runtime?.total_spent_usd ?? 0).toFixed(2)}`}
@@ -227,12 +252,25 @@ export default function DashboardPage() {
         />
       </div>
 
+      {/* Neural network — full width */}
+      <MnSectionCard title="Agent Network" collapsible defaultOpen>
+        <div className="p-4" style={{ height: 420 }}>
+          <MnNeuralNodes
+            nodes={neuralNodes}
+            connections={neuralConns}
+            interactive
+            labels
+            forceLayout
+            pulseSpeed={0.8}
+            particleCount={2}
+            size="fluid"
+            onReady={(ctrl) => { neuralCtrl.current = ctrl; }}
+          />
+        </div>
+      </MnSectionCard>
+
       <div className="grid gap-6 lg:grid-cols-2">
-        <MnSectionCard
-          title="Event Stream"
-          collapsible
-          defaultOpen
-        >
+        <MnSectionCard title="Event Stream" collapsible defaultOpen>
           <div className="flex flex-wrap gap-2 px-4 pb-3">
             {FILTERS.map((f) => (
               <button
@@ -249,18 +287,11 @@ export default function DashboardPage() {
             ))}
           </div>
           <div className="max-h-80 overflow-y-auto">
-            <MnActivityFeed
-              items={activityItems}
-              ariaLabel="Real-time event stream"
-            />
+            <MnActivityFeed items={activityItems} ariaLabel="Real-time event stream" />
           </div>
         </MnSectionCard>
 
-        <MnSectionCard
-          title="System Health"
-          collapsible
-          defaultOpen
-        >
+        <MnSectionCard title="System Health" collapsible defaultOpen>
           <div className="p-4">
             <MnSystemStatus
               services={services}
@@ -270,36 +301,19 @@ export default function DashboardPage() {
           </div>
         </MnSectionCard>
 
-        <MnSectionCard
-          title="Active Agents"
-          collapsible
-          defaultOpen
-        >
+        <MnSectionCard title="Active Agents" collapsible defaultOpen>
           <div className="p-4">
             <MnActiveMissions missions={missions} />
           </div>
         </MnSectionCard>
 
-        <MnSectionCard
-          title="Agent Brain"
-          collapsible
-          defaultOpen
-        >
-          <div className="p-4">
-            <MnAugmentedBrain
-              nodes={brainData.nodes}
-              connections={brainData.connections}
-              size="fluid"
-              height={360}
-            />
+        <MnSectionCard title="Service Topology" collapsible defaultOpen>
+          <div className="flex items-center justify-center p-4">
+            <MnHubSpoke hub={hubData} spokes={spokeData} />
           </div>
         </MnSectionCard>
 
-        <MnSectionCard
-          title="Cost by Entity"
-          collapsible
-          defaultOpen
-        >
+        <MnSectionCard title="Cost by Entity" collapsible defaultOpen>
           <div className="p-4">
             {costs.length > 0 ? (
               <MnChart
@@ -309,18 +323,12 @@ export default function DashboardPage() {
                 showLegend={false}
               />
             ) : (
-              <p className="text-sm text-muted-foreground">
-                No cost data available
-              </p>
+              <p className="text-sm text-muted-foreground">No cost data available</p>
             )}
           </div>
         </MnSectionCard>
 
-        <MnSectionCard
-          title="Agent Messages"
-          collapsible
-          defaultOpen
-        >
+        <MnSectionCard title="Agent Messages" collapsible defaultOpen>
           <div className="max-h-64 overflow-y-auto p-4">
             {events
               .filter((e) => e.event_type === 'MessageSent')
@@ -334,24 +342,16 @@ export default function DashboardPage() {
                     {e.from}
                   </span>
                   {e.to && (
-                    <span className="text-xs text-muted-foreground">
-                      &rarr; {e.to}
-                    </span>
+                    <span className="text-xs text-muted-foreground">&rarr; {e.to}</span>
                   )}
-                  <span className="flex-1 text-xs text-foreground">
-                    {e.content}
-                  </span>
+                  <span className="flex-1 text-xs text-foreground">{e.content}</span>
                   <span className="shrink-0 text-[0.65rem] text-muted-foreground tabular-nums">
                     {new Date(e.ts).toLocaleTimeString()}
                   </span>
                 </div>
               ))}
-            {events.filter(
-              (e) => e.event_type === 'MessageSent',
-            ).length === 0 && (
-              <p className="text-sm text-muted-foreground">
-                No messages yet
-              </p>
+            {events.filter((e) => e.event_type === 'MessageSent').length === 0 && (
+              <p className="text-sm text-muted-foreground">No messages yet</p>
             )}
           </div>
         </MnSectionCard>
@@ -361,27 +361,17 @@ export default function DashboardPage() {
 }
 
 function KpiCard({
-  label,
-  value,
-  sub,
-  warn,
+  label, value, sub, warn,
 }: {
-  label: string;
-  value: string | number;
-  sub?: string;
-  warn?: boolean;
+  label: string; value: string | number; sub?: string; warn?: boolean;
 }) {
   return (
     <div className="rounded-lg border bg-card p-4">
       <p className="text-xs text-muted-foreground">{label}</p>
-      <p
-        className={`text-2xl font-bold tabular-nums ${warn ? 'text-destructive' : ''}`}
-      >
+      <p className={`text-2xl font-bold tabular-nums ${warn ? 'text-destructive' : ''}`}>
         {value}
       </p>
-      {sub && (
-        <p className="text-xs text-muted-foreground">{sub}</p>
-      )}
+      {sub && <p className="text-xs text-muted-foreground">{sub}</p>}
     </div>
   );
 }
