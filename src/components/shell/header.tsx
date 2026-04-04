@@ -1,18 +1,16 @@
 "use client";
 
-import { Menu, Search, Bell } from "lucide-react";
-import { useRef } from "react";
+import { Menu, Bell } from "lucide-react";
 import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { SearchCombobox } from "./search-combobox";
 
 export interface HeaderProps {
   onMenuToggle: () => void;
-  onSearchClick: () => void;
   breadcrumb: string[];
-  searchRef?: React.RefObject<HTMLButtonElement | null>;
 }
 
-export function Header({ onMenuToggle, onSearchClick, breadcrumb, searchRef }: HeaderProps) {
+export function Header({ onMenuToggle, breadcrumb }: HeaderProps) {
   return (
     <header className="fixed top-0 left-0 z-50 flex h-[52px] w-full items-center border-b border-sidebar-border bg-sidebar text-sidebar-foreground">
       {/* Left zone */}
@@ -49,20 +47,9 @@ export function Header({ onMenuToggle, onSearchClick, breadcrumb, searchRef }: H
         )}
       </div>
 
-      {/* Center zone — search trigger */}
+      {/* Center zone — inline search combobox */}
       <div className="hidden flex-1 justify-center px-4 md:flex">
-        <button
-          ref={searchRef}
-          type="button"
-          onClick={onSearchClick}
-          className="flex h-8 w-full max-w-md items-center gap-2 rounded-md border border-sidebar-border bg-sidebar px-3 text-sm text-muted-foreground transition-colors hover:bg-sidebar-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <Search className="h-4 w-4 shrink-0" />
-          <span className="flex-1 text-left">Search...</span>
-          <kbd className="pointer-events-none hidden select-none items-center gap-0.5 rounded border border-sidebar-border bg-sidebar-accent px-1.5 py-0.5 font-mono text-[11px] font-medium sm:inline-flex">
-            ⌘K
-          </kbd>
-        </button>
+        <SearchCombobox />
       </div>
 
       {/* Spacer when center is hidden on mobile */}

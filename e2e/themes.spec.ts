@@ -27,6 +27,6 @@ test.describe("Themes", () => {
   test("search trigger is visible on desktop", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("header")).toBeVisible();
-    await expect(page.getByText("Search...")).toBeVisible();
+    await expect(page.getByPlaceholder("Search...")).toBeVisible();
   });
 });

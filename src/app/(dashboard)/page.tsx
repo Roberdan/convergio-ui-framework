@@ -5,6 +5,7 @@ import { useApiQuery } from '@/hooks/use-api-query';
 import { useSse } from '@/hooks/use-sse';
 import * as api from '@/lib/api';
 import type {
+  Agent,
   IpcEvent,
   RuntimeView,
   CostSummary,
@@ -23,9 +24,9 @@ import {
   type Mission,
 } from '@/components/maranello/agentic';
 import {
-  MnHubSpoke,
-  type HubSpokeHub,
-  type HubSpokeSpoke,
+  MnAugmentedBrain,
+  type BrainNode,
+  type BrainConnection,
 } from '@/components/maranello/agentic';
 import { MnBadge } from '@/components/maranello/data-display';
 import { MnChart } from '@/components/maranello/data-viz';
@@ -135,24 +136,42 @@ export default function DashboardPage() {
     ];
   }, [runtime]);
 
-  const hubData: HubSpokeHub = {
-    label: 'Convergio',
-    status: 'online',
-  };
-  const spokeData: HubSpokeSpoke[] = useMemo(
-    () =>
-      services.slice(0, 8).map((s) => ({
-        label: s.name,
-        status:
-          s.status === 'operational'
-            ? ('online' as const)
-            : s.status === 'degraded'
-              ? ('degraded' as const)
-              : ('offline' as const),
-        connected: s.status !== 'outage',
-      })),
-    [services],
+  const { data: agents } = useApiQuery<Agent[]>(
+    api.agentList,
+    { pollInterval: 30_000 },
   );
+
+  const brainData = useMemo(() => {
+    const catToType: Record<string, BrainNode['type']> = {
+      core_utility: 'core',
+      technical_development: 'skill',
+      business_operations: 'memory',
+      leadership_strategy: 'core',
+      compliance_legal: 'sense',
+      specialized_experts: 'skill',
+      design_ux: 'sense',
+      release_management: 'skill',
+      research_report: 'memory',
+    };
+    const list = agents ?? [];
+    const nodes: BrainNode[] = list.map((a) => ({
+      id: a.name,
+      label: a.name.split('-').slice(0, 2).join('-'),
+      type: catToType[a.category ?? ''] ?? 'skill',
+      active: events.some(
+        (e) => e.from === a.name || e.to === a.name,
+      ),
+    }));
+    const conns: BrainConnection[] = [];
+    const cores = nodes.filter((n) => n.type === 'core');
+    for (const n of nodes) {
+      if (n.type !== 'core' && cores.length > 0) {
+        const hub = cores[Math.floor(Math.random() * cores.length)];
+        conns.push({ from: hub.id, to: n.id, strength: 0.3 });
+      }
+    }
+    return { nodes, connections: conns };
+  }, [agents, events]);
 
   const costLabels = useMemo(
     () => (costs ?? []).map((c: CostSummary) => c.entity_id),
@@ -255,12 +274,17 @@ export default function DashboardPage() {
         </MnSectionCard>
 
         <MnSectionCard
-          title="Delegation Graph"
+          title="Agent Brain"
           collapsible
           defaultOpen
         >
-          <div className="flex items-center justify-center p-4">
-            <MnHubSpoke hub={hubData} spokes={spokeData} />
+          <div className="p-4">
+            <MnAugmentedBrain
+              nodes={brainData.nodes}
+              connections={brainData.connections}
+              size="fluid"
+              height={360}
+            />
           </div>
         </MnSectionCard>
 
