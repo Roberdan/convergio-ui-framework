@@ -27,6 +27,13 @@ import type {
   PromptInput,
   Skill,
   SkillInput,
+  Org,
+  OrgInput,
+  OrgDelegation,
+  Plan,
+  PlanInput,
+  Wave,
+  MeshNode,
   ExtensionInfo,
   DepGraph,
   DepGraphValidation,
@@ -204,6 +211,46 @@ export const skillSearch = (q?: string, category?: string) =>
 
 export const skillCreate = (input: SkillInput) =>
   post<{ id: string }>('/api/skills', input);
+
+/* ── Organizations ── */
+
+export const orgList = () => get<Org[]>('/api/orgs');
+
+export const orgGet = (id: string) =>
+  get<Org>(`/api/orgs/${encodeURIComponent(id)}`);
+
+export const orgCreate = (input: OrgInput) =>
+  post<{ id: string }>('/api/orgs', input);
+
+export const orgUpdate = (id: string, input: OrgInput) =>
+  put<void>(`/api/orgs/${encodeURIComponent(id)}`, input);
+
+export const orgDelete = (id: string) =>
+  del<void>(`/api/orgs/${encodeURIComponent(id)}`);
+
+export const orgDelegations = (org_id: string) =>
+  get<OrgDelegation[]>(`/api/orgs/${encodeURIComponent(org_id)}/delegations`);
+
+/* ── Plans & Tasks ── */
+
+export const planList = (p?: { org_id?: string; status?: string }) =>
+  get<Plan[]>(`/api/plans${qs(p ?? {})}`);
+
+export const planGet = (id: string) =>
+  get<Plan>(`/api/plans/${encodeURIComponent(id)}`);
+
+export const planCreate = (input: PlanInput) =>
+  post<{ id: string }>('/api/plans', input);
+
+export const planWaves = (plan_id: string) =>
+  get<Wave[]>(`/api/plans/${encodeURIComponent(plan_id)}/waves`);
+
+/* ── Mesh ── */
+
+export const meshNodes = () => get<MeshNode[]>('/api/mesh/nodes');
+
+export const meshNodeGet = (id: string) =>
+  get<MeshNode>(`/api/mesh/nodes/${encodeURIComponent(id)}`);
 
 /* ── Multitenancy ── */
 

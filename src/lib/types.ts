@@ -129,6 +129,73 @@ export interface Skill {
 }
 export interface SkillInput { name: string; description: string; category?: string; capabilities: string[] }
 
+/* ── Organizations ── */
+export interface Org {
+  id: string;
+  name: string;
+  description?: string;
+  status: 'active' | 'suspended' | 'archived';
+  budget_usd: number;
+  spent_usd: number;
+  agent_count: number;
+  created_at: string;
+}
+export interface OrgInput {
+  name: string;
+  description?: string;
+  budget_usd: number;
+}
+export interface OrgDelegation {
+  id: string;
+  from_org: string;
+  to_org: string;
+  capability: string;
+  status: 'active' | 'revoked';
+  created_at: string;
+}
+
+/* ── Plans & Tasks ── */
+export interface Plan {
+  id: string;
+  name: string;
+  status: 'pending' | 'in_progress' | 'completed' | 'failed';
+  wave_count: number;
+  task_count: number;
+  completed_tasks: number;
+  created_at: string;
+  org_id?: string;
+}
+export interface PlanInput { name: string; org_id?: string; description?: string }
+export interface Wave {
+  id: string;
+  plan_id: string;
+  index: number;
+  status: 'pending' | 'in_progress' | 'completed';
+  tasks: Task[];
+}
+export interface Task {
+  id: string;
+  plan_id: string;
+  wave_id: string;
+  name: string;
+  status: 'pending' | 'in_progress' | 'submitted' | 'done' | 'failed';
+  assignee?: string;
+  evidence?: string[];
+  thor_validated?: boolean;
+  created_at: string;
+}
+
+/* ── Mesh ── */
+export interface MeshNode {
+  id: string;
+  name: string;
+  url: string;
+  status: 'online' | 'offline' | 'syncing';
+  last_sync?: string;
+  schema_version?: string;
+  latency_ms?: number;
+}
+
 /* ── Multitenancy ���─ */
 export interface PeerEntry { peer_name: string; peer_url?: string; allowed: boolean }
 export interface AuditEntry {
