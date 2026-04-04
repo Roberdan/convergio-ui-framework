@@ -5,18 +5,10 @@ import { useApiQuery } from '@/hooks/use-api-query';
 import * as api from '@/lib/api';
 import type { TimelineEvent, Anomaly, ObservatoryDashboard } from '@/lib/types';
 import { MnSectionCard } from '@/components/maranello/layout';
-import { MnDataTable, type DataTableColumn, MnBadge } from '@/components/maranello/data-display';
+import { MnBadge } from '@/components/maranello/data-display';
 import { MnChart } from '@/components/maranello/data-viz';
 import { MnActivityFeed, type ActivityItem } from '@/components/maranello/feedback';
 import { MnStateScaffold } from '@/components/maranello/feedback';
-
-const ANOMALY_COLS: DataTableColumn[] = [
-  { key: 'kind', label: 'Kind', sortable: true },
-  { key: 'severity', label: 'Severity', type: 'status', sortable: true },
-  { key: 'message', label: 'Message' },
-  { key: 'detected_at', label: 'Detected', sortable: true },
-  { key: 'resolved', label: 'Resolved' },
-];
 
 export default function ObservatoryPage() {
   const [searchQuery, setSearchQuery] = useState('');
