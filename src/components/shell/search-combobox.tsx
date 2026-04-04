@@ -108,7 +108,7 @@ export function SearchCombobox() {
   const catEnd = results.length > 0 ? 0 : navEnd + CATEGORY_ITEMS.length
 
   return (
-    <div ref={rootRef} className="relative w-full max-w-md" role="combobox" aria-expanded={open} aria-haspopup="listbox">
+    <div ref={rootRef} className="relative w-full max-w-md" role="combobox" aria-expanded={open} aria-haspopup="listbox" aria-controls="search-combobox-listbox" aria-owns="search-combobox-listbox">
       {/* Search input — IS the search bar */}
       <div className="flex h-8 items-center gap-2 rounded-md border border-sidebar-border bg-sidebar px-3 text-sm text-muted-foreground focus-within:ring-2 focus-within:ring-ring focus-within:border-transparent transition-colors">
         <Search className="h-4 w-4 shrink-0" aria-hidden="true" />
@@ -132,6 +132,7 @@ export function SearchCombobox() {
       {/* Dropdown — appears below the search bar, same width */}
       {open && (
         <div
+          id="search-combobox-listbox"
           role="listbox"
           aria-label="Search results"
           className="absolute top-[calc(100%+4px)] left-0 w-full max-h-80 overflow-y-auto rounded-lg border border-[var(--mn-border)] bg-popover text-popover-foreground shadow-xl ring-1 ring-foreground/10 z-50"

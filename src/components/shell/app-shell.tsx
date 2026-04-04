@@ -15,7 +15,8 @@ export interface AppShellProps {
 
 export function AppShell({ children, sections, brandName, brandLogo }: AppShellProps) {
   const pathname = usePathname();
-  const [collapsed, setCollapsed] = useState(false);
+  // Start collapsed so mobile Sheet is closed on initial render
+  const [collapsed, setCollapsed] = useState(true);
 
   const toggleSidebar = useCallback(() => setCollapsed((c) => !c), []);
 
