@@ -12,6 +12,7 @@ import type {
   CostSummary,
 } from '@/lib/types';
 import { DiscoveredAgentsList } from './discovered-agents';
+import { discoveredToBrainV1, discoveredToBrainV2, discoveredToBrain3D } from './brain-helpers';
 import { MnSectionCard } from '@/components/maranello/layout';
 import {
   MnSystemStatus,
@@ -244,10 +245,11 @@ export default function DashboardPage() {
     [costs],
   );
 
-  /* ── Brain V1: augmented brain from active workers ── */
+  /* ── Brain V1: augmented brain from active + discovered workers ── */
   const { brainNodes, brainConns } = useMemo(() => {
     const workers = runtime?.active_agents ?? [];
-    if (workers.length === 0) {
+    const discovered = runtime?.discovered_agents ?? [];
+    if (workers.length === 0 && discovered.length === 0) {
       return { brainNodes: [] as BrainNode[], brainConns: [] as BrainConnection[] };
     }
     const layers: BrainNode['type'][] = ['core', 'memory', 'skill', 'sense'];
@@ -267,13 +269,17 @@ export default function DashboardPage() {
     for (let i = 1; i < coreIds.length; i++) {
       conns.push({ from: coreIds[0], to: coreIds[i], strength: 0.8 });
     }
+    const ext = discoveredToBrainV1(discovered, coreIds[0]);
+    nodes.push(...ext.nodes);
+    conns.push(...ext.conns);
     return { brainNodes: nodes, brainConns: conns };
   }, [runtime]);
 
-  /* ── Brain V2: augmented brain v2 from active workers ── */
+  /* ── Brain V2: augmented brain v2 from active + discovered workers ── */
   const { brainV2Nodes, brainV2Synapses, brainV2Stats } = useMemo(() => {
     const workers = runtime?.active_agents ?? [];
-    if (workers.length === 0) {
+    const discovered = runtime?.discovered_agents ?? [];
+    if (workers.length === 0 && discovered.length === 0) {
       return {
         brainV2Nodes: [] as BrainV2Node[],
         brainV2Synapses: [] as BrainV2Synapse[],
@@ -300,30 +306,34 @@ export default function DashboardPage() {
       strength: w.stage === 'running' ? 0.8 : 0.3,
       active: w.stage === 'running',
     }));
+    const ext = discoveredToBrainV2(discovered, hub.id);
+    nodes.push(...ext.nodes);
+    synapses.push(...ext.synapses);
     const tasked = workers.filter((w: RuntimeWorker) => w.task_id);
     return {
       brainV2Nodes: nodes,
       brainV2Synapses: synapses,
       brainV2Stats: {
-        sessions: workers.length,
+        sessions: workers.length + discovered.length,
         tasks: tasked.length,
         synapses: synapses.length,
       } as BrainV2Stats,
     };
   }, [runtime]);
 
-  /* ── Brain 3D: three.js brain from active workers ── */
+  /* ── Brain 3D: three.js brain from active + discovered workers ── */
   const { brain3DNodes, brain3DEdges } = useMemo(() => {
     const workers = runtime?.active_agents ?? [];
-    if (workers.length === 0) {
+    const discovered = runtime?.discovered_agents ?? [];
+    if (workers.length === 0 && discovered.length === 0) {
       return { brain3DNodes: [] as Brain3DNode[], brain3DEdges: [] as Brain3DEdge[] };
     }
     const statusMap: Record<string, Brain3DNode['status']> = {
       running: 'active', spawning: 'idle', stopped: 'offline', error: 'error',
     };
     const coordinator: Brain3DNode = {
-      id: 'coord-main', label: 'Coordinator', type: 'coordinator',
-      status: 'active', activeTasks: workers.length, group: 'core',
+      id: 'coord-main', label: 'Convergio', type: 'coordinator',
+      status: 'active', activeTasks: workers.length + discovered.length, group: 'core',
     };
     const nodes: Brain3DNode[] = [
       coordinator,
@@ -344,6 +354,9 @@ export default function DashboardPage() {
       strength: w.stage === 'running' ? 0.8 : 0.3,
       active: w.stage === 'running',
     }));
+    const ext = discoveredToBrain3D(discovered, coordinator.id);
+    nodes.push(...ext.nodes);
+    edges.push(...ext.edges);
     return { brain3DNodes: nodes, brain3DEdges: edges };
   }, [runtime]);
 
