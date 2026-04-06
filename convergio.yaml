@@ -62,6 +62,7 @@ navigation:
         - { id: billing, label: Billing, href: /billing, icon: Receipt }
         - { id: observatory, label: Observatory, href: /observatory, icon: Activity }
         - { id: metrics, label: Metrics, href: /metrics, icon: BarChart3 }
+        - { id: night-agents, label: Night Agents, href: /night-agents, icon: Moon }
         - { id: prompts, label: Prompt Studio, href: /prompts, icon: Terminal }
 
     - label: System
