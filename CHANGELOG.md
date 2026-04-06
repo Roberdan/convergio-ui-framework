@@ -1,6 +1,11 @@
 # Changelog
 
-## [Unreleased]
+## [0.3.0] - 06 April 2026
+
+### Documentation & Onboarding
+- Docs: rewrote README.md — framework-first onboarding, two usage modes (framework vs registry), concrete YAML quickstart, mental model diagram, custom pages guide
+- Docs: created AGENTS.md — complete guide for AI coding agents (mental model, key files, conventions, common mistakes)
+- Chore: cleaned up 11 stale git branches (4 merged remote + 7 squash-merged remote + 1 local)
 
 ### W1: Fix & Restructure
 - Refactor: split 3 oversized files (gauge, date-range-picker, command-palette) into component + helpers
