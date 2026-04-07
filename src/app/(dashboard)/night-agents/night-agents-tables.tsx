@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import { MnSectionCard } from '@/components/maranello/layout';
 import { MnDataTable, type DataTableColumn, MnBadge } from '@/components/maranello/data-display';
-import type { NightAgentDef, NightAgentRun, TrackedProject } from '@/lib/types-night-agents';
+import type { NightAgentDef, NightRun, TrackedProject } from '@/types/night-agents';
 
 const STATUS_TONE: Record<string, 'success' | 'danger' | 'warning' | 'neutral' | 'info'> = {
   success: 'success',
@@ -27,7 +27,7 @@ function formatTime(iso: string | null | undefined): string {
   } catch { return iso; }
 }
 
-function elapsed(startedAt: string | null): string {
+function elapsed(startedAt: string | null | undefined): string {
   if (!startedAt) return '—';
   const ms = Date.now() - new Date(startedAt).getTime();
   if (ms < 0) return '—';
@@ -75,16 +75,17 @@ const RUN_COLS: DataTableColumn[] = [
   { key: 'duration', label: 'Duration' },
 ];
 
-function prepRuns(runs: NightAgentRun[]): Record<string, unknown>[] {
+function prepRuns(runs: NightRun[]): Record<string, unknown>[] {
   return runs.map((r) => ({
     ...r,
+    agent_name: r.agent_name ?? `Agent #${r.agent_def_id}`,
     status_badge: r.status,
     started_at_fmt: formatTime(r.started_at),
     duration: elapsed(r.started_at),
   }));
 }
 
-export function ActiveRunsTable({ runs }: { runs: NightAgentRun[] }) {
+export function ActiveRunsTable({ runs }: { runs: NightRun[] }) {
   const rows = useMemo(() => prepRuns(runs), [runs]);
   return (
     <MnSectionCard title="Active Runs" badge={runs.length} collapsible defaultOpen>

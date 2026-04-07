@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import { useApiQuery } from '@/hooks/use-api-query';
 import * as nightApi from '@/lib/api-night-agents';
-import type { NightAgentDef, NightAgentRun, TrackedProject } from '@/lib/types-night-agents';
+import type { NightAgentDef, NightRun, TrackedProject } from '@/types/night-agents';
 import { MnStateScaffold } from '@/components/maranello/feedback';
 import { MnBadge } from '@/components/maranello/data-display';
 import {
@@ -38,13 +38,13 @@ export default function NightAgentsPage() {
     data: runs,
     loading: runsLoading,
     error: runsError,
-  } = useApiQuery<NightAgentRun[]>(nightApi.nightAgentActiveRuns, { pollInterval: POLL_MS });
+  } = useApiQuery<NightRun[]>(nightApi.nightRunsActive, { pollInterval: POLL_MS });
 
   const {
     data: projects,
     loading: projLoading,
     error: projError,
-  } = useApiQuery<TrackedProject[]>(nightApi.nightAgentProjects, { pollInterval: POLL_MS });
+  } = useApiQuery<TrackedProject[]>(nightApi.trackedProjectList, { pollInterval: POLL_MS });
 
   const loading = defsLoading && runsLoading && projLoading;
   const error = defsError || runsError || projError;
