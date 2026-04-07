@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.1.0] - 07 April 2026
+
+### Agent Skill Definitions
+- Docs: upgraded 4 AGENT-*.md from wave task lists to permanent skill definitions
+  - **Nasra**: data-viz, charts, gauges, real-time streaming, monitoring
+  - **Jony**: CRUD pages, data tables, forms, modals, detail panels
+  - **Baccio**: testing, accessibility, responsive design, quality gates
+  - **Sara**: page composition, API integration, data mapping, UX patterns
+- Each agent now defines: owned components, enforced patterns, anti-patterns, cross-references
+- Docs: AGENTS.md updated with specialist agent reference table
+
 ## [1.0.0] - 07 April 2026
 
 First stable release. Config-driven dashboard framework with 101 Maranello
