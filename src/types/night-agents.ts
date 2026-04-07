@@ -17,6 +17,8 @@ export interface NightAgentDef {
   max_runtime_secs: number;
   created_at: string;
   updated_at: string;
+  last_status?: string;
+  last_run_at?: string;
 }
 
 export interface NightAgentDefInput {
@@ -41,6 +43,7 @@ export type RunStatus =
 export interface NightRun {
   id: number;
   agent_def_id: number;
+  agent_name?: string;
   status: RunStatus;
   node_name?: string;
   pid?: number;

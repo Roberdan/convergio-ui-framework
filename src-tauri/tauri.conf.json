@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/nicktrap/tauri-docs/main/docs/.schemas/config.schema.json",
   "productName": "Maranello Showcase",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "identifier": "dev.maranello.showcase",
   "build": {
     "frontendDist": "../out",

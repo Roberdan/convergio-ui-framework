@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.0.0] - 07 April 2026
+
+First stable release. Config-driven dashboard framework with 101 Maranello
+components, 4 themes, 17 dashboard pages, AI chat, shadcn-compatible registry,
+and complete documentation (7 guides, 102 component MDX docs).
+
+### Night Agents Dashboard
+- Feat: `/night-agents` page — KPI strip, agent definitions table, active runs, tracked projects
+- Feat: typed API client (`api-night-agents.ts`) for all night-agents daemon endpoints
+- Feat: TypeScript types (`types/night-agents.ts`) mirroring daemon Rust crate
+- Feat: sidebar navigation entry under Operations (Moon icon)
+
+### DX Improvements
+- Docs: `CLAUDE.md` — AI-first instructions with mandatory component selection table (30+ mappings)
+- Docs: `docs/guides/recipes.md` — 5 composition patterns (OKR Dashboard, CRUD Page, Analytics, Gantt+Detail, Simulator)
+- Docs: `docs/guides/common-mistakes.md` — 10 real mistakes with wrong vs correct code examples
+- Feat: CONSTITUTION P9-P12 enforcement rules (no custom tables, no custom metric cards, no hardcoded hex, mandatory catalog search)
+- Feat: prescriptive `whenToUse` fields in `component-catalog-data.ts` for MnDataTable, MnDetailPanel, MnDashboardStrip, MnHbar, MnBadge
+
+### Housekeeping
+- Fix: unified night-agents types (removed duplicate `types-night-agents.ts`)
+- Fix: aligned doc examples with actual component APIs (`tone` not `variant`, correct `MnStateScaffold` props)
+- Fix: night-agents page uses `MnDashboardStrip` instead of custom KpiCard (P10 compliance)
+- Fix: removed stale worktree, cleaned up merged/orphan branches and redundant PR
+- Docs: updated README and AGENTS.md — component count (101), new routes, new guides, P9-P12 rules
+- CI: E2E tests non-blocking (require daemon at localhost:8420)
+
 ## [0.3.0] - 06 April 2026
 
 ### Documentation & Onboarding

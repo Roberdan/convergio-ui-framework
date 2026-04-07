@@ -16,6 +16,10 @@
 | P6 | prefers-reduced-motion respected in all animations |
 | P7 | All text/comments in English |
 | P8 | Keyboard-first interaction model |
+| P9 | No `<table>` elements — use MnDataTable for ALL tabular data |
+| P10 | No custom metric cards — use MnDashboardStrip or MnKpiScorecard |
+| P11 | No hardcoded hex colors in JSX — use `var(--mn-*)` tokens only |
+| P12 | Always search component-catalog-data.ts before creating any UI element |
 
 ## Accessibility (WCAG 2.2 AA)
 

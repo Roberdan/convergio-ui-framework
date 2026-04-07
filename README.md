@@ -1,6 +1,6 @@
 # Convergio Frontend
 
-A **config-driven dashboard framework** with 100 React components, 4 themes, and a shadcn-compatible registry. Write YAML, get a full working app — sidebar, themes, AI chat, data visualizations — with zero custom code.
+A **config-driven dashboard framework** with 101 React components, 4 themes, and a shadcn-compatible registry. Write YAML, get a full working app — sidebar, themes, AI chat, data visualizations — with zero custom code.
 
 **Maranello** is the design system inside Convergio. The framework ships everything: layout shell, theme engine, config loader, page renderer, component showcase, and optional AI/desktop layers.
 
@@ -96,7 +96,7 @@ npx shadcn add mn-gauge mn-chart mn-data-table --registry https://your-maranello
 
 Browse the full registry at `/r/index.json`. Each component JSON includes source code, npm dependencies, and registry dependencies. See `docs/guides/using-the-registry.md` for setup instructions.
 
-> **Note:** Registry mode gives you individual components. Framework mode gives you the complete app shell, config engine, theme system, and all 100 components working together.
+> **Note:** Registry mode gives you individual components. Framework mode gives you the complete app shell, config engine, theme system, and all 101 components working together.
 
 ---
 
@@ -131,7 +131,7 @@ If no config file is found, the framework renders sensible defaults (app name "M
 |---|---|
 | Framework | Next.js 16 App Router |
 | UI Primitives | shadcn/ui + Base UI + Tailwind CSS v4 |
-| Design System | Maranello — 100 components with `Mn` prefix |
+| Design System | Maranello — 101 components with `Mn` prefix |
 | Typography | Outfit (headings), Inter (body), Barlow Condensed (mono/data) |
 | Themes | 4: Navy, Dark, Light, Colorblind (WCAG 2.2 AA) |
 | Icons | Lucide only (no emoji — CONSTITUTION P2) |
@@ -282,6 +282,7 @@ src/
       inference/            #   built-in page: inference monitoring
       mesh/                 #   built-in page: mesh network
       metrics/              #   built-in page: live metrics
+      night-agents/         #   built-in page: night agents dashboard
       observatory/          #   built-in page: event observatory
       orgs/                 #   built-in page: organizations
       plans/                #   built-in page: plan management
@@ -295,7 +296,7 @@ src/
     globals.css             # theme tokens: --mn-* + shadcn bridge vars
     layout.tsx              # root: fonts, theme script, CanvasSafeArc
   components/
-    maranello/              # Maranello Design System — 100 components
+    maranello/              # Maranello Design System — 101 components
       agentic/              #   7 AI/agent components
       data-display/         #  12 data display components
       data-viz/             #  14 data visualization components
@@ -309,7 +310,7 @@ src/
       strategy/             #  11 strategy components
       theme/                #   6 theme control + accessibility components
       shared/               #   shared utilities + tests
-      index.ts              #   barrel re-export (all 100 components)
+      index.ts              #   barrel re-export (all 101 components)
     blocks/                 # page blocks — renders config → UI
     page-renderer.tsx       # renders config pages → block grid
     shell/                  # sidebar, header, command-menu (Cmd-K)
@@ -322,7 +323,7 @@ src/
     config-loader.ts        # YAML parser + Zod validation (cached, file-watched in dev)
     config-schema.ts        # Zod schema for config file
     config-block-schemas.ts # Zod schemas for each block type
-    component-catalog.ts    # 100-entry catalog with bilingual search
+    component-catalog.ts    # 101-entry catalog with bilingual search
     env.ts                  # environment variable resolution
     icon-map.ts             # Lucide icon name → component resolver
     icon-slot.tsx           # <IconSlot name="..." /> for dynamic icons
@@ -331,7 +332,7 @@ src/
 src-tauri/                  # optional Tauri desktop scaffold
 docs/
   guides/                   # how-to guides (see Documentation section)
-  components/               # per-component MDX docs (100 files)
+  components/               # per-component MDX docs (101 files)
   adr/                      # architecture decision records
 ```
 
@@ -370,7 +371,7 @@ navigation:
 
 ## Showcase
 
-The built-in showcase at `/showcase` demonstrates all 100 components with live interactive demos:
+The built-in showcase at `/showcase` demonstrates all 101 components with live interactive demos:
 
 - **Landing** (`/showcase`) — category cards with component counts + live previews
 - **Category pages** (`/showcase/[category]`) — live demos with inline documentation (description, when to use, props table, code examples)
@@ -380,7 +381,7 @@ The built-in showcase at `/showcase` demonstrates all 100 components with live i
 ### Command Palette (Cmd-K)
 
 Press `Cmd+K` (or `Ctrl+K`) to open the command palette:
-- **Fuzzy search** across all 100 components (bilingual IT/EN keywords)
+- **Fuzzy search** across all 101 components (bilingual IT/EN keywords)
 - **Category navigation** — jump to any showcase section
 - **Theme switching** — switch between all 4 themes
 
@@ -390,7 +391,7 @@ The `public/r/` directory contains a shadcn-compatible component registry:
 
 ```
 public/r/
-  index.json              # full catalog with metadata for all 100 components
+  index.json              # full catalog with metadata for all 101 components
   mn-badge.json           # individual component (source + dependencies)
   mn-gauge.json
   ...
@@ -428,7 +429,7 @@ Built-in `MnA11yFab` floating toolbar gives users runtime control over:
 
 ---
 
-## Component Catalog (100 components)
+## Component Catalog (101 components)
 
 ```tsx
 import { MnBadge, MnChart, MnDataTable, MnGauge } from "@/components/maranello"
@@ -464,8 +465,11 @@ import { MnBadge, MnChart, MnDataTable, MnGauge } from "@/components/maranello"
 | Path | Content |
 |---|---|
 | `AGENTS.md` | Guide for AI coding agents working on this codebase |
+| `CLAUDE.md` | AI-first component selection rules, color tokens, page composition patterns |
 | `CONSTITUTION.md` | Binding governance rules (accessibility, themes, code style) |
 | `docs/guides/creating-a-component.md` | Step-by-step: naming, CVA template, theme tokens, barrel exports, registry, showcase, testing |
+| `docs/guides/recipes.md` | 5 composition recipes: OKR Dashboard, CRUD Page, Analytics, Gantt+Detail, Simulator |
+| `docs/guides/common-mistakes.md` | 10 real mistakes with wrong vs correct code examples |
 | `docs/guides/adding-icons.md` | Lucide icons, `IconSlot` vs direct import, custom SVG, sizing & coloring |
 | `docs/guides/adding-a-theme.md` | Adding a 5th theme: CSS tokens, ThemeProvider, theme-script, toggle/rotary |
 | `docs/guides/extending-the-system.md` | Adding categories, themes, design tokens, WCAG AA compliance |
@@ -489,6 +493,10 @@ import { MnBadge, MnChart, MnDataTable, MnGauge } from "@/components/maranello"
 - **4 themes always** — every component works in navy, dark, light, colorblind
 - **Keyboard-first** — Cmd-K, Tab navigation, focus rings
 - **Lucide icons only** — zero emoji (CONSTITUTION P2)
+- **No raw `<table>`** — use `MnDataTable` for all tabular data (P9)
+- **No custom metric cards** — use `MnDashboardStrip` or `MnKpiScorecard` (P10)
+- **No hardcoded hex in JSX** — use `var(--mn-*)` tokens only (P11)
+- **Catalog-first** — search `component-catalog-data.ts` before creating UI (P12)
 - **Max 250 lines per file** — split into component + `.helpers.ts`
 - **shadcn source-first** — UI components live in your repo, not in node_modules
 - **TypeScript strict** — no `any`, named exports only

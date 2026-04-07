@@ -4,9 +4,9 @@
 
 ## What This Project Is
 
-**Convergio Frontend** is a **config-driven dashboard framework**, not just a component library. It ships a complete, working application: layout shell, sidebar, header, theme engine, page renderer, 100 React components, 4 themes, AI chat, SSE hooks, and a component showcase. Everything is wired together and ready to run.
+**Convergio Frontend** is a **config-driven dashboard framework**, not just a component library. It ships a complete, working application: layout shell, sidebar, header, theme engine, page renderer, 101 React components, 4 themes, AI chat, SSE hooks, and a component showcase. Everything is wired together and ready to run.
 
-**Maranello** is the name of the design system — the 100 components with the `Mn` prefix. It lives *inside* Convergio.
+**Maranello** is the name of the design system — the 101 components with the `Mn` prefix. It lives *inside* Convergio.
 
 ### Two Usage Modes
 
@@ -55,9 +55,12 @@ Config file resolution (first match wins):
 | `src/components/shell/` | App shell: sidebar, header, breadcrumbs, search combobox |
 | `src/app/(dashboard)/layout.tsx` | Dashboard layout — calls `loadAppConfig()` + `loadNavSections()` |
 | `src/app/(dashboard)/[...slug]/page.tsx` | Catch-all route for YAML-defined pages |
-| `src/components/maranello/index.ts` | Barrel export for all 100 Maranello components |
+| `src/components/maranello/index.ts` | Barrel export for all 101 Maranello components |
 | `src/app/globals.css` | Theme tokens: `--mn-*` CSS custom properties for all 4 themes |
+| `CLAUDE.md` | AI-first component selection rules and page composition patterns |
 | `CONSTITUTION.md` | Binding code rules (accessibility, themes, naming, file size limits) |
+| `src/lib/component-catalog-data.ts` | 101-entry searchable catalog — search before creating any UI |
+| `src/lib/api-night-agents.ts` | Typed HTTP client for night-agents daemon API |
 
 ---
 
@@ -158,6 +161,10 @@ These are **non-negotiable**. Violations will be rejected in review.
 | `"use client"` | Only on files that use React hooks |
 | WCAG 2.2 AA | Minimum accessibility level for all components |
 | Keyboard-first | All interactive elements must be keyboard-navigable |
+| No `<table>` elements | Use `MnDataTable` for ALL tabular data (P9) |
+| No custom metric cards | Use `MnDashboardStrip` or `MnKpiScorecard` (P10) |
+| No hardcoded hex in JSX | Use `var(--mn-*)` tokens only (P11) |
+| Catalog-first | Search `component-catalog-data.ts` before creating any UI (P12) |
 | English only | All code, comments, and documentation in English |
 
 ---
@@ -202,7 +209,6 @@ pnpm lint         # ESLint
 pnpm typecheck    # TypeScript strict check
 pnpm test         # unit tests (Vitest)
 pnpm test:e2e     # Playwright E2E
-pnpm format       # Prettier formatting
 ```
 
 ---
@@ -217,3 +223,7 @@ pnpm format       # Prettier formatting
 6. **Creating files > 250 lines** — split into component + `.helpers.ts`.
 7. **Using `any`** — TypeScript strict mode, no exceptions.
 8. **Forgetting themes** — test every visual change in all 4 themes.
+9. **Using `<table>` or custom grids** — always use `MnDataTable` for tabular data (P9).
+10. **Creating custom metric cards** — use `MnDashboardStrip` or `MnKpiScorecard` (P10).
+11. **Skipping catalog search** — always check `component-catalog-data.ts` before creating any UI element (P12).
+12. **Using `Sheet`/`Dialog` for detail views** — use `MnDetailPanel` instead. See `docs/guides/common-mistakes.md`.
