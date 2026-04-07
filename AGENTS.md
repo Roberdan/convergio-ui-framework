@@ -62,6 +62,17 @@ Config file resolution (first match wins):
 | `src/lib/component-catalog-data.ts` | 101-entry searchable catalog — search before creating any UI |
 | `src/lib/api-night-agents.ts` | Typed HTTP client for night-agents daemon API |
 
+### Specialist Agents
+
+Four specialist agents have deep domain knowledge. Use their files for context when working in their domain:
+
+| Agent | File | Domain |
+|---|---|---|
+| **Nasra** | `AGENT-NASRA.md` | Data visualization, charts, gauges, real-time streaming, monitoring |
+| **Jony** | `AGENT-JONY.md` | CRUD pages, data tables, forms, modals, detail panels |
+| **Baccio** | `AGENT-BACCIO.md` | Testing, accessibility, responsive design, quality gates |
+| **Sara** | `AGENT-SARA-UX.md` | Page composition, API integration, data mapping, UX patterns |
+
 ---
 
 ## How to Add a Dashboard Page (YAML Only)
