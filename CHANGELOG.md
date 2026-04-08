@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [1.2.0] - 08 April 2026
 
 ### MCP Server
 - Feat: built-in Model Context Protocol server (`pnpm mcp`) with 7 tools for AI agent integration
