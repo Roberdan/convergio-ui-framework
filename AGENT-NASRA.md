@@ -99,3 +99,21 @@ Example — full quality score gauge:
 - Max 250 lines per file — split to `.helpers.ts` (P4)
 - Named exports only, `"use client"` only with hooks
 - English code, conventional commits
+
+## MCP Server Integration
+
+You have access to the framework's MCP server (`pnpm mcp`) which exposes 7 tools. Use these instead of grepping the codebase:
+
+| Tool | When to use |
+|---|---|
+| `search_components` | Find components by name, category, or use-case keyword |
+| `get_component` | Get full details, props, and example for a specific component |
+| `list_categories` | Overview of all categories with component counts |
+| `generate_yaml_page` | Generate YAML page config from a user's description |
+| `list_block_types` | Check available YAML block types |
+| `get_composition` | Get recommended component combos for cockpit, CRUD, executive, etc. |
+| `get_theme_tokens` | Check theme colors before hardcoding anything |
+
+When a user asks "which component should I use for X?" — call `search_components` first, then `get_component` for details. When they ask "build me a page with Y" — call `generate_yaml_page`.
+
+The MCP server reads directly from `component-catalog-data.ts`, so it's always up to date.
