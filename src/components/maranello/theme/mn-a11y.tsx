@@ -18,6 +18,11 @@ const DEFAULTS: A11ySettings = { fontSize: "md", reducedMotion: false, highContr
 const SIZES: Record<FontSize, number> = { sm: 0.875, md: 1.0, lg: 1.125, xl: 1.25 }
 const FONT_KEYS = Object.keys(SIZES) as FontSize[]
 
+function setClassState(target: Element, className: string, enabled: boolean) {
+  if (enabled) target.classList.add(className)
+  else target.classList.remove(className)
+}
+
 const sizeButtonVariants = cva(
   "cursor-pointer rounded-md border px-3 py-1.5 text-xs transition-all duration-150",
   {
@@ -41,9 +46,9 @@ function loadSettings(): A11ySettings {
 function applySettings(s: A11ySettings) {
   const root = document.documentElement
   root.style.fontSize = `${(SIZES[s.fontSize] ?? 1) * 16}px`
-  root.classList.toggle("mn-reduced-motion", s.reducedMotion)
-  root.classList.toggle("mn-high-contrast", s.highContrast)
-  root.classList.toggle("mn-no-focus-ring", !s.focusVisible)
+  setClassState(root, "mn-reduced-motion", s.reducedMotion)
+  setClassState(root, "mn-high-contrast", s.highContrast)
+  setClassState(root, "mn-no-focus-ring", !s.focusVisible)
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)) } catch { /* noop */ }
 }
 
@@ -52,7 +57,9 @@ function ToggleRow({ label, checked, onChange }: { label: string; checked: boole
     <div className="flex items-center justify-between py-1.5">
       <span className="text-sm text-[var(--mn-text-tertiary)]">{label}</span>
       <button
+        type="button"
         role="switch"
+        aria-label={label}
         aria-checked={checked}
         onClick={onChange}
         className={cn(
@@ -149,7 +156,7 @@ export function MnA11y({ className, ...props }: MnA11yProps) {
           <div className="mb-1.5 text-xs uppercase tracking-wider text-[var(--mn-text-muted)]">Text Size</div>
           <div className="flex gap-1">
             {FONT_KEYS.map((k) => (
-              <button key={k} onClick={() => update({ fontSize: k })}
+              <button type="button" key={k} onClick={() => update({ fontSize: k })}
                 className={sizeButtonVariants({ active: settings.fontSize === k })}>
                 {k.toUpperCase()}
               </button>
@@ -164,7 +171,7 @@ export function MnA11y({ className, ...props }: MnA11yProps) {
         <ToggleRow label="Focus Indicators" checked={settings.focusVisible}
           onChange={() => update({ focusVisible: !settings.focusVisible })} />
         <hr className="my-2.5 border-[var(--mn-border)]" />
-        <button onClick={() => setSettings({ ...DEFAULTS })}
+        <button type="button" onClick={() => setSettings({ ...DEFAULTS })}
           className="mt-2 w-full cursor-pointer rounded-md border border-[var(--mn-border)] bg-transparent px-2 py-2 text-xs text-[var(--mn-text-tertiary)] transition-colors duration-150 hover:bg-[var(--mn-border)]">
           Reset to Defaults
         </button>

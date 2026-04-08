@@ -1,5 +1,5 @@
 # ============================================================================
-# maranello.yaml — Maranello Design System configuration
+# maranello.yaml — Convergio Frontend Framework configuration
 #
 # This file defines branding, theme, navigation, and dashboard pages.
 # Edit this file and restart `pnpm dev` to customize the app.
@@ -11,8 +11,8 @@
 
 # ── App Identity ──
 app:
-  name: Maranello Design System
-  description: Component showcase and design system explorer
+  name: Convergio Frontend Framework
+  description: Preset-driven showcase and framework explorer for real product surfaces
   # logo: /logo.svg
 
 # ── Theme ──
@@ -31,7 +31,7 @@ theme:
 #   badge — optional numeric badge
 navigation:
   sections:
-    - label: Design System
+    - label: Framework
       items:
         - id: home
           label: Home
@@ -48,6 +48,10 @@ navigation:
           label: Agentic AI
           href: /showcase/agentic
           icon: Brain
+        - id: cockpit
+          label: Cockpit
+          href: /showcase/cockpit
+          icon: Gauge
         - id: data-display
           label: Data Display
           href: /showcase/data-display
@@ -92,4 +96,3 @@ navigation:
           label: Theme & A11y
           href: /showcase/theme
           icon: Palette
-

@@ -52,9 +52,9 @@ export function ShowcaseInteractiveTheme() {
         example={`<MnA11yFab />`}
       >
         <p className="text-xs text-muted-foreground mb-2">
-          The accessibility FAB renders fixed at the bottom-right corner of the viewport.
+          The framework includes one global FAB in the shell. This inline preview shows the same control without duplicating the floating button.
         </p>
-        <MnA11yFab />
+        <MnA11yFab position="inline" />
       </ComponentDoc>
     </>
   );

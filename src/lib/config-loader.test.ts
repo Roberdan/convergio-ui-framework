@@ -32,7 +32,7 @@ describe("config-loader functions", () => {
       await import("./config-loader");
     const config = loadAppConfig();
 
-    expect(config.name).toBe("Maranello");
+    expect(config.name).toBe("Convergio Frontend Framework");
     expect(config.defaultTheme).toBe("navy");
     expect(loadNavSections()).toEqual([]);
     expect(loadAIConfig().agents).toEqual([]);
@@ -45,7 +45,7 @@ describe("config-loader functions", () => {
     const { loadAppConfig } = await import("./config-loader");
     const config = loadAppConfig();
 
-    expect(config.name).toBe("Maranello");
+    expect(config.name).toBe("Convergio Frontend Framework");
     expect(config.defaultTheme).toBe("navy");
   });
 

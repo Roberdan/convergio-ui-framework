@@ -13,7 +13,7 @@ import type {
 } from '@/lib/types';
 import { DiscoveredAgentsList } from './discovered-agents';
 import { discoveredToBrainV1, discoveredToBrainV2, discoveredToBrain3D } from './brain-helpers';
-import { MnSectionCard } from '@/components/maranello/layout';
+import { MnDashboardStrip, MnSectionCard } from '@/components/maranello/layout';
 import {
   MnSystemStatus,
   type Service,
@@ -45,6 +45,19 @@ import {
 } from '@/components/maranello/agentic';
 import { MnBadge } from '@/components/maranello/data-display';
 import { MnChart } from '@/components/maranello/data-viz';
+import {
+  activityItems as demoActivityItems,
+  brain3DEdges as demoBrain3DEdgeSeed,
+  brain3DNodes as demoBrain3DSeed,
+  brainConnections as demoBrainConnectionsSeed,
+  brainNodes as demoBrainNodesSeed,
+  brainV2Nodes as demoBrainV2NodesSeed,
+  brainV2Stats as demoBrainV2StatsSeed,
+  brainV2Synapses as demoBrainV2SynapsesSeed,
+  hubSpokeHub as demoHubSeed,
+  hubSpokeSpokes as demoSpokeSeed,
+  missions as demoMissionSeed,
+} from './showcase/showcase-data';
 
 /* ── SSE event filter ── */
 
@@ -74,6 +87,72 @@ const CAT_COLORS: Record<string, string> = {
   release_management: '#06b6d4',
   research_report: '#a855f7',
 };
+
+const DEMO_SUMMARY = {
+  activeAgents: 28,
+  externalAgents: 8,
+  queueDepth: 41,
+  totalSpentUsd: 2847.32,
+  totalBudgetUsd: 6500,
+  staleCount: 4,
+};
+
+const DEMO_SERVICES: Service[] = [
+  { id: 'api', name: 'Control API', status: 'operational', uptime: 99.98, latencyMs: 82 },
+  { id: 'mesh', name: 'Agent mesh', status: 'operational', uptime: 99.94, latencyMs: 109 },
+  { id: 'night', name: 'Night runs', status: 'degraded', uptime: 98.7, latencyMs: 241 },
+];
+
+const DEMO_COSTS: CostSummary[] = [
+  { entity_id: 'coordinator-opus', entity_type: 'agent', daily_cost: 128, monthly_cost: 2840, model: 'claude-opus' },
+  { entity_id: 'worker-sonnet-03', entity_type: 'agent', daily_cost: 94, monthly_cost: 1980, model: 'claude-sonnet' },
+  { entity_id: 'thor-validator', entity_type: 'agent', daily_cost: 58, monthly_cost: 1120, model: 'claude-haiku' },
+  { entity_id: 'kernel-qwen', entity_type: 'node', daily_cost: 37, monthly_cost: 840, model: 'qwen2.5-coder' },
+];
+
+const DEMO_MESSAGES: IpcEvent[] = [
+  {
+    from: 'coordinator-opus',
+    to: 'worker-sonnet-03',
+    content: 'Prepare the release narrative and verify the keyboard states before handoff.',
+    event_type: 'MessageSent',
+    ts: '2026-04-08T14:11:00.000Z',
+  },
+  {
+    from: 'thor-validator',
+    to: 'coordinator-opus',
+    content: 'Accessibility gate passed after contrast correction on the summary cards.',
+    event_type: 'MessageSent',
+    ts: '2026-04-08T13:58:00.000Z',
+  },
+  {
+    from: 'kernel-jarvis',
+    content: 'Queued the executive preset rebuild with seeded charts and decision tables.',
+    event_type: 'MessageSent',
+    ts: '2026-04-08T13:42:00.000Z',
+  },
+];
+
+const DEMO_STRIP_ZONES = [
+  {
+    type: 'trend' as const,
+    title: 'Signal',
+    items: [
+      { label: 'Adoption', value: '84%', data: [61, 66, 70, 76, 81, 84] },
+      { label: 'Latency', value: '182ms', data: [240, 228, 216, 203, 191, 182] },
+    ],
+  },
+  {
+    type: 'pipeline' as const,
+    title: 'Flow',
+    rows: [
+      { label: 'Queued', value: 27, secondary: 'now' },
+      { label: 'Review', value: 11, secondary: 'gated' },
+      { label: 'Ship', value: 6, secondary: 'today' },
+    ],
+    footer: { label: 'Success', value: '98.4%' },
+  },
+];
 
 /* ── Helpers ── */
 
@@ -178,6 +257,49 @@ export default function DashboardPage() {
     ];
   }, [runtime]);
 
+  const hasLiveData = Boolean(
+    runtime &&
+    (
+      (runtime.active_agents?.length ?? 0) > 0 ||
+      (runtime.discovered_agents?.length ?? 0) > 0 ||
+      (runtime.queue_depth ?? 0) > 0 ||
+      (runtime.total_spent_usd ?? 0) > 0 ||
+      (runtime.stale_count ?? 0) > 0
+    ),
+  ) || events.length > 0 || services.length > 0 || costs.length > 0;
+
+  const demoMode = !hasLiveData;
+
+  const summary = demoMode
+    ? DEMO_SUMMARY
+    : {
+        activeAgents: (runtime?.active_agents?.length ?? 0) + (runtime?.discovered_agents?.length ?? 0),
+        externalAgents: runtime?.discovered_agents?.length ?? 0,
+        queueDepth: runtime?.queue_depth ?? 0,
+        totalSpentUsd: runtime?.total_spent_usd ?? 0,
+        totalBudgetUsd: runtime?.total_budget_usd ?? 0,
+        staleCount: runtime?.stale_count ?? 0,
+      };
+
+  const stripMetrics = demoMode
+    ? [
+        { label: 'Active Agents', value: DEMO_SUMMARY.activeAgents, trend: 'up' as const },
+        { label: 'Queue Depth', value: DEMO_SUMMARY.queueDepth, trend: 'flat' as const },
+        { label: 'Daily Spend', value: `$${DEMO_SUMMARY.totalSpentUsd.toFixed(0)}`, trend: 'down' as const },
+        { label: 'Stale Tasks', value: DEMO_SUMMARY.staleCount, trend: 'flat' as const },
+      ]
+    : [
+        { label: 'Active Agents', value: summary.activeAgents, trend: 'up' as const },
+        { label: 'Queue Depth', value: summary.queueDepth, trend: 'flat' as const },
+        { label: 'Daily Spend', value: `$${summary.totalSpentUsd.toFixed(0)}`, trend: 'down' as const },
+        { label: 'Stale Tasks', value: summary.staleCount, trend: summary.staleCount > 0 ? ('up' as const) : ('flat' as const) },
+      ];
+
+  const effectiveServices = demoMode ? DEMO_SERVICES : services;
+  const effectiveActivityItems = demoMode ? demoActivityItems : activityItems;
+  const effectiveMissions = demoMode ? demoMissionSeed : missions;
+  const effectiveCosts = demoMode ? DEMO_COSTS : costs;
+
   /* ── Neural nodes: only agents active in the current SSE stream ── */
   const { neuralNodes, neuralConns } = useMemo(() => {
     const catalog = new Map((agents ?? []).map((a) => [a.name, a]));
@@ -231,18 +353,18 @@ export default function DashboardPage() {
   );
 
   const costLabels = useMemo(
-    () => costs.map((c: CostSummary) => c.entity_id),
-    [costs],
+    () => effectiveCosts.map((c: CostSummary) => c.entity_id),
+    [effectiveCosts],
   );
   const costSeries = useMemo(
     () => [
       {
         label: 'Daily cost ($)',
-        data: costs.map((c: CostSummary) => c.daily_cost),
+        data: effectiveCosts.map((c: CostSummary) => c.daily_cost),
         color: 'var(--mn-accent)',
       },
     ],
-    [costs],
+    [effectiveCosts],
   );
 
   /* ── Brain V1: augmented brain from active + discovered workers ── */
@@ -360,43 +482,120 @@ export default function DashboardPage() {
     return { brain3DNodes: nodes, brain3DEdges: edges };
   }, [runtime]);
 
+  const demoNeural = useMemo(() => ({
+    nodes: demoBrain3DSeed.slice(0, 16).map((node) => ({
+      id: node.id,
+      label: node.label,
+      sublabel: node.model ?? node.type,
+      color:
+        node.type === 'coordinator'
+          ? 'var(--mn-accent)'
+          : node.status === 'error'
+            ? 'var(--mn-danger)'
+            : node.type === 'extension'
+              ? 'var(--mn-warning)'
+              : 'var(--mn-success)',
+      group: node.type,
+      energy: node.status === 'active' ? 1 : 0.55,
+      size: node.type === 'coordinator' || node.type === 'core' ? 1.4 : 1,
+    })),
+    conns: demoBrain3DEdgeSeed.slice(0, 24).map((edge) => ({
+      from: edge.source,
+      to: edge.target,
+      strength: edge.strength ?? 0.6,
+    })),
+  }), []);
+
+  const effectiveNeuralNodes = demoMode ? demoNeural.nodes : neuralNodes;
+  const effectiveNeuralConns = demoMode ? demoNeural.conns : neuralConns;
+  const effectiveBrainNodes = demoMode ? demoBrainNodesSeed : brainNodes;
+  const effectiveBrainConns = demoMode ? demoBrainConnectionsSeed : brainConns;
+  const effectiveBrainV2Nodes = demoMode ? demoBrainV2NodesSeed : brainV2Nodes;
+  const effectiveBrainV2Synapses = demoMode ? demoBrainV2SynapsesSeed : brainV2Synapses;
+  const effectiveBrainV2Stats = demoMode ? demoBrainV2StatsSeed : brainV2Stats;
+  const effectiveBrain3DNodes = demoMode ? demoBrain3DSeed : brain3DNodes;
+  const effectiveBrain3DEdges = demoMode ? demoBrain3DEdgeSeed : brain3DEdges;
+  const messageEvents = demoMode ? DEMO_MESSAGES : events.filter((e) => e.event_type === 'MessageSent');
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <MnBadge tone={connected ? 'success' : 'danger'}>
-          {connected ? 'Live' : 'Disconnected'}
-        </MnBadge>
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">
+            {demoMode ? 'Convergio Frontend Framework' : 'Dashboard'}
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            {demoMode
+              ? 'Demo mode keeps the homepage rich with animated dashboards, charts, and seeded framework data even when no daemon is attached.'
+              : 'Live runtime telemetry from the active agent mesh.'}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          {demoMode ? (
+            <a href="/showcase" className="rounded-md border px-3 py-1.5 text-sm hover:bg-accent">
+              Explore components
+            </a>
+          ) : null}
+          <MnBadge tone={demoMode ? 'info' : connected ? 'success' : 'danger'}>
+            {demoMode ? 'Demo mode' : connected ? 'Live' : 'Disconnected'}
+          </MnBadge>
+        </div>
       </div>
+
+      <MnDashboardStrip
+        metrics={stripMetrics}
+        zones={demoMode ? DEMO_STRIP_ZONES : undefined}
+        ariaLabel="Framework dashboard preview"
+      />
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         <KpiCard
           label="Active Agents"
-          value={(runtime?.active_agents?.length ?? 0) + (runtime?.discovered_agents?.length ?? 0)}
-          sub={runtime?.discovered_agents?.length ? `${runtime.discovered_agents.length} external` : undefined}
+          value={summary.activeAgents}
+          sub={summary.externalAgents ? `${summary.externalAgents} external` : undefined}
         />
-        <KpiCard label="Queue Depth" value={runtime?.queue_depth ?? 0} />
+        <KpiCard label="Queue Depth" value={summary.queueDepth} />
         <KpiCard
           label="Budget Spent"
-          value={`$${(runtime?.total_spent_usd ?? 0).toFixed(2)}`}
-          sub={`of $${(runtime?.total_budget_usd ?? 0).toFixed(2)}`}
+          value={`$${summary.totalSpentUsd.toFixed(2)}`}
+          sub={`of $${summary.totalBudgetUsd.toFixed(2)}`}
         />
         <KpiCard
           label="Stale Tasks"
-          value={runtime?.stale_count ?? 0}
-          warn={(runtime?.stale_count ?? 0) > 0}
+          value={summary.staleCount}
+          warn={summary.staleCount > 0}
         />
       </div>
 
+      {/* Brain visualizations — NOT collapsible (animated overflow-hidden
+           causes canvas clientWidth=0 during height transition) */}
+      <MnSectionCard title="Brain 3D" collapsible={false}>
+        <div className="p-4" style={{ minHeight: 500 }}>
+          {effectiveBrain3DNodes.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No active workers</p>
+          ) : (
+            <MnBrain3D
+              nodes={effectiveBrain3DNodes}
+              edges={effectiveBrain3DEdges}
+              autoRotate
+              autoRotateSpeed={0.4}
+              showLabels
+              height={500}
+              size="fluid"
+            />
+          )}
+        </div>
+      </MnSectionCard>
+
       {/* Neural network — full width */}
-      <MnSectionCard title={`Active Agents (${neuralNodes.length})`} collapsible defaultOpen>
-        <div className="p-4" style={{ height: neuralNodes.length > 0 ? 420 : 80 }}>
-          {neuralNodes.length === 0 ? (
+      <MnSectionCard title={`Active Agents (${effectiveNeuralNodes.length})`} collapsible defaultOpen>
+        <div className="p-4" style={{ height: effectiveNeuralNodes.length > 0 ? 420 : 80 }}>
+          {effectiveNeuralNodes.length === 0 ? (
             <p className="text-sm text-muted-foreground">No agents working right now</p>
           ) : (
             <MnNeuralNodes
-              nodes={neuralNodes}
-              connections={neuralConns}
+              nodes={effectiveNeuralNodes}
+              connections={effectiveNeuralConns}
               interactive
               labels
               forceLayout
@@ -409,35 +608,15 @@ export default function DashboardPage() {
         </div>
       </MnSectionCard>
 
-      {/* Brain visualizations — NOT collapsible (animated overflow-hidden
-           causes canvas clientWidth=0 during height transition) */}
-      <MnSectionCard title="Brain 3D" collapsible={false}>
-        <div className="p-4" style={{ minHeight: 500 }}>
-          {brain3DNodes.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No active workers</p>
-          ) : (
-            <MnBrain3D
-              nodes={brain3DNodes}
-              edges={brain3DEdges}
-              autoRotate
-              autoRotateSpeed={0.4}
-              showLabels
-              height={500}
-              size="fluid"
-            />
-          )}
-        </div>
-      </MnSectionCard>
-
       <div className="grid gap-6 lg:grid-cols-2">
         <MnSectionCard title="Augmented Brain" collapsible={false}>
           <div className="p-4" style={{ minHeight: 420 }}>
-            {brainNodes.length === 0 ? (
+            {effectiveBrainNodes.length === 0 ? (
               <p className="text-sm text-muted-foreground">No active workers</p>
             ) : (
               <MnAugmentedBrain
-                nodes={brainNodes}
-                connections={brainConns}
+                nodes={effectiveBrainNodes}
+                connections={effectiveBrainConns}
                 height={420}
                 size="fluid"
               />
@@ -447,13 +626,13 @@ export default function DashboardPage() {
 
         <MnSectionCard title="Brain V2 — Synaptic Map" collapsible={false}>
           <div className="p-4" style={{ minHeight: 420 }}>
-            {brainV2Nodes.length === 0 ? (
+            {effectiveBrainV2Nodes.length === 0 ? (
               <p className="text-sm text-muted-foreground">No active workers</p>
             ) : (
               <MnAugmentedBrainV2
-                nodes={brainV2Nodes}
-                synapses={brainV2Synapses}
-                stats={brainV2Stats}
+                nodes={effectiveBrainV2Nodes}
+                synapses={effectiveBrainV2Synapses}
+                stats={effectiveBrainV2Stats}
                 title="Worker Synapses"
                 showControls
                 height={420}
@@ -482,14 +661,14 @@ export default function DashboardPage() {
             ))}
           </div>
           <div className="max-h-80 overflow-y-auto">
-            <MnActivityFeed items={activityItems} ariaLabel="Real-time event stream" />
+            <MnActivityFeed items={effectiveActivityItems} ariaLabel="Real-time event stream" />
           </div>
         </MnSectionCard>
 
         <MnSectionCard title="System Health" collapsible defaultOpen>
           <div className="p-4">
             <MnSystemStatus
-              services={services}
+              services={effectiveServices}
               onRefresh={refetchHealth}
               refreshInterval={30_000}
             />
@@ -498,20 +677,20 @@ export default function DashboardPage() {
 
         <MnSectionCard title="Active Agents" collapsible defaultOpen>
           <div className="p-4">
-            <MnActiveMissions missions={missions} />
-            <DiscoveredAgentsList agents={runtime?.discovered_agents ?? []} />
+            <MnActiveMissions missions={effectiveMissions} />
+            {!demoMode ? <DiscoveredAgentsList agents={runtime?.discovered_agents ?? []} /> : null}
           </div>
         </MnSectionCard>
 
         <MnSectionCard title="Service Topology" collapsible defaultOpen>
           <div className="flex items-center justify-center p-4">
-            <MnHubSpoke hub={hubData} spokes={spokeData} />
+            <MnHubSpoke hub={demoMode ? demoHubSeed : hubData} spokes={demoMode ? demoSpokeSeed : spokeData} />
           </div>
         </MnSectionCard>
 
         <MnSectionCard title="Cost by Entity" collapsible defaultOpen>
           <div className="p-4">
-            {costs.length > 0 ? (
+            {effectiveCosts.length > 0 ? (
               <MnChart
                 type="bar"
                 labels={costLabels}
@@ -526,10 +705,7 @@ export default function DashboardPage() {
 
         <MnSectionCard title="Agent Messages" collapsible defaultOpen>
           <div className="max-h-64 overflow-y-auto p-4">
-            {events
-              .filter((e) => e.event_type === 'MessageSent')
-              .slice(0, 50)
-              .map((e, i) => (
+            {messageEvents.slice(0, 50).map((e, i) => (
                 <div
                   key={`${e.ts}-${i}`}
                   className="flex gap-2 border-b border-border py-2 last:border-0"
@@ -546,7 +722,7 @@ export default function DashboardPage() {
                   </span>
                 </div>
               ))}
-            {events.filter((e) => e.event_type === 'MessageSent').length === 0 && (
+            {messageEvents.length === 0 && (
               <p className="text-sm text-muted-foreground">No messages yet</p>
             )}
           </div>

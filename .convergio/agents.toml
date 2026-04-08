@@ -1,0 +1,112 @@
+[[agents]]
+name = "sara-greco-ai"
+role = "CEO"
+model = "claude-opus-4-6"
+capabilities = ["architecture decisions, code review"]
+department = "Leadership"
+
+[[agents]]
+name = "alessia-fabbri-ai"
+role = "PM"
+model = "claude-sonnet-4-5"
+capabilities = ["planning, tracking, priorities"]
+department = "Leadership"
+
+[[agents]]
+name = "carlo-pellegrini-ai"
+role = "Tech Lead"
+model = "claude-sonnet-4-5"
+capabilities = ["code review, standards, mentoring"]
+department = "Leadership"
+
+[[agents]]
+name = "alessia-rossi-ai"
+role = "Release Manager"
+model = "claude-sonnet-4-5"
+capabilities = ["CI/CD, deploy, versioning"]
+department = "Leadership"
+
+[[agents]]
+name = "elena-ferrari-ai"
+role = "Developer"
+model = "claude-haiku-4-5"
+capabilities = ["implementation"]
+department = "Leadership"
+
+[[agents]]
+name = "omar-fabbri-ai"
+role = "Developer"
+model = "claude-haiku-4-5"
+capabilities = ["implementation"]
+department = "Leadership"
+
+[[agents]]
+name = "andrea-giordano-ai"
+role = "Rust Developer"
+model = "claude-sonnet-4-5"
+capabilities = ["Rust development"]
+department = "Backend"
+
+[[agents]]
+name = "sofia-ricci-ai"
+role = "Code Reviewer"
+model = "claude-haiku-4-5"
+capabilities = ["Rust lint review"]
+department = "Backend"
+
+[[agents]]
+name = "omar-rossi-ai"
+role = "Frontend Developer"
+model = "claude-sonnet-4-5"
+capabilities = ["UI components"]
+department = "Frontend"
+
+[[agents]]
+name = "luca-mancini-ai"
+role = "Design Reviewer"
+model = "claude-haiku-4-5"
+capabilities = ["design review"]
+department = "Frontend"
+
+[[agents]]
+name = "enrico-giordano-ai"
+role = "DevOps Engineer"
+model = "claude-haiku-4-5"
+capabilities = ["CI monitoring"]
+department = "DevOps"
+
+[[agents]]
+name = "tommy-pellegrini-ai"
+role = "Compliance Officer"
+model = "claude-sonnet-4-5"
+capabilities = ["regulatory compliance, GDPR"]
+department = "Compliance & Legal"
+
+[[agents]]
+name = "leo-romano-ai"
+role = "Privacy Analyst"
+model = "claude-haiku-4-5"
+capabilities = ["privacy impact, consent, PII"]
+department = "Compliance & Legal"
+
+[[agents]]
+name = "alex-giordano-ai"
+role = "Design System Lead"
+model = "claude-sonnet-4-5"
+capabilities = ["design tokens, visual consistency"]
+department = "Design & UX"
+
+[[agents]]
+name = "sofia-romano-ai"
+role = "UX Researcher"
+model = "claude-haiku-4-5"
+capabilities = ["usability testing, interaction patterns"]
+department = "Design & UX"
+
+[[agents]]
+name = "giovanni-ricci-ai"
+role = "AI Ethics Lead"
+model = "claude-sonnet-4-5"
+capabilities = ["AI safety, bias, responsible AI"]
+department = "AI & Ethics"
+

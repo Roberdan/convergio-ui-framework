@@ -1,5 +1,6 @@
 import {
   Brain,
+  Gauge,
   Table,
   BarChart3,
   MessageSquare,
@@ -13,6 +14,7 @@ import {
   Palette,
   type LucideIcon,
 } from 'lucide-react';
+import { CATALOG } from '@/lib/component-catalog';
 
 export interface CategoryMeta {
   slug: string;
@@ -27,15 +29,23 @@ export const CATEGORIES: CategoryMeta[] = [
     slug: 'agentic',
     name: 'Agentic AI',
     icon: Brain,
-    count: 7,
+    count: CATALOG.filter((entry) => entry.category === 'agentic').length,
     description:
       'AI-powered components for agent orchestration, cognitive architectures, and mission tracking.',
+  },
+  {
+    slug: 'cockpit',
+    name: 'Cockpit',
+    icon: Gauge,
+    count: 6,
+    description:
+      'Ferrari Luce-inspired cockpit instruments: speedometers with complications, dashboard strip, binnacle cluster, heatmap, and system status.',
   },
   {
     slug: 'data-display',
     name: 'Data Display',
     icon: Table,
-    count: 12,
+    count: CATALOG.filter((entry) => entry.category === 'data-display').length,
     description:
       'Tables, cards, badges, avatars, and rich data presentation components.',
   },
@@ -43,7 +53,7 @@ export const CATEGORIES: CategoryMeta[] = [
     slug: 'data-viz',
     name: 'Data Visualization',
     icon: BarChart3,
-    count: 14,
+    count: CATALOG.filter((entry) => entry.category === 'data-viz').length,
     description:
       'Charts, heatmaps, treemaps, gauges, and interactive data visualizations.',
   },
@@ -51,7 +61,7 @@ export const CATEGORIES: CategoryMeta[] = [
     slug: 'feedback',
     name: 'Feedback',
     icon: MessageSquare,
-    count: 6,
+    count: CATALOG.filter((entry) => entry.category === 'feedback').length,
     description:
       'Toasts, modals, notifications, streaming text, and user feedback components.',
   },
@@ -59,7 +69,7 @@ export const CATEGORIES: CategoryMeta[] = [
     slug: 'financial',
     name: 'Financial',
     icon: DollarSign,
-    count: 2,
+    count: CATALOG.filter((entry) => entry.category === 'financial').length,
     description:
       'FinOps dashboards, cost breakdowns, timelines, and financial metric tracking.',
   },
@@ -67,7 +77,7 @@ export const CATEGORIES: CategoryMeta[] = [
     slug: 'forms',
     name: 'Forms & Input',
     icon: FormInput,
-    count: 11,
+    count: CATALOG.filter((entry) => entry.category === 'forms').length,
     description:
       'Form fields, date pickers, filters, toggles, voice input, and search components.',
   },
@@ -75,7 +85,7 @@ export const CATEGORIES: CategoryMeta[] = [
     slug: 'layout',
     name: 'Layout',
     icon: Layout,
-    count: 8,
+    count: CATALOG.filter((entry) => entry.category === 'layout').length,
     description:
       'Grid systems, section cards, admin shells, dashboards, and page structure.',
   },
@@ -83,7 +93,7 @@ export const CATEGORIES: CategoryMeta[] = [
     slug: 'navigation',
     name: 'Navigation',
     icon: Navigation,
-    count: 5,
+    count: CATALOG.filter((entry) => entry.category === 'navigation').length,
     description:
       'Breadcrumbs, tabs, steppers, section nav, and command palette.',
   },
@@ -91,7 +101,7 @@ export const CATEGORIES: CategoryMeta[] = [
     slug: 'network',
     name: 'Network',
     icon: Network,
-    count: 10,
+    count: CATALOG.filter((entry) => entry.category === 'network').length,
     description:
       'Mesh topologies, hub-spoke diagrams, deployment tables, and infrastructure views.',
   },
@@ -99,7 +109,7 @@ export const CATEGORIES: CategoryMeta[] = [
     slug: 'ops',
     name: 'Operations',
     icon: Settings,
-    count: 8,
+    count: CATALOG.filter((entry) => entry.category === 'ops').length,
     description:
       'Audit logs, binnacles, night jobs, Gantt charts, Kanban boards, and workbenches.',
   },
@@ -107,7 +117,7 @@ export const CATEGORIES: CategoryMeta[] = [
     slug: 'strategy',
     name: 'Strategy',
     icon: Target,
-    count: 11,
+    count: CATALOG.filter((entry) => entry.category === 'strategy').length,
     description:
       'BCG matrices, SWOT analysis, Porter\'s forces, OKRs, and business model canvases.',
   },
@@ -115,13 +125,13 @@ export const CATEGORIES: CategoryMeta[] = [
     slug: 'theme',
     name: 'Theme Controls',
     icon: Palette,
-    count: 6,
+    count: CATALOG.filter((entry) => entry.category === 'theme').length,
     description:
       'Theme toggles, rotary controls, Ferrari-inspired switches, and accessibility tools.',
   },
 ];
 
-export const TOTAL_COMPONENTS = CATEGORIES.reduce((s, c) => s + c.count, 0);
+export const TOTAL_COMPONENTS = CATALOG.length;
 export const TOTAL_CATEGORIES = CATEGORIES.length;
 export const TOTAL_THEMES = 4;
 

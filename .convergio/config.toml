@@ -1,0 +1,9 @@
+[project]
+name = "convergio-frontend"
+mission = "A **config-driven dashboard framework** with 101 React components, 4 themes, and a shadcn-compatible registry. Write YAML, get a full working app — sidebar, themes, AI chat, data visualizations —…"
+
+[commands]
+build = "cargo build"
+test = "cargo test"
+dev = "cargo run"
+deploy = "see .github/workflows/"

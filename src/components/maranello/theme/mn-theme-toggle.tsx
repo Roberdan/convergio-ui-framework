@@ -86,11 +86,11 @@ export function MnThemeToggle({
   if (showLabel) {
     return (
       <button
+        {...props}
         type="button"
         aria-label={`Current theme: ${meta.label}. Click to switch.`}
         title={meta.label}
         onClick={cycle}
-        {...props}
         className={cn(
           "inline-flex items-center gap-2 rounded-full px-3 py-1.5",
           "border border-[var(--mn-border)]",
@@ -113,11 +113,11 @@ export function MnThemeToggle({
 
   return (
     <button
+      {...props}
       type="button"
       aria-label={`Current theme: ${meta.label}. Click to switch.`}
       title={meta.label}
       onClick={cycle}
-      {...props}
       className={cn(mnThemeToggleVariants({ size }), className)}
     >
       <span aria-hidden="true">{meta.icon}</span>

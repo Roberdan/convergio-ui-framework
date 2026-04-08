@@ -12,6 +12,8 @@ export interface Odometer { digits: (string | number)[]; highlightLast?: boolean
 export interface StatusLed { color: string; label: string }
 export interface Trend { direction: "up" | "down"; delta: string; color: string }
 
+export type { Crosshair, CrosshairScatterDot, QuadrantCounts, Multigraph } from './mn-gauge-crosshair'
+
 /* ── Palette ────────────────────────────────────────────────── */
 
 export function readPalette(el: Element) {
@@ -42,6 +44,8 @@ export function readPalette(el: Element) {
 }
 export type GaugePalette = ReturnType<typeof readPalette>
 
+import { drawCrosshair, drawMultigraph, type Crosshair, type QuadrantCounts, type Multigraph } from './mn-gauge-crosshair'
+
 /* ── Drawing helpers ───────────────────────────────────────── */
 
 export const R = (d: number) => (d * Math.PI) / 180
@@ -62,6 +66,8 @@ export function render(
   tk: number, stk: number, nums: number[] | undefined, color: string,
   unit?: string, lbl?: string, ab?: ArcBar, subs?: SubDial[],
   ir?: InnerRing, od?: Odometer, led?: StatusLed, tr?: Trend,
+  ch?: Crosshair, qc?: QuadrantCounts, mg?: Multigraph,
+  cvOverride?: string, cuOverride?: string,
 ) {
   const ctx = cvs.getContext("2d")
   if (!ctx) return
@@ -153,12 +159,14 @@ export function render(
     circ(ctx, cx, cy, cr * 0.2); ctx.fillStyle = pal.capCenter; ctx.fill()
   }
 
-  // Center text — always render value prominently
+  // Center text — render value or override
   {
     const fs = tk ? Math.max(16, px * 0.16) : Math.max(20, px * 0.22)
     const valY = tk ? cy + r * 0.15 : cy
     ctx.font = `700 ${fs}px 'Barlow Condensed','Outfit',sans-serif`; ctx.fillStyle = pal.centerValue; ctx.textAlign = "center"; ctx.textBaseline = "middle"
-    ctx.fillText(`${Math.round(norm * prog + mn)}${unit ?? ''}`, cx, valY)
+    const displayVal = cvOverride ?? `${Math.round(norm * prog + mn)}${unit ?? ''}`
+    ctx.fillText(displayVal, cx, valY)
+    if (cuOverride) { ctx.font = `500 ${Math.max(8, px * 0.06)}px 'Barlow Condensed','Outfit',sans-serif`; ctx.fillStyle = pal.centerUnit; ctx.fillText(cuOverride, cx, valY + fs * 0.65) }
     if (lbl) { ctx.font = `600 ${Math.max(7, px * 0.045)}px 'Barlow Condensed','Outfit',sans-serif`; ctx.fillStyle = pal.centerLabel; ctx.fillText(lbl, cx, valY - fs * 0.75) }
   }
 
@@ -204,4 +212,8 @@ export function render(
     ctx.font = `600 ${Math.max(6, px * 0.035)}px 'Barlow Condensed',sans-serif`; ctx.fillStyle = tr.color; ctx.textAlign = "right"; ctx.textBaseline = "middle"
     ctx.fillText(`${arrow} ${tr.delta}`, tx, ty)
   }
+
+  // Crosshair / Multigraph complications
+  if (ch) drawCrosshair(ctx, ch, cx, cy, r, px, prog, pal, qc)
+  if (mg) drawMultigraph(ctx, mg, cx, cy, r, px, prog, pal)
 }

@@ -53,6 +53,11 @@ export const LINE_LABELS: Record<LineSpacing, string> = {
 
 let dyslexiaFontLoaded = false;
 
+function setClassState(target: Element, className: string, enabled: boolean) {
+  if (enabled) target.classList.add(className);
+  else target.classList.remove(className);
+}
+
 function ensureDyslexiaFont() {
   if (dyslexiaFontLoaded || typeof document === "undefined") return;
   dyslexiaFontLoaded = true;
@@ -93,12 +98,12 @@ export function applySettings(s: A11ySettings) {
   body.style.lineHeight = lh;
 
   // Body classes
-  body.classList.toggle("mn-a11y-reduced-motion", s.reducedMotion);
-  body.classList.toggle("mn-a11y-high-contrast", s.highContrast);
-  body.classList.toggle("mn-a11y-dyslexia-font", s.dyslexiaFont);
+  setClassState(body, "mn-a11y-reduced-motion", s.reducedMotion);
+  setClassState(body, "mn-a11y-high-contrast", s.highContrast);
+  setClassState(body, "mn-a11y-dyslexia-font", s.dyslexiaFont);
 
   // HTML class
-  html.classList.toggle("mn-no-focus-ring", !s.focusVisible);
+  setClassState(html, "mn-no-focus-ring", !s.focusVisible);
 
   // Load dyslexia font on first use
   if (s.dyslexiaFont) ensureDyslexiaFont();

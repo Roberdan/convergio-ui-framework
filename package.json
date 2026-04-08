@@ -1,7 +1,7 @@
 {
   "name": "convergio-frontend",
   "version": "1.1.0",
-  "description": "Maranello Design System — operational shell with 100+ React components, 4 themes, config-driven architecture. Built on Next.js 16, shadcn/ui, Tailwind CSS v4.",
+  "description": "Convergio Frontend Framework — operational shell with 100+ React components, 4 themes, and config-driven product presets. Built on Next.js 16.",
   "private": true,
   "scripts": {
     "dev": "next dev",

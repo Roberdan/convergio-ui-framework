@@ -1,0 +1,44 @@
+app:
+  name: Executive Starter
+  description: Narrative-first KPI cockpit for weekly leadership review and board prep.
+
+theme:
+  default: light
+  storageKey: convergio-executive-theme
+
+navigation:
+  sections:
+    - label: Leadership
+      items:
+        - { id: cockpit, label: Cockpit, href: /, icon: LayoutDashboard }
+        - { id: priorities, label: Priorities, href: /priorities, icon: Target }
+        - { id: risks, label: Risks, href: /risks, icon: AlertTriangle }
+
+pages:
+  /:
+    title: Weekly leadership cockpit
+    description: Give the board clear numbers, clear risks, and clear next decisions.
+    rows:
+      - columns: 4
+        blocks:
+          - { type: kpi-card, label: ARR run-rate, value: "$4.8M", change: "+0.4M", trend: up }
+          - { type: kpi-card, label: Gross retention, value: "93%", change: "+2%", trend: up }
+          - { type: kpi-card, label: Margin, value: "18.4%", change: "+1.2%", trend: up }
+          - { type: kpi-card, label: Cash risk, value: "Low", change: "stable", trend: flat }
+      - columns: 2
+        blocks:
+          - type: chart-block
+            chartType: area
+            labels: [Jan, Feb, Mar, Apr, May, Jun]
+            series:
+              - { label: Run-rate, data: [3.2, 3.4, 3.7, 4.0, 4.4, 4.8] }
+          - type: data-table-maranello
+            columns:
+              - { key: theme, label: Board theme, sortable: true }
+              - { key: owner, label: Owner }
+              - { key: status, label: Status, sortable: true }
+              - { key: nextStep, label: Next step }
+            data:
+              - { theme: Margin recovery, owner: CFO, status: On track, nextStep: Approve pricing experiment }
+              - { theme: Churn reduction, owner: COO, status: At risk, nextStep: Escalate onboarding blockers }
+              - { theme: Enterprise expansion, owner: CRO, status: Planned, nextStep: Confirm Q3 account list }

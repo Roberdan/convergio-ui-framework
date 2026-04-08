@@ -5,6 +5,8 @@ import { MnSpinner } from "../data-display/mn-spinner";
 import { MnStepper } from "../navigation/mn-stepper";
 import { MnToggleSwitch } from "../forms/mn-toggle-switch";
 import { MnSwot } from "../strategy/mn-swot";
+import { MnThemeToggle } from "../theme/mn-theme-toggle";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 
 describe("MnBadge", () => {
   it("renders label text", () => {
@@ -138,5 +140,19 @@ describe("MnSwot", () => {
   it("has accessible region role", () => {
     render(<MnSwot {...props} />);
     expect(screen.getByRole("region")).toBeInTheDocument();
+  });
+});
+
+describe("MnThemeToggle", () => {
+  it("cycles the active theme on click", () => {
+    render(
+      <ThemeProvider defaultTheme="navy">
+        <MnThemeToggle />
+      </ThemeProvider>,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /Current theme:/i }));
+
+    expect(document.documentElement).toHaveAttribute("data-theme", "colorblind");
   });
 });

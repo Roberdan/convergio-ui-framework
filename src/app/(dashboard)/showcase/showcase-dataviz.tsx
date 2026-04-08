@@ -9,6 +9,7 @@ import {
   MnActivityFeed,
   MnChart,
   MnFunnel,
+  MnGauge,
   MnHbar,
   MnSpeedometer,
 } from '@/components/maranello';
@@ -102,6 +103,15 @@ export function ShowcaseDataViz() {
               { label: 'Mistral', value: 150, color: '#72EFDD' },
             ]}
           />
+        </ComponentDoc>
+
+        <ComponentDoc
+          entry={entry('mn-gauge')}
+          example={`<MnGauge value={72} min={0} max={100} label="Confidence" size="md" />`}
+        >
+          <div className="flex justify-center">
+            <MnGauge value={72} min={0} max={100} label="Confidence" size="md" />
+          </div>
         </ComponentDoc>
 
         <ComponentDoc

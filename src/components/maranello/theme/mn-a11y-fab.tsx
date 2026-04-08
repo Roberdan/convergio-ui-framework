@@ -21,7 +21,9 @@ function Toggle({ label, checked, onChange }: { label: string; checked: boolean;
     <div className="flex items-center justify-between py-1.5">
       <span className="text-sm" style={{ color: "var(--mn-text, currentColor)" }}>{label}</span>
       <button
+        type="button"
         role="switch"
+        aria-label={label}
         aria-checked={checked}
         onClick={onChange}
         className={cn(
@@ -54,6 +56,7 @@ function BtnGroup<T extends string>({
     <div className="flex gap-1">
       {keys.map((k) => (
         <button
+          type="button"
           key={k}
           onClick={() => onSelect(k)}
           className={cn(
@@ -72,7 +75,13 @@ function BtnGroup<T extends string>({
 }
 
 /** Floating Action Button for accessibility settings. */
-function MnA11yFab({ className }: { className?: string }) {
+function MnA11yFab({
+  className,
+  position = "fixed",
+}: {
+  className?: string;
+  position?: "fixed" | "inline";
+}) {
   const [open, setOpen] = React.useState(false);
   const [settings, setSettings] = React.useState<A11ySettings>(DEFAULTS);
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -120,13 +129,22 @@ function MnA11yFab({ className }: { className?: string }) {
   }, [open]);
 
   return (
-    <div ref={containerRef} className={cn("fixed bottom-6 right-6 z-[8500]", className)}>
+    <div
+      ref={containerRef}
+      className={cn(
+        position === "fixed"
+          ? "fixed bottom-6 right-6 z-[8500]"
+          : "relative z-auto inline-flex",
+        className,
+      )}
+    >
       {/* Panel */}
       <div
         role="dialog"
         aria-label="Accessibility settings"
         className={cn(
-          "absolute bottom-16 right-0 w-[280px] rounded-lg border border-border bg-card p-4 shadow-xl transition-all duration-200",
+          position === "fixed" ? "absolute bottom-16 right-0" : "absolute left-0 top-14",
+          "w-[280px] rounded-lg border border-border bg-card p-4 shadow-xl transition-all duration-200",
           open ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0",
         )}
       >
@@ -163,6 +181,7 @@ function MnA11yFab({ className }: { className?: string }) {
 
         {/* Reset */}
         <button
+          type="button"
           onClick={reset}
           className="mt-1 w-full cursor-pointer rounded-md border border-border bg-transparent px-2 py-2 text-xs transition-colors duration-150 hover:bg-accent"
           style={{ color: "var(--mn-text-muted, currentColor)" }}
@@ -173,6 +192,7 @@ function MnA11yFab({ className }: { className?: string }) {
 
       {/* FAB */}
       <button
+        type="button"
         ref={fabRef}
         aria-label="Accessibility settings"
         aria-expanded={open}

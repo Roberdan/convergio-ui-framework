@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import {
   SIZE_PX, type GaugeSize, readPalette,
   type SubDial, type ArcBar, type InnerRing, type Odometer, type StatusLed, type Trend,
+  type Crosshair, type CrosshairScatterDot, type QuadrantCounts, type Multigraph,
   ease, render,
 } from "./mn-gauge.helpers"
 
@@ -14,7 +15,7 @@ const gaugeWrap = cva("relative inline-block", {
   defaultVariants: { size: "md" },
 })
 
-export type { SubDial, ArcBar, InnerRing, Odometer, StatusLed, Trend }
+export type { SubDial, ArcBar, InnerRing, Odometer, StatusLed, Trend, Crosshair, CrosshairScatterDot, QuadrantCounts, Multigraph }
 
 export interface MnGaugeProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "children">, VariantProps<typeof gaugeWrap> {
@@ -22,13 +23,17 @@ export interface MnGaugeProps
   ticks?: number; subticks?: number; numbers?: number[]
   startAngle?: number; endAngle?: number; color?: string
   arcBar?: ArcBar; subDials?: SubDial[]; innerRing?: InnerRing
-  odometer?: Odometer; statusLed?: StatusLed; trend?: Trend; animate?: boolean
+  odometer?: Odometer; statusLed?: StatusLed; trend?: Trend
+  crosshair?: Crosshair; quadrantCounts?: QuadrantCounts; multigraph?: Multigraph
+  centerValue?: string; centerUnit?: string
+  animate?: boolean
 }
 
 function MnGauge({
   value = 0, min = 0, max = 100, unit, label, ticks = 10, subticks = 5, numbers,
   startAngle = -135, endAngle = 135, color, arcBar, subDials,
   innerRing, odometer, statusLed, trend,
+  crosshair, quadrantCounts, multigraph, centerValue, centerUnit,
   animate = true, size = "md", className, ...rest
 }: MnGaugeProps) {
   const cvs = React.useRef<HTMLCanvasElement>(null)
@@ -45,21 +50,21 @@ function MnGauge({
     const s = px(); if (!cvs.current || !wrap.current) return
     const pal = readPalette(wrap.current)
     const effectiveColor = color ?? pal.accent
-    const go = (p: number) => { if (!cvs.current) return; render(cvs.current, pal, s, p, value, min, max, startAngle, endAngle, ticks, subticks, numbers, effectiveColor, unit, label, arcBar, subDials, innerRing, odometer, statusLed, trend) }
+    const go = (p: number) => { if (!cvs.current) return; render(cvs.current, pal, s, p, value, min, max, startAngle, endAngle, ticks, subticks, numbers, effectiveColor, unit, label, arcBar, subDials, innerRing, odometer, statusLed, trend, crosshair, quadrantCounts, multigraph, centerValue, centerUnit) }
     if (!animate) { go(1); return }
     const dur = 1400, t0 = performance.now()
     const tick = (now: number) => { const p = Math.min(1, (now - t0) / dur); go(ease(p)); if (p < 1) raf.current = requestAnimationFrame(tick) }
     raf.current = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf.current)
-  }, [value, min, max, unit, label, ticks, subticks, numbers, startAngle, endAngle, color, arcBar, subDials, innerRing, odometer, statusLed, trend, animate, px])
+  }, [value, min, max, unit, label, ticks, subticks, numbers, startAngle, endAngle, color, arcBar, subDials, innerRing, odometer, statusLed, trend, crosshair, quadrantCounts, multigraph, centerValue, centerUnit, animate, px])
 
   React.useEffect(() => {
     if (size !== "fluid" || typeof ResizeObserver === "undefined") return
     let tid: ReturnType<typeof setTimeout>
-    const ro = new ResizeObserver(() => { clearTimeout(tid); tid = setTimeout(() => { const s = px(); if (s > 0 && cvs.current && wrap.current) { const p = readPalette(wrap.current); render(cvs.current, p, s, 1, value, min, max, startAngle, endAngle, ticks, subticks, numbers, color ?? p.accent, unit, label, arcBar, subDials, innerRing, odometer, statusLed, trend) } }, 150) })
+    const ro = new ResizeObserver(() => { clearTimeout(tid); tid = setTimeout(() => { const s = px(); if (s > 0 && cvs.current && wrap.current) { const p = readPalette(wrap.current); render(cvs.current, p, s, 1, value, min, max, startAngle, endAngle, ticks, subticks, numbers, color ?? p.accent, unit, label, arcBar, subDials, innerRing, odometer, statusLed, trend, crosshair, quadrantCounts, multigraph, centerValue, centerUnit) } }, 150) })
     if (wrap.current) ro.observe(wrap.current)
     return () => ro.disconnect()
-  }, [size, value, min, max, unit, label, ticks, subticks, numbers, startAngle, endAngle, color, arcBar, subDials, innerRing, odometer, statusLed, trend, px])
+  }, [size, value, min, max, unit, label, ticks, subticks, numbers, startAngle, endAngle, color, arcBar, subDials, innerRing, odometer, statusLed, trend, crosshair, quadrantCounts, multigraph, centerValue, centerUnit, px])
 
   return (
     <div ref={wrap} role="meter" aria-valuemin={min} aria-valuemax={max} aria-valuenow={value}

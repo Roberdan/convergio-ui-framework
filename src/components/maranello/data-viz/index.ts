@@ -1,5 +1,6 @@
 export { MnChart, type MnChartProps, type ChartSeries, type ChartType } from "./mn-chart"
 export { MnGauge, type MnGaugeProps } from "./mn-gauge"
+export type { SubDial, ArcBar, InnerRing, Odometer, StatusLed, Trend, Crosshair, CrosshairScatterDot, QuadrantCounts, Multigraph } from "./mn-gauge"
 export { MnHalfGauge, halfGaugeWrap } from "./mn-half-gauge"
 export type { MnHalfGaugeProps, HalfGaugeColorStop } from "./mn-half-gauge"
 export { MnHeatmap } from "./mn-heatmap"

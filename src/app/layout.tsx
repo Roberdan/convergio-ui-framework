@@ -28,8 +28,8 @@ const barlowCondensed = Barlow_Condensed({
 const appConfig = loadAppConfig();
 
 export const metadata: Metadata = {
-  title: "Maranello Design System",
-  description: appConfig.description ?? "Maranello Design System",
+  title: appConfig.name ?? "Convergio Frontend Framework",
+  description: appConfig.description ?? "Convergio Frontend Framework",
 };
 
 export default function RootLayout({
@@ -43,9 +43,9 @@ export default function RootLayout({
       data-theme={appConfig.defaultTheme}
       suppressHydrationWarning
       className={`${inter.variable} ${outfit.variable} ${barlowCondensed.variable} h-full antialiased ${appConfig.defaultTheme !== "light" ? "dark" : ""}`}
-    >
+      >
       <head>
-        <ThemeScript />
+        <ThemeScript storageKey={appConfig.themeStorageKey} />
       </head>
       <body className="min-h-full">
         <a
@@ -54,7 +54,10 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <ThemeProvider defaultTheme={appConfig.defaultTheme}>
+        <ThemeProvider
+          defaultTheme={appConfig.defaultTheme}
+          storageKey={appConfig.themeStorageKey}
+        >
           <CanvasSafeArc />
           <TooltipProvider>
             {children}

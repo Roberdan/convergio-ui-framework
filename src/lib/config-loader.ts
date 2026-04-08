@@ -26,9 +26,8 @@ import { rawConfigSchema, type ValidatedConfig } from "./config-schema";
  * If no config file is found the loader returns sensible defaults
  * (app name "Maranello", navy theme, empty navigation/pages/AI).
  *
- * NOTE: `api.baseUrl` and `theme.storageKey` in the YAML are validated
- * but not consumed by the runtime — API URL comes from env.ts (API_URL),
- * and the theme storage key is hardcoded in theme-script.tsx.
+ * NOTE: `api.baseUrl` is validated but not consumed by the runtime — API URL
+ * currently comes from env.ts (API_URL).
  */
 
 const DEFAULTS: ValidatedConfig = Object.freeze({});
@@ -91,10 +90,11 @@ function loadRaw(): ValidatedConfig {
 export function loadAppConfig(): AppConfig {
   const raw = loadRaw();
   return {
-    name: raw.app?.name ?? "Maranello",
+    name: raw.app?.name ?? "Convergio Frontend Framework",
     description: raw.app?.description,
     logo: raw.app?.logo,
     defaultTheme: (raw.theme?.default as AppConfig["defaultTheme"]) ?? "navy",
+    themeStorageKey: raw.theme?.storageKey ?? "convergio-theme",
   };
 }
 

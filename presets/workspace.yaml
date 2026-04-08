@@ -1,0 +1,49 @@
+app:
+  name: Workspace Starter
+  description: Delivery-first SaaS workbench with review flow and ownership clarity.
+
+theme:
+  default: navy
+  storageKey: convergio-workspace-theme
+
+navigation:
+  sections:
+    - label: Delivery
+      items:
+        - { id: dashboard, label: Overview, href: /, icon: LayoutDashboard }
+        - { id: projects, label: Projects, href: /projects, icon: FolderKanban }
+        - { id: review, label: Review Queue, href: /review, icon: ClipboardList }
+    - label: Operations
+      items:
+        - { id: risks, label: Risks, href: /risks, icon: AlertTriangle }
+        - { id: settings, label: Settings, href: /settings, icon: Settings }
+
+pages:
+  /:
+    title: Delivery cockpit
+    description: Keep work moving, reviews tight, and blockers visible.
+    rows:
+      - columns: 4
+        blocks:
+          - { type: kpi-card, label: Active workstreams, value: "12", change: "+2", trend: up }
+          - { type: kpi-card, label: Review risk, value: "2", change: "-1", trend: down }
+          - { type: kpi-card, label: Cycle time, value: "2.8d", change: "-0.4d", trend: down }
+          - { type: kpi-card, label: Team focus score, value: "81%", change: "+5%", trend: up }
+      - columns: 2
+        blocks:
+          - type: data-table-maranello
+            pageSize: 5
+            columns:
+              - { key: initiative, label: Initiative, sortable: true }
+              - { key: owner, label: Owner, sortable: true }
+              - { key: status, label: Status, sortable: true }
+              - { key: progress, label: Progress }
+            data:
+              - { initiative: Apollo onboarding, owner: Mina Shah, status: Active, progress: 76% }
+              - { initiative: Billing close loop, owner: Luca Serra, status: At risk, progress: 58% }
+              - { initiative: Release automation, owner: Jane Roe, status: Planned, progress: 24% }
+          - type: activity-feed
+            items:
+              - { time: "14:10", text: "NaSra updated the launch checklist", status: info }
+              - { time: "13:42", text: "Baccio blocked a low-contrast regression", status: warning }
+              - { time: "12:55", text: "Jony shipped the approvals queue", status: success }

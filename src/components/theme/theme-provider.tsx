@@ -13,11 +13,10 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
-const STORAGE_KEY = "convergio-theme";
 const listeners = new Set<() => void>();
 
-function getSnapshot(): string | null {
-  try { return localStorage.getItem(STORAGE_KEY); } catch { return null; }
+function getSnapshot(storageKey: string): string | null {
+  try { return localStorage.getItem(storageKey); } catch { return null; }
 }
 
 function getServerSnapshot(): string | null {
@@ -43,11 +42,16 @@ function applyTheme(theme: Theme) {
   }
 }
 
-export function ThemeProvider({ children, defaultTheme = "navy" }: {
+export function ThemeProvider({ children, defaultTheme = "navy", storageKey = "convergio-theme" }: {
   children: React.ReactNode;
   defaultTheme?: Theme;
+  storageKey?: string;
 }) {
-  const stored = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const stored = useSyncExternalStore(
+    subscribe,
+    () => getSnapshot(storageKey),
+    getServerSnapshot,
+  );
   const theme: Theme = (stored && (THEMES as readonly string[]).includes(stored))
     ? (stored as Theme)
     : defaultTheme;
@@ -57,10 +61,10 @@ export function ThemeProvider({ children, defaultTheme = "navy" }: {
   }, [theme]);
 
   const setTheme = useCallback((next: Theme) => {
-    try { localStorage.setItem(STORAGE_KEY, next); } catch {}
+    try { localStorage.setItem(storageKey, next); } catch {}
     applyTheme(next);
     notifyListeners();
-  }, []);
+  }, [storageKey]);
 
   const value = useMemo(() => ({ theme, setTheme, themes: THEMES }), [theme, setTheme]);
 

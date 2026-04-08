@@ -11,6 +11,7 @@ export interface AppConfig {
   logo?: string;
   description?: string;
   defaultTheme: "light" | "dark" | "navy" | "colorblind";
+  themeStorageKey?: string;
 }
 
 /* ── Navigation ── */

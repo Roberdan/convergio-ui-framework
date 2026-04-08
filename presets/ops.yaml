@@ -1,0 +1,47 @@
+app:
+  name: Ops Starter
+  description: Incident-first control center for service health, triage, and escalation.
+
+theme:
+  default: dark
+  storageKey: convergio-ops-theme
+
+navigation:
+  sections:
+    - label: Operations
+      items:
+        - { id: wall, label: Command Wall, href: /, icon: Activity }
+        - { id: incidents, label: Incidents, href: /incidents, icon: AlertTriangle }
+        - { id: services, label: Services, href: /services, icon: Monitor }
+    - label: Coordination
+      items:
+        - { id: runbooks, label: Runbooks, href: /runbooks, icon: BookOpen }
+        - { id: metrics, label: Metrics, href: /metrics, icon: BarChart3 }
+
+pages:
+  /:
+    title: Command wall
+    description: See service health, load, and escalation pressure at a glance.
+    rows:
+      - columns: 4
+        blocks:
+          - { type: kpi-card, label: MTTA, value: "4.2m", change: "-1.1m", trend: down }
+          - { type: kpi-card, label: Open incidents, value: "3", change: "-2", trend: down }
+          - { type: kpi-card, label: Services degraded, value: "1", change: "-1", trend: down }
+          - { type: kpi-card, label: Deploy freeze, value: "Off", change: "stable", trend: flat }
+      - columns: 2
+        blocks:
+          - type: system-status-block
+            version: v1.1.0
+            environment: production
+            services:
+              - { id: edge, name: Edge API, status: operational, uptime: 99.99, latencyMs: 74 }
+              - { id: ingest, name: Signal ingest, status: degraded, uptime: 98.90, latencyMs: 224 }
+              - { id: notify, name: Notifications, status: operational, uptime: 99.95, latencyMs: 61 }
+            incidents:
+              - { id: inc-77, title: Ingest backlog building in EU West, date: "Today · 14:05", severity: degraded }
+          - type: activity-feed
+            items:
+              - { time: "14:12", text: "Alert routed to EU on-call bridge", status: warning }
+              - { time: "13:58", text: "Customer-impact banner removed", status: success }
+              - { time: "13:31", text: "Latency spike detected on ingest", status: error }

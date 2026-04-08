@@ -1,8 +1,12 @@
-# Convergio Frontend
+# Convergio Frontend Framework
 
-A **config-driven dashboard framework** with 101 React components, 4 themes, and a shadcn-compatible registry. Write YAML, get a full working app — sidebar, themes, AI chat, data visualizations — with zero custom code.
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-convergio--frontend.vercel.app-blue)](https://convergio-frontend.vercel.app) [![Showcase](https://img.shields.io/badge/Showcase-Cockpit%20%26%20Components-gold)](https://convergio-frontend.vercel.app/showcase/cockpit)
+
+A **config-driven dashboard framework** with 101+ React components, 4 themes, and a shadcn-compatible registry. Write YAML, get a full working app — sidebar, themes, AI chat, data visualizations — with zero custom code.
 
 **Maranello** is the design system inside Convergio. The framework ships everything: layout shell, theme engine, config loader, page renderer, component showcase, and optional AI/desktop layers.
+
+> **Live demo:** [convergio-frontend.vercel.app](https://convergio-frontend.vercel.app) — explore all components interactively, including the [Cockpit](https://convergio-frontend.vercel.app/showcase/cockpit) with Ferrari Luce-inspired gauges, dashboard strip, and instrument binnacle.
 
 ## Two Ways to Use It
 
@@ -79,6 +83,19 @@ pnpm dev    # open http://localhost:3000 — your dashboard is live
 - Command palette (Cmd-K) with fuzzy search across all components
 - Config-driven pages — add new routes by adding entries to `pages:` in YAML
 - Optional AI chat panel, SSE event streams, API polling hooks
+
+### Quick-start presets
+
+If you want a stronger starting point than a blank dashboard, copy one of the curated presets:
+
+```bash
+cp presets/workspace.yaml convergio.yaml   # SaaS / delivery workbench
+cp presets/ops.yaml convergio.yaml         # incident / control center
+cp presets/executive.yaml convergio.yaml   # leadership / board cockpit
+pnpm dev
+```
+
+These presets are intentionally opinionated: believable seed data, one primary workflow per surface, and accessibility defaults kept on by design.
 
 **What you add when you need it:**
 - Custom React pages in `src/app/(dashboard)/your-page/page.tsx`
@@ -371,12 +388,14 @@ navigation:
 
 ## Showcase
 
-The built-in showcase at `/showcase` demonstrates all 101 components with live interactive demos:
+The built-in showcase at `/showcase` demonstrates all components with live interactive demos:
 
-- **Landing** (`/showcase`) — category cards with component counts + live previews
+- **Landing** (`/showcase`) — category cards with component counts + live signature preview
+- **Cockpit** (`/showcase/cockpit`) — Ferrari Luce-inspired instruments: performance dials, dashboard strip, KPI binnacle with complications (arcBar, subDials, crosshair, multigraph), resource heatmap, system status
 - **Category pages** (`/showcase/[category]`) — live demos with inline documentation (description, when to use, props table, code examples)
 - **Icons browser** (`/showcase/icons`) — searchable grid of all Lucide icons with click-to-copy
 - **Theme playground** (`/showcase/themes`) — side-by-side comparison across all 4 themes
+- **Presets** (`/showcase/presets`) — starter configuration previews (workspace, ops, executive)
 
 ### Command Palette (Cmd-K)
 

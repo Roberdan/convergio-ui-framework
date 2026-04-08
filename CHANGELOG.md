@@ -1,5 +1,24 @@
 # Changelog
 
+## [Unreleased]
+
+### Cockpit Showcase & Gauge Complications
+- Feat: dedicated **Cockpit** showcase section (`/showcase/cockpit`) with 6 instrument groups faithful to the old convergio-design demo
+- Feat: `MnGauge` now supports **crosshair** complication (scatter dots, axis labels, quadrant counts) — new `crosshair` and `quadrantCounts` props
+- Feat: `MnGauge` now supports **multigraph** complication (sparkline area chart inside gauge face) — new `multigraph` prop
+- Feat: `MnGauge` center text overrides via `centerValue` and `centerUnit` props for no-needle gauge modes
+- Feat: cockpit performance dials with Ferrari `-225`/`45` bottom-center orientation
+- Feat: KPI instrument cluster (binnacle) with Utilization (innerRing+odometer), Quality Score (arcBar+subDials+trend), Portfolio Map (crosshair+scatter), signal panels
+- Feat: 5-zone dashboard strip (gauge, 7-row pipeline, 4-series trend, board, gauge)
+- Feat: secondary gauge cluster (Risk Level, Data Quality, KPI Coverage, Quality Trend with multigraph)
+- Feat: resource heatmap and system status in cockpit section
+- Feat: cockpit added to sidebar navigation with Gauge icon
+
+### Preset Gallery
+- Feat: added `/showcase/presets` with three accessibility-first starter previews: workspace, ops, and executive
+- Feat: upgraded the showcase landing preview from toy widgets to product-style live surfaces
+- Docs: added curated preset YAMLs under `presets/` and quick-start instructions in `README.md`
+
 ## [1.1.0] - 07 April 2026
 
 ### Agent Skill Definitions
