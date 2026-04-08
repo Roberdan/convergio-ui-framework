@@ -5,7 +5,7 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 2 : undefined,
   reporter: "html",
   use: {
     baseURL: "http://127.0.0.1:3015",
@@ -16,7 +16,9 @@ export default defineConfig({
     { name: "webkit", use: { browserName: "webkit" } },
   ],
   webServer: {
-    command: "pnpm build && pnpm start -p 3015",
+    command: process.env.CI
+      ? "pnpm start -p 3015"
+      : "pnpm build && pnpm start -p 3015",
     url: "http://127.0.0.1:3015",
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,

@@ -12,44 +12,87 @@ concurrency:
 
 jobs:
   quality:
-    name: Build & Test
+    name: Lint & Typecheck
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-
       - uses: pnpm/action-setup@v4
         with:
           version: 10
-
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
+      - run: pnpm install --frozen-lockfile
       - name: Typecheck
         run: pnpm typecheck
-
       - name: Lint
         run: pnpm lint --max-warnings 20
 
+  build:
+    name: Build & Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('src/**') }}
+          restore-keys: |
+            nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
+            nextjs-${{ runner.os }}-
       - name: Build
         run: pnpm build
-
       - name: Unit tests
         run: pnpm test
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: nextjs-build
+          path: .next
+          retention-days: 1
 
+  e2e:
+    name: E2E Tests
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Download build
+        uses: actions/download-artifact@v4
+        with:
+          name: nextjs-build
+          path: .next
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: pw-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
-
       - name: E2E tests
         continue-on-error: true
         run: pnpm test:e2e --project=chromium
-
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
