@@ -37,6 +37,10 @@ navigation:
           label: Home
           href: /
           icon: Home
+        - id: dashboard
+          label: Dashboard
+          href: /dashboard
+          icon: LayoutDashboard
         - id: icons
           label: Icons
           href: /showcase/icons
