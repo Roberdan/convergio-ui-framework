@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useEventSource } from "./use-event-source"
 
 export type SSEStatus = "connecting" | "open" | "error" | "closed"
@@ -50,7 +50,7 @@ export function useSSEAdapter<T>(config: UseSSEAdapterConfig<T>): UseSSEAdapterR
   const [lastEventState, setLastEventState] = useState<SSEEvent | null>(null)
 
   const mapEventRef = useRef(mapEvent)
-  mapEventRef.current = mapEvent
+  useEffect(() => { mapEventRef.current = mapEvent })
 
   const handleMessage = useCallback((raw: unknown) => {
     const event: SSEEvent = {

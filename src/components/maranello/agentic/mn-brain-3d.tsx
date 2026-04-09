@@ -39,7 +39,7 @@ export function MnBrain3D({
   nodes, edges, onNodeClick, onNodeHover,
   autoRotate = true, autoRotateSpeed = 0.5, showLabels = true,
   height = 500, ariaLabel = "3D agent network visualization",
-  particleSize, showTraffic,
+  particleSize, showTraffic: _showTraffic,
   size = "md", className, ...rest
 }: MnBrain3DProps) {
   const wrap = React.useRef<HTMLDivElement>(null)
