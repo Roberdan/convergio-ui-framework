@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.1] - 09 April 2026
+
+### Bug Fixes
+- fix(gauge): reverted incorrect -90° Canvas angle offset from v1.3.1 — `startAngle`/`endAngle` props are already in Canvas coordinates and don't need transformation
+
 ## [1.4.0] - 09 April 2026
 
 ### Agentic Enhancements (closes #46, #47, #48, #49)
