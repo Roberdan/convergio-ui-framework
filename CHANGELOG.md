@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.1] - 09 April 2026
+
+### Bug Fixes
+- fix(gauge): corrected MnGauge needle rotation off by 90° — applied -90° Canvas angle offset so the gauge arc spans 7→5 o'clock as expected (closes #43)
+
+### Tests
+- test(e2e): added comprehensive full-navigation Playwright suite (529 lines) covering all 12 dashboard pages, sidebar navigation, modals, filters, stress tests, and accessibility checks
+
 ## [1.3.0] - 09 April 2026
 
 ### i18n (closes #41, #42)
