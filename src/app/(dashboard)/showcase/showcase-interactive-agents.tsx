@@ -10,6 +10,7 @@ import {
   MnStreamingText,
   MnAgentTrace,
   MnApprovalChain,
+  MnProcessTimeline,
   MnModal,
   MnStateScaffold,
   MnToast,
@@ -95,6 +96,22 @@ export function ShowcaseInteractiveAgents() {
       <div className="md:col-span-2">
         <ComponentDoc entry={entry('mn-approval-chain')} example={`<MnApprovalChain steps={steps} orientation="horizontal" />`}>
           <MnApprovalChain steps={approvalSteps} orientation="horizontal" />
+        </ComponentDoc>
+      </div>
+
+      <div className="md:col-span-2">
+        <ComponentDoc entry={entry('mn-process-timeline')} example={`<MnProcessTimeline steps={steps} showActors showDuration />`}>
+          <MnProcessTimeline
+            steps={[
+              { id: "1", label: "Request", status: "done", actor: { name: "Student" }, duration: "2m" },
+              { id: "2", label: "Review", status: "done", actor: { name: "Admin", color: "var(--mn-info)" }, duration: "1h" },
+              { id: "3", label: "Approval", status: "active", actor: { name: "Dean", color: "var(--mn-warning)" } },
+              { id: "4", label: "Enrollment", status: "pending", actor: { name: "System" } },
+            ]}
+            showActors
+            showDuration
+            animate
+          />
         </ComponentDoc>
       </div>
 
