@@ -15,6 +15,13 @@ const eslintConfig = defineConfig([
     // Worktrees from Convergio plan execution:
     ".worktrees/**",
   ]),
+  // Playwright fixtures use `use()` which triggers react-hooks false positive
+  {
+    files: ["e2e/**/*.ts"],
+    rules: {
+      "react-hooks/rules-of-hooks": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

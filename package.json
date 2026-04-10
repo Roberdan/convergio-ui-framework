@@ -11,6 +11,11 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "test:e2e:ci": "CI=true playwright test",
+    "test:e2e:update-snapshots": "playwright test --update-snapshots",
+    "test:e2e:chromium": "playwright test --project=chromium",
+    "test:e2e:firefox": "playwright test --project=firefox",
+    "test:e2e:webkit": "playwright test --project=webkit",
     "mcp": "tsx src/mcp/server.ts",
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build"
