@@ -43,6 +43,7 @@ Before creating ANY UI element, search the catalog by intent:
 | Toast | `MnToast` | Custom alert divs |
 | Stepper/wizard | `MnStepper` | Custom step indicators |
 | Process/workflow timeline | `MnProcessTimeline` | Custom timeline divs |
+| Workflow orchestration | `MnWorkflowOrchestrator` | Custom SVG/canvas graphs |
 | Breadcrumb | `MnBreadcrumb` | Custom path links |
 
 ## How to find the right component

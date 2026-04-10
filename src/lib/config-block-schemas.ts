@@ -139,6 +139,39 @@ const dataTableMaranelloSchema = z.object({
   data: z.array(z.record(z.string(), z.unknown())),
 }).passthrough();
 
+const workflowNodeSchema = z.object({
+  id: z.string(),
+  label: z.string(),
+  icon: z.string().optional(),
+  color: z.string().optional(),
+  status: z.enum(["idle", "active", "thinking", "done", "error"]).optional(),
+  sublabel: z.string().optional(),
+  badge: z.string().optional(),
+  group: z.string().optional(),
+});
+
+const workflowEdgeSchema = z.object({
+  from: z.string(),
+  to: z.string(),
+  directed: z.boolean().optional(),
+  label: z.string().optional(),
+  active: z.boolean().optional(),
+  bidirectional: z.boolean().optional(),
+});
+
+const workflowOrchestratorSchema = z.object({
+  type: z.literal("workflow-orchestrator-block"),
+  nodes: z.array(workflowNodeSchema),
+  edges: z.array(workflowEdgeSchema),
+  layout: z.enum(["circular", "horizontal", "vertical", "auto"]).optional(),
+  phase: z.object({
+    current: z.number(),
+    total: z.number(),
+    label: z.string().optional(),
+    agent: z.string().optional(),
+  }).optional(),
+}).passthrough();
+
 /** Discriminated union of all block types, keyed on `type`. */
 export const blockSchema = z.discriminatedUnion("type", [
   kpiCardSchema,
@@ -158,4 +191,5 @@ export const blockSchema = z.discriminatedUnion("type", [
   okrSchema,
   systemStatusSchema,
   dataTableMaranelloSchema,
+  workflowOrchestratorSchema,
 ]);

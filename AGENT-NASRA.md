@@ -32,6 +32,7 @@ Everything related to charts, gauges, metrics, live data, cockpit instruments, a
 | `MnSystemStatus` | Service health indicators with uptime, latency, incidents |
 | `MnActivityFeed` | Real-time event timelines |
 | `MnInstrumentBinnacle` | Combined instrument panel: strip + event log |
+| `MnWorkflowOrchestrator` | Generic workflow topology: circular, pipeline, vertical, auto layout |
 
 ### MnGauge Complications (Ferrari Luce engine)
 

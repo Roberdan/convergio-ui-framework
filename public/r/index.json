@@ -854,6 +854,21 @@
     ]
   },
   {
+    "name": "mn-workflow-orchestrator",
+    "type": "registry:ui",
+    "description": "mn-workflow-orchestrator component",
+    "dependencies": [
+      "class-variance-authority"
+    ],
+    "registryDependencies": [],
+    "files": [
+      "agentic/mn-workflow-orchestrator.tsx",
+      "agentic/mn-workflow-orchestrator.helpers.tsx",
+      "agentic/mn-workflow-orchestrator.layout.ts",
+      "agentic/mn-workflow-orchestrator.types.ts"
+    ]
+  },
+  {
     "name": "mn-night-jobs",
     "type": "registry:ui",
     "description": "mn-night-jobs component",

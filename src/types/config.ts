@@ -196,6 +196,14 @@ export interface DataTableMaranelloBlock {
   compact?: boolean; loading?: boolean; emptyMessage?: string;
 }
 
+export interface WorkflowOrchestratorBlock {
+  type: "workflow-orchestrator-block";
+  nodes: { id: string; label: string; icon?: string; color?: string; status?: "idle" | "active" | "thinking" | "done" | "error"; sublabel?: string; badge?: string; group?: string }[];
+  edges: { from: string; to: string; directed?: boolean; label?: string; active?: boolean; bidirectional?: boolean }[];
+  layout?: "circular" | "horizontal" | "vertical" | "auto";
+  phase?: { current: number; total: number; label?: string; agent?: string };
+}
+
 /** Union of all available page block types. */
 export type PageBlock =
   | KpiCardBlock
@@ -214,7 +222,8 @@ export type PageBlock =
   | MapBlock
   | OkrBlock
   | SystemStatusBlock
-  | DataTableMaranelloBlock;
+  | DataTableMaranelloBlock
+  | WorkflowOrchestratorBlock;
 
 /* ── Page Structure ── */
 

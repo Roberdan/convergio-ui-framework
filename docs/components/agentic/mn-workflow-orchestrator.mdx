@@ -1,0 +1,58 @@
+---
+title: MnWorkflowOrchestrator
+category: agentic
+description: "Generic real-time workflow visualization with multiple layout algorithms, animated edges, and phase indicator"
+keywords: ["workflow", "orchestrator", "flusso", "orchestratore", "pipeline", "dag", "graph", "grafo", "mesh", "process"]
+---
+
+# MnWorkflowOrchestrator
+
+Generic real-time workflow visualization with multiple layout algorithms, animated edges, and phase indicator.
+
+## When to use
+
+Use to visualize any workflow topology — agent meshes, data pipelines, approval flows, CI/CD stages.
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `nodes` | `WorkflowNode[]` | **required** | Workflow nodes with id, label, status, icon, color |
+| `edges` | `WorkflowEdge[]` | **required** | Connections between nodes |
+| `layout` | `"circular" \| "horizontal" \| "vertical" \| "auto"` | `"circular"` | Layout algorithm |
+| `phase` | `WorkflowPhase` | — | Phase progress indicator |
+| `onNodeClick` | `(nodeId: string) => void` | — | Callback when a node is clicked |
+| `onEdgeClick` | `(from: string, to: string) => void` | — | Callback when an edge is clicked |
+| `selectedNode` | `string` | — | Highlight a specific node |
+| `showParticles` | `boolean` | `true` | Show animated particles on active edges |
+| `animationSpeed` | `number` | `1` | Animation speed multiplier |
+| `size` | `"sm" \| "md" \| "lg" \| "fluid"` | `"fluid"` | Size variant |
+| `ariaLabel` | `string` | — | Accessible label for the SVG |
+
+## Example
+
+```tsx
+import { MnWorkflowOrchestrator } from "@/components/maranello"
+
+<MnWorkflowOrchestrator
+  nodes={[
+    { id: "ingest", label: "Ingest", status: "done", color: "var(--mn-success)" },
+    { id: "validate", label: "Validate", status: "active" },
+    { id: "transform", label: "Transform", status: "idle" },
+    { id: "load", label: "Load", status: "idle" },
+  ]}
+  edges={[
+    { from: "ingest", to: "validate", active: true },
+    { from: "validate", to: "transform" },
+    { from: "transform", to: "load" },
+  ]}
+  layout="horizontal"
+  phase={{ current: 2, total: 4, label: "Validation", agent: "validator-01" }}
+/>
+```
+
+## Accessibility
+
+- Uses `role="img"` with configurable `aria-label`
+- Interactive nodes are keyboard focusable with `role="button"` and `tabIndex`
+- Status changes are conveyed via visual indicators (color, pulse animation, badge)

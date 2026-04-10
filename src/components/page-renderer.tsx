@@ -13,6 +13,7 @@ import {
   MnOkr,
   MnSystemStatus,
   MnDataTable,
+  MnWorkflowOrchestrator,
 } from "@/components/maranello";
 
 /**
@@ -95,6 +96,8 @@ function BlockRenderer({ block }: { block: PageBlock }) {
       return <MnSystemStatus {...block} />;
     case "data-table-maranello":
       return <MnDataTable {...block} />;
+    case "workflow-orchestrator-block":
+      return <MnWorkflowOrchestrator {...block} />;
     default: {
       const unknownType = (block as { type: string }).type;
       if (!KNOWN_TYPES.has(unknownType)) {
