@@ -4,9 +4,9 @@
 
 ## What This Project Is
 
-**Convergio Frontend** is a **config-driven dashboard framework**, not just a component library. It ships a complete, working application: layout shell, sidebar, header, theme engine, page renderer, 101 React components, 4 themes, AI chat, SSE hooks, and a component showcase. Everything is wired together and ready to run.
+**Convergio Frontend** is a **config-driven dashboard framework**, not just a component library. It ships a complete, working application: layout shell, sidebar, header, theme engine, page renderer, 103 React components, 4 themes, AI chat, SSE hooks, and a component showcase. Everything is wired together and ready to run.
 
-**Maranello** is the name of the design system — the 101 components with the `Mn` prefix. It lives *inside* Convergio.
+**Maranello** is the name of the design system — the 103 components with the `Mn` prefix. It lives *inside* Convergio.
 
 ### Two Usage Modes
 
@@ -58,11 +58,11 @@ Config file resolution (first match wins):
 | `src/components/shell/` | App shell: sidebar, header, breadcrumbs, search combobox |
 | `src/app/(dashboard)/layout.tsx` | Dashboard layout — calls `loadAppConfig()` + `loadNavSections()` |
 | `src/app/(dashboard)/[...slug]/page.tsx` | Catch-all route for YAML-defined pages |
-| `src/components/maranello/index.ts` | Barrel export for all 101 Maranello components |
+| `src/components/maranello/index.ts` | Barrel export for all 103 Maranello components |
 | `src/app/globals.css` | Theme tokens: `--mn-*` CSS custom properties for all 4 themes |
 | `CLAUDE.md` | AI-first component selection rules and page composition patterns |
 | `CONSTITUTION.md` | Binding code rules (accessibility, themes, naming, file size limits) |
-| `src/lib/component-catalog-data.ts` | 101-entry searchable catalog — search before creating any UI |
+| `src/lib/component-catalog-data.ts` | 103-entry searchable catalog — search before creating any UI |
 | `src/lib/api-night-agents.ts` | Typed HTTP client for night-agents daemon API |
 | `src/lib/i18n/` | i18n system: `MnLocaleProvider`, `useLocale()`, `resolveLocale()`, English defaults |
 
@@ -122,7 +122,7 @@ No code changes needed. Restart the dev server.
 
 ### Available Block Types
 
-`kpi-card` | `data-table` | `data-table-maranello` | `activity-feed` | `stat-list` | `empty-state` | `ai-chat` | `gauge-block` | `chart-block` (sparkline/donut/area/bar/radar/bubble) | `funnel-block` | `hbar-block` | `speedometer-block` | `gantt-block` | `kanban-block` | `okr-block` | `map-block` | `system-status-block`
+`kpi-card` | `data-table` | `data-table-maranello` | `activity-feed` | `stat-list` | `empty-state` | `ai-chat` | `gauge-block` | `chart-block` (sparkline/donut/area/bar/radar/bubble) | `funnel-block` | `hbar-block` | `speedometer-block` | `gantt-block` | `kanban-block` | `okr-block` | `map-block` | `system-status-block` | `workflow-orchestrator-block`
 
 ---
 

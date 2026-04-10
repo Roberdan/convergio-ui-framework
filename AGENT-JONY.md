@@ -29,6 +29,7 @@ Everything related to data tables, CRUD pages, forms, modals, detail panels, and
 | `MnTabs` | Tab navigation — never custom tab divs |
 | `MnStepper` | Multi-step wizards |
 | `MnProcessTimeline` | Horizontal/vertical workflow visualization with actors and status |
+| `MnWorkflowOrchestrator` | Generic workflow topology with 4 layouts, animated edges, phase bar |
 | `MnFilterPanel` / `MnFacetWorkbench` | Filter UIs — never custom select dropdowns |
 | `MnSearchDrawer` / `MnCommandPalette` | Search UIs |
 | `MnKanbanBoard` | Kanban views |
