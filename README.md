@@ -1,12 +1,12 @@
-# Convergio Frontend Framework
+# Convergio UI Framework
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-convergio--frontend.vercel.app-blue)](https://convergio-frontend.vercel.app) [![Showcase](https://img.shields.io/badge/Showcase-Cockpit%20%26%20Components-gold)](https://convergio-frontend.vercel.app/showcase/cockpit)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-convergio--ui--framework.vercel.app-blue)](https://convergio-ui-framework.vercel.app) [![Showcase](https://img.shields.io/badge/Showcase-Cockpit%20%26%20Components-gold)](https://convergio-ui-framework.vercel.app/showcase/cockpit)
 
-A **config-driven dashboard framework** with 101+ React components, 4 themes, and a shadcn-compatible registry. Write YAML, get a full working app — sidebar, themes, AI chat, data visualizations — with zero custom code.
+A **config-driven dashboard framework** with 103 React components, 4 themes, and a shadcn-compatible registry. Write YAML, get a full working app — sidebar, themes, AI chat, data visualizations — with zero custom code.
 
 **Maranello** is the design system inside Convergio. The framework ships everything: layout shell, theme engine, config loader, page renderer, component showcase, and optional AI/desktop layers.
 
-> **Live demo:** [convergio-frontend.vercel.app](https://convergio-frontend.vercel.app) — explore all components interactively, including the [Cockpit](https://convergio-frontend.vercel.app/showcase/cockpit) with Ferrari Luce-inspired gauges, dashboard strip, and instrument binnacle.
+> **Live demo:** [convergio-ui-framework.vercel.app](https://convergio-ui-framework.vercel.app) — explore all components interactively, including the [Cockpit](https://convergio-ui-framework.vercel.app/showcase/cockpit) with Ferrari Luce-inspired gauges, dashboard strip, and instrument binnacle.
 
 ### Screenshots
 
@@ -22,114 +22,56 @@ A **config-driven dashboard framework** with 101+ React components, 4 themes, an
 |---|---|
 | ![Agentic](docs/screenshots/agentic.png) | ![Data Viz](docs/screenshots/dataviz.png) |
 
-## Two Ways to Use It
+## Three Ways to Use It
 
-> **Note:** The `convergio-design` repo (lower-level design tokens and web components) has been **archived**. For all new projects — whether you want the full framework or individual components — start here with `convergio-frontend`.
+> **Note:** The `convergio-design` repo has been **archived**. Start here for everything.
 
 ### 1. Framework Mode — Clone and Configure (Recommended)
 
 Clone this repo, edit one YAML file, and you have a production-ready dashboard app. No React code required for basic dashboards.
 
 ```bash
-git clone https://github.com/Roberdan/convergio-frontend.git my-app
+git clone https://github.com/Roberdan/convergio-ui-framework.git my-app
 cd my-app
 pnpm install
+pnpm dev    # open http://localhost:3000
 ```
 
-Edit `maranello.yaml` (or `convergio.yaml`) in the project root:
+Edit `maranello.yaml` — branding, navigation, pages, AI agents — all config-driven.
 
-```yaml
-app:
-  name: Acme Dashboard
-  logo: /logo.svg
+### 2. Core Package Mode — Install the Framework Shell
 
-theme:
-  default: dark
-
-navigation:
-  sections:
-    - label: Main
-      items:
-        - { id: home, label: Home, href: /, icon: LayoutDashboard }
-        - { id: team, label: Team, href: /team, icon: Users }
-
-pages:
-  /:
-    title: Home
-    rows:
-      - columns: 3
-        blocks:
-          - { type: kpi-card, label: Revenue, value: "$1.2M", change: "+8%", trend: up }
-          - { type: kpi-card, label: Users, value: "34,521", change: "+12%", trend: up }
-          - { type: kpi-card, label: Uptime, value: "99.97%", trend: flat }
-      - columns: 2
-        blocks:
-          - type: chart-block
-            chartType: area
-            labels: [Jan, Feb, Mar, Apr, May, Jun]
-            series:
-              - { label: Revenue, data: [80, 95, 110, 108, 130, 142] }
-          - type: gauge-block
-            label: CPU Load
-            value: 73
-            min: 0
-            max: 100
-            unit: "%"
-            size: md
-  /team:
-    title: Team
-    rows:
-      - columns: 1
-        blocks:
-          - type: data-table-maranello
-            columns: [{ accessorKey: name, header: Name }, { accessorKey: role, header: Role }]
-            data:
-              - { name: Alice, role: Engineer }
-              - { name: Bob, role: Designer }
-```
+Already have a Next.js project? Install only the framework core (shell, config, theme, hooks) and add the components you need:
 
 ```bash
-pnpm dev    # open http://localhost:3000 — your dashboard is live
+# Install the core framework
+npm install github:Roberdan/convergio-ui-framework#packages/core
+
+# Ask Nasra which components your YAML config needs
+pnpm mcp  # then call: analyze_yaml_needs with your YAML
+
+# Install only those components (shadcn-style, copied to your project)
+npx shadcn add mn-gauge mn-chart mn-data-table --registry https://convergio-ui-framework.vercel.app/r
 ```
 
-**What you get out of the box:**
-- Responsive sidebar navigation (auto-generated from YAML)
-- 4 themes with one-click switching (header dropdown, Cmd-K palette, or Manettino dial)
-- WCAG 2.2 AA accessibility with floating a11y toolbar
-- Command palette (Cmd-K) with fuzzy search across all components
-- Config-driven pages — add new routes by adding entries to `pages:` in YAML
-- Optional AI chat panel, SSE event streams, API polling hooks
+```tsx
+import { AppShell, loadNavSections, PageRenderer } from "@convergio/core";
+import { MnGauge } from "./components/maranello/data-viz/mn-gauge";
+```
 
-### Quick-start presets
+This gives you the shell + config engine without copying all 103 components.
 
-If you want a stronger starting point than a blank dashboard, copy one of the curated presets:
+### 3. Registry Mode — Cherry-Pick Components Only
+
+Just want individual components in an existing project?
 
 ```bash
-cp presets/workspace.yaml convergio.yaml   # SaaS / delivery workbench
-cp presets/ops.yaml convergio.yaml         # incident / control center
-cp presets/executive.yaml convergio.yaml   # leadership / board cockpit
-pnpm dev
+npx shadcn add mn-badge mn-gauge --registry https://convergio-ui-framework.vercel.app/r
 ```
 
-These presets are intentionally opinionated: believable seed data, one primary workflow per surface, and accessibility defaults kept on by design.
+Components are self-contained `.tsx` files copied into your project. Dependencies auto-resolved via `registryDependencies` in each registry JSON.
 
-**What you add when you need it:**
-- Custom React pages in `src/app/(dashboard)/your-page/page.tsx`
-- Custom components in `src/components/maranello/your-category/`
-- API backend connection via `API_URL` env var + `use-api-query` / `use-event-source` hooks
-
-### 2. Registry Mode — Cherry-Pick Components
-
-Already have a Next.js/React project? Install individual Maranello components via the shadcn CLI:
-
-```bash
-npx shadcn add mn-badge --registry https://your-maranello-host/r
-npx shadcn add mn-gauge mn-chart mn-data-table --registry https://your-maranello-host/r
-```
-
-Browse the full registry at `/r/index.json`. Each component JSON includes source code, npm dependencies, and registry dependencies. See `docs/guides/using-the-registry.md` for setup instructions.
-
-> **Note:** Registry mode gives you individual components. Framework mode gives you the complete app shell, config engine, theme system, and all 101 components working together.
+> **Summary:** Framework mode = full app. Core package = shell + pick your components. Registry = components only.
 
 ---
 
@@ -164,7 +106,7 @@ If no config file is found, the framework renders sensible defaults (app name "M
 |---|---|
 | Framework | Next.js 16 App Router |
 | UI Primitives | shadcn/ui + Base UI + Tailwind CSS v4 |
-| Design System | Maranello — 101 components with `Mn` prefix |
+| Design System | Maranello — 103 components with `Mn` prefix |
 | Typography | Outfit (headings), Inter (body), Barlow Condensed (mono/data) |
 | Themes | 4: Navy, Dark, Light, Colorblind (WCAG 2.2 AA) |
 | Icons | Lucide only (no emoji — CONSTITUTION P2) |
@@ -329,7 +271,7 @@ src/
     globals.css             # theme tokens: --mn-* + shadcn bridge vars
     layout.tsx              # root: fonts, theme script, CanvasSafeArc
   components/
-    maranello/              # Maranello Design System — 101 components
+    maranello/              # Maranello Design System — 103 components
       agentic/              #   7 AI/agent components
       data-display/         #  12 data display components
       data-viz/             #  14 data visualization components
@@ -343,7 +285,7 @@ src/
       strategy/             #  11 strategy components
       theme/                #   6 theme control + accessibility components
       shared/               #   shared utilities + tests
-      index.ts              #   barrel re-export (all 101 components)
+      index.ts              #   barrel re-export (all 103 components)
     blocks/                 # page blocks — renders config → UI
     page-renderer.tsx       # renders config pages → block grid
     shell/                  # sidebar, header, command-menu (Cmd-K)
@@ -358,7 +300,7 @@ src/
     config-loader.ts        # YAML parser + Zod validation (cached, file-watched in dev)
     config-schema.ts        # Zod schema for config file
     config-block-schemas.ts # Zod schemas for each block type
-    component-catalog.ts    # 101-entry catalog with bilingual search
+    component-catalog.ts    # 103-entry catalog with bilingual search
     env.ts                  # environment variable resolution
     icon-map.ts             # Lucide icon name → component resolver
     icon-slot.tsx           # <IconSlot name="..." /> for dynamic icons
@@ -367,7 +309,7 @@ src/
 src-tauri/                  # optional Tauri desktop scaffold
 docs/
   guides/                   # how-to guides (see Documentation section)
-  components/               # per-component MDX docs (101 files)
+  components/               # per-component MDX docs (103 files)
   adr/                      # architecture decision records
 ```
 
@@ -418,13 +360,13 @@ The built-in showcase at `/showcase` demonstrates all components with live inter
 ### Command Palette (Cmd-K)
 
 Press `Cmd+K` (or `Ctrl+K`) to open the command palette:
-- **Fuzzy search** across all 101 components (bilingual IT/EN keywords)
+- **Fuzzy search** across all 103 components (bilingual IT/EN keywords)
 - **Category navigation** — jump to any showcase section
 - **Theme switching** — switch between all 4 themes
 
 ## MCP Server (AI Agent Integration)
 
-The framework includes a built-in [Model Context Protocol](https://modelcontextprotocol.io) server that lets AI agents discover components, generate YAML configs, and get composition advice.
+Built-in [Model Context Protocol](https://modelcontextprotocol.io) server — 10 tools for AI agents.
 
 ```bash
 pnpm mcp   # starts the MCP server (stdio transport)
@@ -434,13 +376,16 @@ pnpm mcp   # starts the MCP server (stdio transport)
 
 | Tool | Description |
 |---|---|
-| `search_components` | Fuzzy search the 101+ component catalog by name, category, or keyword |
+| `search_components` | Fuzzy search the 103 component catalog by name, category, or keyword |
 | `get_component` | Full details: props, when-to-use, code example, file path |
 | `list_categories` | All categories with component counts |
 | `generate_yaml_page` | Generate valid YAML page config from a description |
 | `list_block_types` | Available YAML block types with descriptions |
 | `get_composition` | Recommended component combinations for a use-case |
 | `get_theme_tokens` | Theme color tokens for all 4 themes |
+| `analyze_yaml_needs` | Parse a YAML config and list which components are needed |
+| `resolve_component_deps` | Resolve transitive dependencies for a list of components |
+| `install_components` | Generate shadcn install command with all resolved deps |
 
 ### Configure in your MCP client
 
@@ -451,7 +396,7 @@ pnpm mcp   # starts the MCP server (stdio transport)
     "convergio": {
       "command": "npx",
       "args": ["tsx", "src/mcp/server.ts"],
-      "cwd": "/path/to/convergio-frontend"
+      "cwd": "/path/to/convergio-ui-framework"
     }
   }
 }
@@ -476,7 +421,7 @@ The `public/r/` directory contains a shadcn-compatible component registry:
 
 ```
 public/r/
-  index.json              # full catalog with metadata for all 101 components
+  index.json              # full catalog with metadata for all 103 components
   mn-badge.json           # individual component (source + dependencies)
   mn-gauge.json
   ...
@@ -546,7 +491,7 @@ import { MnLocaleProvider } from "@/lib/i18n";
 
 ---
 
-## Component Catalog (101 components)
+## Component Catalog (103 components)
 
 ```tsx
 import { MnBadge, MnChart, MnDataTable, MnGauge } from "@/components/maranello"
