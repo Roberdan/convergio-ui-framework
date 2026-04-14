@@ -27,8 +27,8 @@ export interface AgentConfig {
   name: string;
   /** Short description of the agent's purpose. */
   description: string;
-  /** LLM provider — SDK-based or CLI-based. */
-  provider: "openai" | "anthropic" | "copilot" | "qwen" | "qwen-cli" | "claude-cli" | "copilot-cli" | "custom";
+  /** LLM provider — SDK-based via Vercel AI SDK. */
+  provider: "openai" | "anthropic" | "copilot" | "qwen" | "azure" | "custom";
   /** Model identifier (e.g. "gpt-4o", "claude-sonnet-4-6"). */
   model: string;
   /** System prompt that defines agent behavior. */

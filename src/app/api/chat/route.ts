@@ -5,18 +5,16 @@ import { z } from "zod";
 import { loadAIConfig } from "@/lib/config-loader";
 import { verifyValue } from "@/lib/session";
 import type { AgentConfig } from "@/types/ai";
-import { streamViaCli, isCliProvider } from "./route.helpers";
 
 /**
- * POST /api/chat — streaming chat completions.
+ * POST /api/chat — streaming chat completions via Vercel AI SDK.
  *
  * Requires authenticated session cookie.
  * Accepts: { messages, agentId? }
  * Input is validated with Zod before processing.
  *
  * Provider routing is config-driven via convergio.yaml:
- * - SDK-based: "openai", "anthropic", "copilot", "qwen"
- * - CLI-based: "claude-cli", "copilot-cli", "qwen-cli" (spawn local binary)
+ * "openai", "anthropic", "copilot", "qwen", "azure"
  */
 
 const chatRequestSchema = z.object({
@@ -31,6 +29,16 @@ function resolveModel(agent: AgentConfig) {
   switch (agent.provider) {
     case "openai":
       return openai(agent.model);
+    case "azure": {
+      const azure = createOpenAI({
+        baseURL: process.env.AZURE_OPENAI_ENDPOINT
+          ? `${process.env.AZURE_OPENAI_ENDPOINT}/openai/deployments`
+          : "",
+        apiKey: process.env.AZURE_OPENAI_API_KEY ?? "",
+        headers: { "api-key": process.env.AZURE_OPENAI_API_KEY ?? "" },
+      });
+      return azure(agent.model);
+    }
     case "qwen": {
       const qwen = createOpenAI({
         baseURL: process.env.QWEN_BASE_URL ?? "https://dashscope.aliyuncs.com/compatible-mode/v1",
@@ -52,10 +60,6 @@ function resolveModel(agent: AgentConfig) {
       });
       return copilot(agent.model);
     }
-    case "qwen-cli":
-    case "claude-cli":
-    case "copilot-cli":
-      throw new Error("CLI providers use streamViaCli, not resolveModel.");
     case "custom":
       throw new Error(
         `Provider "custom" not configured for agent "${agent.id}".`,
@@ -117,30 +121,6 @@ export async function POST(req: Request) {
       { status: 503 },
     );
   }
-
-  /* CLI-based providers: bypass Vercel AI SDK, spawn local process */
-  if (isCliProvider(agent.provider)) {
-    const lastUserMsg = [...messages].reverse().find((m) => m.role === "user");
-    if (!lastUserMsg) {
-      return Response.json(
-        { error: { code: "NO_USER_MESSAGE", message: "No user message found" } },
-        { status: 422 },
-      );
-    }
-    const stream = streamViaCli(agent, lastUserMsg.content);
-    const response = new Response(stream, {
-      status: 200,
-      headers: {
-        "Content-Type": "text/plain; charset=utf-8",
-        "Transfer-Encoding": "chunked",
-        "X-RateLimit-Limit": "60",
-        "X-RateLimit-Remaining": "59",
-      },
-    });
-    return response;
-  }
-
-  /* SDK-based providers: resolve model and stream via Vercel AI SDK */
 
   let model;
   try {
