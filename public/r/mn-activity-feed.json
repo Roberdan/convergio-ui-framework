@@ -9,5 +9,7 @@
     }
   ],
   "dependencies": [],
-  "registryDependencies": []
+  "registryDependencies": [
+    "mn-format"
+  ]
 }

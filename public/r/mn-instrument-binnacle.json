@@ -9,5 +9,9 @@
     }
   ],
   "dependencies": [],
-  "registryDependencies": []
+  "registryDependencies": [
+    "mn-binnacle",
+    "mn-dashboard-strip",
+    "mn-format"
+  ]
 }

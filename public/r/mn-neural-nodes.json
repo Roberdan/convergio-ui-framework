@@ -26,5 +26,9 @@
   "dependencies": [
     "class-variance-authority"
   ],
-  "registryDependencies": []
+  "registryDependencies": [
+    "mn-neural-nodes-draw",
+    "mn-neural-nodes-force",
+    "mn-neural-nodes-types"
+  ]
 }

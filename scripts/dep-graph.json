@@ -1,0 +1,164 @@
+{
+  "mn-a11y": [],
+  "mn-a11y-fab": [],
+  "mn-active-missions": [],
+  "mn-activity-feed": [
+    "mn-format"
+  ],
+  "mn-admin-shell": [],
+  "mn-agent-cost-breakdown": [
+    "mn-format"
+  ],
+  "mn-agent-trace": [],
+  "mn-approval-chain": [],
+  "mn-async-select": [],
+  "mn-audit-log": [
+    "mn-format"
+  ],
+  "mn-augmented-brain": [],
+  "mn-augmented-brain-v2": [],
+  "mn-avatar": [],
+  "mn-badge": [],
+  "mn-bcg-matrix": [],
+  "mn-binnacle": [
+    "mn-format"
+  ],
+  "mn-brain-3d": [],
+  "mn-breadcrumb": [],
+  "mn-budget-treemap": [],
+  "mn-bullet-chart": [],
+  "mn-business-model-canvas": [],
+  "mn-calendar-range": [],
+  "mn-chart": [],
+  "mn-chat": [],
+  "mn-cohort-grid": [
+    "mn-format"
+  ],
+  "mn-command-palette": [],
+  "mn-confidence-chart": [],
+  "mn-cost-timeline": [],
+  "mn-customer-journey": [],
+  "mn-customer-journey-map": [],
+  "mn-dashboard": [],
+  "mn-dashboard-renderer": [],
+  "mn-dashboard-strip": [],
+  "mn-data-table": [],
+  "mn-date-picker": [
+    "mn-format"
+  ],
+  "mn-date-range-picker": [
+    "mn-format"
+  ],
+  "mn-decision-matrix": [],
+  "mn-deployment-table": [
+    "mn-format"
+  ],
+  "mn-design-tokens": [],
+  "mn-detail-panel": [],
+  "mn-dropdown-menu": [],
+  "mn-entity-workbench": [],
+  "mn-facet-workbench": [],
+  "mn-ferrari-control": [],
+  "mn-filter-panel": [],
+  "mn-finops": [
+    "mn-format"
+  ],
+  "mn-flip-counter": [],
+  "mn-form-field": [],
+  "mn-format": [],
+  "mn-funnel": [],
+  "mn-gantt": [],
+  "mn-gauge": [
+    "mn-gauge-crosshair"
+  ],
+  "mn-gauge-crosshair": [],
+  "mn-grid-layout": [],
+  "mn-half-gauge": [],
+  "mn-hbar": [],
+  "mn-header-shell": [],
+  "mn-heatmap": [],
+  "mn-hub-spoke": [],
+  "mn-icon": [
+    "mn-icon-catalog"
+  ],
+  "mn-icon-catalog": [],
+  "mn-instrument-binnacle": [
+    "mn-binnacle",
+    "mn-dashboard-strip",
+    "mn-format"
+  ],
+  "mn-kanban-board": [],
+  "mn-kpi-scorecard": [],
+  "mn-layout-state-machine": [],
+  "mn-login": [],
+  "mn-map": [],
+  "mn-mesh-network": [
+    "mn-mesh-network-canvas",
+    "mn-mesh-network-card",
+    "mn-mesh-network-toolbar"
+  ],
+  "mn-mesh-network-canvas": [
+    "mn-mesh-network",
+    "mn-mesh-network-card",
+    "mn-mesh-network-toolbar"
+  ],
+  "mn-mesh-network-card": [
+    "mn-mesh-network",
+    "mn-mesh-network-canvas",
+    "mn-mesh-network-toolbar"
+  ],
+  "mn-mesh-network-toolbar": [],
+  "mn-modal": [],
+  "mn-network-messages": [],
+  "mn-neural-nodes": [
+    "mn-neural-nodes-draw",
+    "mn-neural-nodes-force",
+    "mn-neural-nodes-types"
+  ],
+  "mn-neural-nodes-draw": [
+    "mn-neural-nodes-types"
+  ],
+  "mn-neural-nodes-force": [
+    "mn-neural-nodes-types"
+  ],
+  "mn-neural-nodes-types": [],
+  "mn-night-jobs": [
+    "mn-format"
+  ],
+  "mn-nine-box-matrix": [],
+  "mn-notification-center": [],
+  "mn-okr": [],
+  "mn-org-chart": [],
+  "mn-pipeline-ranking": [
+    "mn-format"
+  ],
+  "mn-porter-five-forces": [],
+  "mn-process-timeline": [],
+  "mn-profile": [],
+  "mn-progress-ring": [],
+  "mn-risk-matrix": [],
+  "mn-search-drawer": [],
+  "mn-section-card": [],
+  "mn-section-nav": [],
+  "mn-settings-panel": [],
+  "mn-social-graph": [],
+  "mn-source-cards": [],
+  "mn-speedometer": [],
+  "mn-spinner": [],
+  "mn-state-scaffold": [],
+  "mn-stepper": [],
+  "mn-strategy-canvas": [],
+  "mn-streaming-text": [],
+  "mn-swot": [],
+  "mn-system-status": [],
+  "mn-tabs": [],
+  "mn-theme-rotary": [],
+  "mn-theme-toggle": [],
+  "mn-toast": [],
+  "mn-toggle-switch": [],
+  "mn-token-meter": [],
+  "mn-user-table": [],
+  "mn-voice-input": [],
+  "mn-waterfall": [],
+  "mn-workflow-orchestrator": []
+}

@@ -11,5 +11,9 @@
   "dependencies": [
     "class-variance-authority"
   ],
-  "registryDependencies": []
+  "registryDependencies": [
+    "mn-mesh-network",
+    "mn-mesh-network-canvas",
+    "mn-mesh-network-toolbar"
+  ]
 }
