@@ -20,6 +20,7 @@ vi.mock("@/lib/session", () => ({
 
 vi.mock("@ai-sdk/openai", () => ({
   openai: vi.fn(() => ({ modelId: "gpt-4o" })),
+  createOpenAI: vi.fn(() => vi.fn(() => ({ modelId: "qwen-plus" }))),
 }));
 
 vi.mock("ai", () => ({

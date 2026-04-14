@@ -27,8 +27,8 @@ export interface AgentConfig {
   name: string;
   /** Short description of the agent's purpose. */
   description: string;
-  /** LLM provider: "openai", "anthropic", or "custom". */
-  provider: "openai" | "anthropic" | "custom";
+  /** LLM provider: "openai", "anthropic", "qwen", or "custom". */
+  provider: "openai" | "anthropic" | "qwen" | "custom";
   /** Model identifier (e.g. "gpt-4o", "claude-sonnet-4-6"). */
   model: string;
   /** System prompt that defines agent behavior. */

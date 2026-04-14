@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { openai } from "@ai-sdk/openai";
+import { openai, createOpenAI } from "@ai-sdk/openai";
 import { streamText } from "ai";
 import { z } from "zod";
 import { loadAIConfig } from "@/lib/config-loader";
@@ -27,6 +27,13 @@ function resolveModel(agent: AgentConfig) {
   switch (agent.provider) {
     case "openai":
       return openai(agent.model);
+    case "qwen": {
+      const qwen = createOpenAI({
+        baseURL: process.env.QWEN_BASE_URL ?? "https://dashscope.aliyuncs.com/compatible-mode/v1",
+        apiKey: process.env.QWEN_API_KEY ?? "",
+      });
+      return qwen(agent.model);
+    }
     case "anthropic":
       throw new Error(
         `Provider "anthropic" not configured for agent "${agent.id}".`,
