@@ -1,8 +1,10 @@
 import type { CatalogEntry } from './component-catalog-data';
 
-function c(name: string, slug: string, cat: string, desc: string, when: string, kw: string[]): CatalogEntry {
+function c(name: string, slug: string, cat: string, desc: string, when: string, kw: string[],
+  deps: string[] = [], regDeps: string[] = []): CatalogEntry {
   return { name, slug, category: cat, description: desc, whenToUse: when,
-    filePath: `${cat}/${slug}.tsx`, propsInterface: `${name}Props`, keywords: kw };
+    filePath: `${cat}/${slug}.tsx`, propsInterface: `${name}Props`, keywords: kw,
+    dependencies: deps, registryDependencies: regDeps };
 }
 
 export const CATALOG_A: CatalogEntry[] = [

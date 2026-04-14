@@ -9,6 +9,10 @@ export interface CatalogEntry {
   whenToUse: string;
   filePath: string;
   propsInterface: string;
+  /** npm packages this component requires (e.g. "lucide-react", "recharts") */
+  dependencies: string[];
+  /** other Maranello components this component depends on (by slug) */
+  registryDependencies: string[];
 }
 
 import { CATALOG_A } from './component-catalog-entries-a';

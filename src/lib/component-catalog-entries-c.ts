@@ -1,8 +1,10 @@
 import type { CatalogEntry } from './component-catalog-data';
 
-function c(name: string, slug: string, cat: string, desc: string, when: string, kw: string[]): CatalogEntry {
+function c(name: string, slug: string, cat: string, desc: string, when: string, kw: string[],
+  deps: string[] = [], regDeps: string[] = []): CatalogEntry {
   return { name, slug, category: cat, description: desc, whenToUse: when,
-    filePath: `${cat}/${slug}.tsx`, propsInterface: `${name}Props`, keywords: kw };
+    filePath: `${cat}/${slug}.tsx`, propsInterface: `${name}Props`, keywords: kw,
+    dependencies: deps, registryDependencies: regDeps };
 }
 
 export const CATALOG_C: CatalogEntry[] = [
@@ -103,7 +105,8 @@ export const CATALOG_C: CatalogEntry[] = [
     description: "Ferrari-inspired rotary mode selector with haptic-style detent positions",
     whenToUse: "Use as a themed mode or level selector with rotary dial interaction",
     filePath: "theme/mn-ferrari-control.tsx", propsInterface: "MnManettinoProps",
-    keywords: ["manettino", "rotary", "ferrari", "selector", "selettore", "dial", "ghiera"] },
+    keywords: ["manettino", "rotary", "ferrari", "selector", "selettore", "dial", "ghiera"],
+    dependencies: [], registryDependencies: [] },
   c("MnThemeRotary", "mn-theme-rotary", "theme",
     "Rotary dial for selecting the active color theme with preview swatches",
     "Use to let users browse and switch themes via a physical-dial metaphor",
