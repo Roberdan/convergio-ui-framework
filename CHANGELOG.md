@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1] - 14 April 2026
+
+### Theme Refinements
+- feat(theme): tint all neutral tokens per brand temperature — dark theme warm-amber, colorblind theme cool-blue, light theme warm ivory
+- feat(theme): per-theme tinted shadows with hairline glow borders replacing global pure-black shadows
+- All values verified WCAG AA compliant; navy theme unchanged (already tinted)
+
 ## [1.4.2] - 09 April 2026
 
 ### Bug Fixes (closes #51, #52, #53, #54)
