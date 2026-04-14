@@ -1,1 +1,1 @@
-export * from "@/components/maranello/network";
+export * from "../../../src/components/maranello/network";

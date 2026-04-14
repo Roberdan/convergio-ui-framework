@@ -79,9 +79,11 @@ function BtnGroup<T extends string>({
 function MnA11yFab({
   className,
   position = "fixed",
+  side = "right",
 }: {
   className?: string;
   position?: "fixed" | "inline";
+  side?: "left" | "right";
 }) {
   const t = useLocale("a11yFab");
   const [open, setOpen] = React.useState(false);
@@ -135,7 +137,7 @@ function MnA11yFab({
       ref={containerRef}
       className={cn(
         position === "fixed"
-          ? "fixed bottom-6 right-6 z-[8500]"
+          ? `fixed bottom-6 z-[8500] ${side === "left" ? "left-6" : "right-6"}`
           : "relative z-auto inline-flex",
         className,
       )}
@@ -145,7 +147,9 @@ function MnA11yFab({
         role="dialog"
         aria-label={t.accessibilitySettings}
         className={cn(
-          position === "fixed" ? "absolute bottom-16 right-0" : "absolute left-0 top-14",
+          position === "fixed"
+            ? `absolute bottom-16 ${side === "left" ? "left-0" : "right-0"}`
+            : "absolute left-0 top-14",
           "w-[280px] rounded-lg border border-border bg-card p-4 shadow-xl transition-all duration-200",
           open ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none translate-y-2 opacity-0",
         )}

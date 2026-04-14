@@ -1,5 +1,5 @@
 /** @convergio/core/shell — Shell components. */
-export { AppShell, type AppShellProps } from "@/components/shell/app-shell";
-export { Sidebar, type NavSection, type NavItem } from "@/components/shell/sidebar";
-export { Header } from "@/components/shell/header";
-export { SearchCombobox } from "@/components/shell/search-combobox";
+export { AppShell, type AppShellProps } from "../../src/components/shell/app-shell";
+export { Sidebar, type NavSection, type NavItem } from "../../src/components/shell/sidebar";
+export { Header } from "../../src/components/shell/header";
+export { SearchCombobox } from "../../src/components/shell/search-combobox";

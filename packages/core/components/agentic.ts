@@ -1,1 +1,1 @@
-export * from "@/components/maranello/agentic";
+export * from "../../../src/components/maranello/agentic";

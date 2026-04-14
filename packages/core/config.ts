@@ -6,6 +6,6 @@ export {
   loadAIConfig,
   loadPageRoutes,
   loadLocaleOverrides,
-} from "@/lib/config-loader";
-export { rawConfigSchema, type ValidatedConfig } from "@/lib/config-schema";
-export { blockSchema } from "@/lib/config-block-schemas";
+} from "../../src/lib/config-loader";
+export { rawConfigSchema, type ValidatedConfig } from "../../src/lib/config-schema";
+export { blockSchema } from "../../src/lib/config-block-schemas";

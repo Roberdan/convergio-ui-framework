@@ -1,17 +1,14 @@
 import { Suspense, createElement } from "react";
 import type { PageConfig, PageBlock } from "@/types";
-import { loadAIConfig } from "@/lib/config-loader";
 import { getBlock } from "@/lib/block-registry";
-import { KpiCard, DataTable, ActivityFeed, StatList, EmptyState, AIChatPanel } from "@/components/blocks";
 
 /**
  * Page Renderer — transforms a PageConfig into rendered UI.
  *
- * Maranello block components are loaded from the dynamic block registry
- * (see src/lib/block-registry.ts). Built-in blocks (kpi-card, data-table,
- * activity-feed, stat-list, empty-state, ai-chat) are always available.
+ * All block components are loaded from the dynamic block registry
+ * (see src/lib/block-registry.ts). No block types are hardcoded here.
  *
- * To register Maranello blocks, import block-registrations.ts in your layout:
+ * To register blocks, import block-registrations.ts in your layout:
  * ```ts
  * import "@/lib/block-registrations";
  * ```
@@ -54,41 +51,14 @@ function BlockFallback() {
 }
 
 function BlockRenderer({ block }: { block: PageBlock }) {
-  /* Built-in blocks — always available, no registry needed */
-  switch (block.type) {
-    case "kpi-card":
-      return <KpiCard {...block} />;
-    case "data-table":
-      return <DataTable {...block} />;
-    case "activity-feed":
-      return <ActivityFeed {...block} />;
-    case "stat-list":
-      return <StatList {...block} />;
-    case "empty-state":
-      return <EmptyState {...block} />;
-    case "ai-chat":
-      return <AIChatPanel defaultAgentId={block.agentId} aiConfig={loadAIConfig()} />;
-    default:
-      break;
-  }
-
-  /* Registry blocks — Maranello components registered via block-registry */
-  return <RegistryBlock block={block} />;
-}
-
-function RegistryBlock({ block }: { block: PageBlock }) {
   const Component = getBlock(block.type);
   if (!Component) {
     console.warn(`[PageRenderer] Unknown block type: "${block.type}". Is the component installed and registered?`);
     return null;
   }
-  /* chart-block needs type remapping: block.chartType → component's type prop */
-  const props = block.type === "chart-block"
-    ? (() => { const { type: _t, chartType, ...rest } = block; return { type: chartType, ...rest }; })() // eslint-disable-line @typescript-eslint/no-unused-vars
-    : block;
   return (
     <Suspense fallback={<BlockFallback />}>
-      {createElement(Component, props)}
+      {createElement(Component, block)}
     </Suspense>
   );
 }
