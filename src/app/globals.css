@@ -133,12 +133,12 @@
   --space-2xl: calc(3rem     * var(--mn-a11y-space-scale));
   --space-3xl: calc(4rem     * var(--mn-a11y-space-scale));
 
-  /* ── Shadows ── */
-  --shadow-sm:       0 1px 4px rgba(0,0,0,0.06);
-  --shadow-md:       0 4px 16px rgba(0,0,0,0.10);
-  --shadow-lg:       0 8px 32px rgba(0,0,0,0.14);
-  --shadow-card:     0 2px 20px rgba(0,0,0,0.08);
-  --shadow-elevated: 0 8px 40px rgba(0,0,0,0.12);
+  /* ── Shadows (per-theme tinted; these are navy defaults) ── */
+  --shadow-sm:       0 1px 4px rgba(13,32,69,0.10), 0 0 0 1px rgba(13,32,69,0.04);
+  --shadow-md:       0 4px 16px rgba(13,32,69,0.14), 0 1px 4px rgba(13,32,69,0.08);
+  --shadow-lg:       0 8px 32px rgba(13,32,69,0.18), 0 2px 8px rgba(13,32,69,0.08);
+  --shadow-card:     0 2px 20px rgba(13,32,69,0.12), 0 0 0 1px rgba(13,32,69,0.04);
+  --shadow-elevated: 0 8px 40px rgba(13,32,69,0.16), 0 2px 8px rgba(13,32,69,0.08);
 
   /* ── Transitions ── */
   --ease-out:      cubic-bezier(0.16, 1, 0.3, 1);
@@ -248,27 +248,27 @@
   --mn-accent-text:     #ffffff;
   --mn-accent-bg:       color-mix(in srgb, #DC0000 8%, transparent);
   --mn-accent-border:   color-mix(in srgb, #DC0000 20%, transparent);
-  --mn-surface:         #ffffff;
+  --mn-surface:         #fffdf8;
   --mn-surface-raised:  #faf3e6;
   --mn-surface-sunken:  #e8d5b0;
-  --mn-surface-input:   #ffffff;
-  --mn-surface-overlay: color-mix(in srgb, #ffffff 92%, transparent);
-  --mn-surface-hover:   rgba(0,0,0,0.04);
-  --mn-text:            #111111;
-  --mn-text-muted:      #6b6b6b;
-  --mn-text-secondary:  #444444;
+  --mn-surface-input:   #fffefb;
+  --mn-surface-overlay: color-mix(in srgb, #fffdf8 92%, transparent);
+  --mn-surface-hover:   rgba(80,50,20,0.04);
+  --mn-text:            #1a1714;
+  --mn-text-muted:      #6b6560;
+  --mn-text-secondary:  #4a4440;
   --mn-text-tertiary:   #5a5550;
   --mn-text-disabled:   #7b7469;
-  --mn-text-inverse:    #ffffff;
+  --mn-text-inverse:    #fffdf8;
   --mn-border:          #d4c4a8;
-  --mn-border-subtle:   rgba(0,0,0,0.08);
+  --mn-border-subtle:   rgba(80,50,20,0.07);
   --mn-border-strong:   #b8ad9a;
   --mn-border-focus:    #DC0000;
   --mn-border-error:    #DC0000;
-  --mn-hover-bg:        rgba(0,0,0,0.06);
-  --mn-active-bg:       rgba(0,0,0,0.12);
+  --mn-hover-bg:        rgba(80,50,20,0.05);
+  --mn-active-bg:       rgba(80,50,20,0.10);
   --mn-focus-ring:      #DC0000;
-  --mn-focus-ring-offset: #ffffff;
+  --mn-focus-ring-offset: #fffdf8;
   --mn-error:           #DC0000;
   --mn-error-bg:        color-mix(in srgb, #DC0000 14%, transparent);
   --mn-success:         #008844;
@@ -280,6 +280,13 @@
   --mn-backdrop:        rgba(0,0,0,0.25);
   --mn-scrim:           rgba(0,0,0,0.6);
   --mn-danger-text:     #ffffff;
+
+  /* ── Warm-tinted shadows ── */
+  --shadow-sm:       0 1px 3px rgba(100,60,30,0.08), 0 0 0 1px rgba(100,60,30,0.04);
+  --shadow-md:       0 4px 16px rgba(100,60,30,0.10), 0 1px 4px rgba(100,60,30,0.06);
+  --shadow-lg:       0 12px 40px rgba(100,60,30,0.12), 0 2px 8px rgba(100,60,30,0.06);
+  --shadow-card:     0 2px 20px rgba(100,60,30,0.10), 0 0 0 1px rgba(100,60,30,0.04);
+  --shadow-elevated: 0 8px 40px rgba(100,60,30,0.14), 0 2px 8px rgba(100,60,30,0.06);
 
   /* ── shadcn bridge ── */
   --background: #FAF3E6;
@@ -327,30 +334,30 @@
   /* ── Maranello semantic tokens ── */
   --mn-accent:          #FFC72C;
   --mn-accent-hover:    #e6b326;
-  --mn-accent-text:     #111111;
+  --mn-accent-text:     #13110f;
   --mn-accent-bg:       color-mix(in srgb, #FFC72C 8%, transparent);
   --mn-accent-border:   color-mix(in srgb, #FFC72C 20%, transparent);
-  --mn-surface:         #111111;
-  --mn-surface-raised:  #1a1a1a;
-  --mn-surface-sunken:  #0a0a0a;
-  --mn-surface-input:   #1a1a1a;
-  --mn-surface-overlay: color-mix(in srgb, #000000 82%, transparent);
-  --mn-surface-hover:   rgba(255,255,255,0.04);
-  --mn-text:            #fafafa;
-  --mn-text-muted:      #9e9e9e;
-  --mn-text-secondary:  #cccccc;
-  --mn-text-tertiary:   #c8c8c8;
-  --mn-text-disabled:   #7a7a7a;
-  --mn-text-inverse:    #000000;
-  --mn-border:          #2a2a2a;
-  --mn-border-subtle:   rgba(255,255,255,0.07);
-  --mn-border-strong:   #c8c8c8;
+  --mn-surface:         #13110f;
+  --mn-surface-raised:  #1c1a17;
+  --mn-surface-sunken:  #0c0b09;
+  --mn-surface-input:   #1c1a17;
+  --mn-surface-overlay: color-mix(in srgb, #0c0b09 82%, transparent);
+  --mn-surface-hover:   rgba(255,220,140,0.04);
+  --mn-text:            #faf8f5;
+  --mn-text-muted:      #9a9590;
+  --mn-text-secondary:  #ccc8c2;
+  --mn-text-tertiary:   #c8c4be;
+  --mn-text-disabled:   #7a7570;
+  --mn-text-inverse:    #0c0b09;
+  --mn-border:          #2c2a26;
+  --mn-border-subtle:   rgba(255,220,140,0.06);
+  --mn-border-strong:   #c8c4be;
   --mn-border-focus:    #FFC72C;
   --mn-border-error:    #DC0000;
-  --mn-hover-bg:        rgba(255,255,255,0.06);
-  --mn-active-bg:       rgba(255,255,255,0.12);
+  --mn-hover-bg:        rgba(255,220,140,0.05);
+  --mn-active-bg:       rgba(255,220,140,0.10);
   --mn-focus-ring:      #FFC72C;
-  --mn-focus-ring-offset: #111111;
+  --mn-focus-ring-offset: #13110f;
   --mn-error:           #DC0000;
   --mn-error-bg:        color-mix(in srgb, #DC0000 16%, transparent);
   --mn-success:         #00A651;
@@ -362,6 +369,13 @@
   --mn-backdrop:        rgba(0,0,0,0.4);
   --mn-scrim:           rgba(0,0,0,0.72);
   --mn-danger-text:     #ffffff;
+
+  /* ── Warm-amber tinted shadows + hairline glow ── */
+  --shadow-sm:       0 1px 4px rgba(0,0,0,0.30), 0 0 0 1px rgba(255,199,44,0.06);
+  --shadow-md:       0 4px 16px rgba(0,0,0,0.36), 0 0 0 1px rgba(255,199,44,0.05);
+  --shadow-lg:       0 8px 32px rgba(0,0,0,0.42), 0 0 0 1px rgba(255,199,44,0.05);
+  --shadow-card:     0 2px 20px rgba(0,0,0,0.32), 0 0 0 1px rgba(255,199,44,0.06);
+  --shadow-elevated: 0 8px 40px rgba(0,0,0,0.44), 0 0 0 1px rgba(255,199,44,0.06);
 
   /* ── shadcn bridge ── */
   --background: var(--mn-surface);
@@ -411,27 +425,27 @@
   --mn-accent-text:     #ffffff;
   --mn-accent-bg:       color-mix(in srgb, #0072B2 8%, transparent);
   --mn-accent-border:   color-mix(in srgb, #0072B2 20%, transparent);
-  --mn-surface:         #111111;
-  --mn-surface-raised:  #1a1a1a;
-  --mn-surface-sunken:  #0a0a0a;
-  --mn-surface-input:   #1a1a1a;
-  --mn-surface-overlay: color-mix(in srgb, #000000 82%, transparent);
-  --mn-surface-hover:   rgba(255,255,255,0.04);
-  --mn-text:            #fafafa;
-  --mn-text-muted:      #9e9e9e;
-  --mn-text-secondary:  #cccccc;
-  --mn-text-tertiary:   #c8c8c8;
-  --mn-text-disabled:   #7a7a7a;
-  --mn-text-inverse:    #000000;
-  --mn-border:          #2a2a2a;
-  --mn-border-subtle:   rgba(255,255,255,0.07);
-  --mn-border-strong:   #c8c8c8;
+  --mn-surface:         #10131a;
+  --mn-surface-raised:  #191c24;
+  --mn-surface-sunken:  #0a0c12;
+  --mn-surface-input:   #191c24;
+  --mn-surface-overlay: color-mix(in srgb, #0a0c12 82%, transparent);
+  --mn-surface-hover:   rgba(180,210,255,0.04);
+  --mn-text:            #eaf0f8;
+  --mn-text-muted:      #8a96a8;
+  --mn-text-secondary:  #c0c8d5;
+  --mn-text-tertiary:   #b8c0cc;
+  --mn-text-disabled:   #6a7588;
+  --mn-text-inverse:    #0a0c12;
+  --mn-border:          #242a36;
+  --mn-border-subtle:   rgba(180,210,255,0.06);
+  --mn-border-strong:   #c0c8d5;
   --mn-border-focus:    #0072B2;
   --mn-border-error:    #D55E00;
-  --mn-hover-bg:        rgba(255,255,255,0.06);
-  --mn-active-bg:       rgba(255,255,255,0.12);
+  --mn-hover-bg:        rgba(180,210,255,0.05);
+  --mn-active-bg:       rgba(180,210,255,0.10);
   --mn-focus-ring:      #0072B2;
-  --mn-focus-ring-offset: #111111;
+  --mn-focus-ring-offset: #10131a;
   --mn-error:           #C94000;
   --mn-error-bg:        color-mix(in srgb, #C94000 16%, transparent);
   --mn-success:         #009E73;
@@ -443,6 +457,13 @@
   --mn-backdrop:        rgba(0,0,0,0.4);
   --mn-scrim:           rgba(0,0,0,0.72);
   --mn-danger-text:     #ffffff;
+
+  /* ── Cool-blue tinted shadows + hairline glow ── */
+  --shadow-sm:       0 1px 4px rgba(0,0,0,0.30), 0 0 0 1px rgba(0,114,178,0.06);
+  --shadow-md:       0 4px 16px rgba(0,0,0,0.36), 0 0 0 1px rgba(0,114,178,0.05);
+  --shadow-lg:       0 8px 32px rgba(0,0,0,0.42), 0 0 0 1px rgba(0,114,178,0.05);
+  --shadow-card:     0 2px 20px rgba(0,0,0,0.32), 0 0 0 1px rgba(0,114,178,0.06);
+  --shadow-elevated: 0 8px 40px rgba(0,0,0,0.44), 0 0 0 1px rgba(0,114,178,0.06);
 
   /* ── shadcn bridge ── */
   --background: var(--mn-surface);
@@ -524,6 +545,13 @@
   --mn-backdrop:        rgba(0, 0, 0, 0.5);
   --mn-scrim:           rgba(9, 22, 54, 0.8);
   --mn-danger-text:     #ffffff;
+
+  /* ── Deep-blue tinted shadows + hairline glow ── */
+  --shadow-sm:       0 1px 4px rgba(9,22,54,0.30), 0 0 0 1px rgba(255,199,44,0.05);
+  --shadow-md:       0 4px 16px rgba(9,22,54,0.36), 0 0 0 1px rgba(255,199,44,0.04);
+  --shadow-lg:       0 8px 32px rgba(9,22,54,0.42), 0 0 0 1px rgba(255,199,44,0.04);
+  --shadow-card:     0 2px 20px rgba(9,22,54,0.32), 0 0 0 1px rgba(255,199,44,0.05);
+  --shadow-elevated: 0 8px 40px rgba(9,22,54,0.44), 0 0 0 1px rgba(255,199,44,0.05);
 
   /* ── shadcn bridge ── */
   --background: var(--mn-surface);
