@@ -15,16 +15,20 @@ import { registerSearchTools } from './tools/search';
 import { registerComponentTool } from './tools/component';
 import { registerGenerateTools } from './tools/generate';
 import { registerCompositionTools } from './tools/composition';
+import { registerAnalyzeTools } from './tools/analyze';
+import { registerDepsTools } from './tools/deps';
 
 const server = new McpServer({
-  name: 'convergio-frontend',
-  version: '1.0.0',
+  name: 'convergio-ui-framework',
+  version: '1.1.0',
 });
 
 registerSearchTools(server);
 registerComponentTool(server);
 registerGenerateTools(server);
 registerCompositionTools(server);
+registerAnalyzeTools(server);
+registerDepsTools(server);
 
 async function main() {
   const transport = new StdioServerTransport();
