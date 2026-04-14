@@ -1,6 +1,6 @@
 {
   "name": "@convergio/core",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Convergio UI Framework core — shell, config, theme, hooks, and page renderer for config-driven dashboards.",
   "license": "MPL-2.0",
   "type": "module",
@@ -12,7 +12,21 @@
     "./hooks": "./hooks.ts",
     "./blocks": "./blocks.ts",
     "./block-registry": "./block-registry.ts",
-    "./page-renderer": "./page-renderer.ts"
+    "./page-renderer": "./page-renderer.ts",
+    "./components": "./components.ts",
+    "./components/data-viz": "./components/data-viz.ts",
+    "./components/data-display": "./components/data-display.ts",
+    "./components/navigation": "./components/navigation.ts",
+    "./components/forms": "./components/forms.ts",
+    "./components/feedback": "./components/feedback.ts",
+    "./components/layout": "./components/layout.ts",
+    "./components/strategy": "./components/strategy.ts",
+    "./components/financial": "./components/financial.ts",
+    "./components/agentic": "./components/agentic.ts",
+    "./components/network": "./components/network.ts",
+    "./components/ops": "./components/ops.ts",
+    "./components/theme": "./components/theme-components.ts",
+    "./components/shared": "./components/shared-components.ts"
   },
   "peerDependencies": {
     "next": ">=16",
