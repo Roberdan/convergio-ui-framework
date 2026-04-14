@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.7.1] - 14 April 2026
+
+### Documentation Restructure
+- docs: per-folder `AGENTS.md` in every `src/` subdirectory (9 files) — any agent gets local context on entry
+- docs: root docs slimmed 1059→397 lines (−63%), zero duplication between files
+- docs: agent specialist files restored with full domain knowledge (gauge complications, CRUD patterns, a11y checklist, composition recipes) — updated for v1.7.0 (103 components, 10 MCP tools, 5 providers)
+- docs: README.md updated — "Three Ways to Use It" (framework / core package / registry), 10 MCP tools, correct URLs
+- chore: all `convergio-frontend` references → `convergio-ui-framework`
+
 ## [1.7.0] - 14 April 2026
 
 ### Core Package + Smart Registry
