@@ -169,11 +169,16 @@ export function MnChart({
     return null
   }
 
+  const [mounted, setMounted] = React.useState(false)
+  React.useEffect(() => { setMounted(true) }, [])
+
   return (
     <div className={cn("relative h-48 w-full", className)} role="img" aria-label={`${type} chart`} {...props}>
-      <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
-        {renderChart()!}
-      </ResponsiveContainer>
+      {mounted && (
+        <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
+          {renderChart()!}
+        </ResponsiveContainer>
+      )}
     </div>
   )
 }

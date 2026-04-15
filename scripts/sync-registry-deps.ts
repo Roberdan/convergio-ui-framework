@@ -8,7 +8,7 @@
  *
  * Usage: npx tsx scripts/sync-registry-deps.ts
  */
-import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, readdirSync, statSync } from "node:fs";
 import { join, basename } from "node:path";
 
 const ROOT = process.cwd();

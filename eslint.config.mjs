@@ -15,6 +15,15 @@ const eslintConfig = defineConfig([
     // Worktrees from Convergio plan execution:
     ".worktrees/**",
   ]),
+  // Allow unused vars with _ prefix (destructured-but-unused props, catch bindings)
+  {
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" },
+      ],
+    },
+  },
   // Playwright fixtures use `use()` which triggers react-hooks false positive
   {
     files: ["e2e/**/*.ts"],

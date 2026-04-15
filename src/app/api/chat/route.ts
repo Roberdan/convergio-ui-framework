@@ -2,7 +2,6 @@ import { cookies } from "next/headers";
 import { openai, createOpenAI } from "@ai-sdk/openai";
 import { streamText } from "ai";
 import { z } from "zod";
-import { loadAIConfig } from "@/lib/config-loader";
 import { verifyValue } from "@/lib/session";
 import type { AgentConfig } from "@/types/ai";
 
@@ -109,6 +108,7 @@ export async function POST(req: Request) {
   }
 
   const { messages, agentId } = parsed.data;
+  const { loadAIConfig } = await import("@/lib/config-loader");
   const aiConfig = loadAIConfig();
 
   const agent =

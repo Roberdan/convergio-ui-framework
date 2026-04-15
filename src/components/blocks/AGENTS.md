@@ -11,4 +11,10 @@ Built-in page blocks used by the PageRenderer. These are NOT Maranello component
 | `empty-state` | `empty-state` | Placeholder when no data |
 | `ai-chat-panel` | `ai-chat` | AI chat interface (connects to /api/chat) |
 
-Maranello block types (gauge-block, chart-block, etc.) are registered dynamically via `src/lib/block-registry.ts`.
+## Registration
+
+Each block has a `.register.ts` sidecar that registers it with the block registry (`src/lib/block-registry.ts`).
+Built-in blocks use eager `registerBlock()`, Maranello blocks use lazy `lazyBlock()` for code-splitting.
+All registrations are imported from `src/lib/block-registrations.ts`.
+
+Maranello block types (gauge-block, chart-block, funnel-block, etc.) are registered dynamically via their own `.register.ts` files in `src/components/maranello/*/`.

@@ -5,23 +5,9 @@
  * Usage: npx tsx scripts/scan-deps.ts
  */
 import { readFileSync, readdirSync, statSync } from "node:fs";
-import { join, relative, basename } from "node:path";
+import { join, basename } from "node:path";
 
 const MARANELLO_DIR = join(process.cwd(), "src", "components", "maranello");
-
-/** Recursively find all .tsx files */
-function findTsx(dir: string): string[] {
-  const result: string[] = [];
-  for (const entry of readdirSync(dir)) {
-    const full = join(dir, entry);
-    if (statSync(full).isDirectory()) {
-      result.push(...findTsx(full));
-    } else if (entry.endsWith(".tsx") && !entry.endsWith(".test.tsx") && entry !== "index.ts") {
-      result.push(full);
-    }
-  }
-  return result;
-}
 
 /** Extract slug from file path: mn-gauge.tsx → mn-gauge */
 function toSlug(filePath: string): string {

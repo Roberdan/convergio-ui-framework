@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+.next/
+.nuxt/
+.output/
+
+# Coverage
+coverage/
+.nyc_output/
+
+# OS files
+.DS_Store
+*.swp
+
+# IDE
+.idea/
+.vscode/
+
+# Env
+.env
+.env.local

@@ -107,7 +107,7 @@ function StageRow({ stage, i, next, barW, barX, y, total, reach, rows, animate, 
   )
 }
 
-export function MnFunnel({ data, animate = true, showConversion, size, onStageClick, className, ...props }: MnFunnelProps) {
+export function MnFunnel({ data, animate = true, showConversion: _showConversion, size, onStageClick, className, ...props }: MnFunnelProps) {
   const t = useLocale("funnel")
   if (!data?.pipeline?.length) {
     return (

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "convergio": {
+      "command": "/Users/Roberdan/GitHub/convergio/daemon/target/release/convergio-mcp-server",
+      "args": ["--transport", "stdio"],
+      "env": {
+        "CONVERGIO_MCP_RING": "1",
+        "CONVERGIO_MCP_PROFILE": "compact"
+      }
+    }
+  }
+}
