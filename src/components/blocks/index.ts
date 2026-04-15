@@ -9,7 +9,7 @@
  * 2. Add it to the PageBlock union type
  * 3. Create the component in src/components/blocks/
  * 4. Export it here
- * 5. Register it in the PageRenderer switch
+ * 5. Register it in block-registrations.ts via registerBlock()
  *
  * Available blocks:
  * - KpiCard: headline metric (label + value + trend)

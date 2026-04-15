@@ -10,10 +10,10 @@
  * ```
  */
 
-export { AppShell, type AppShellProps } from "@/components/shell/app-shell";
-export { Sidebar, type NavSection, type NavItem } from "@/components/shell/sidebar";
-export { Header } from "@/components/shell/header";
-export { SearchCombobox } from "@/components/shell/search-combobox";
+export { AppShell, type AppShellProps } from "../../src/components/shell/app-shell";
+export { Sidebar, type NavSection, type NavItem } from "../../src/components/shell/sidebar";
+export { Header } from "../../src/components/shell/header";
+export { SearchCombobox } from "../../src/components/shell/search-combobox";
 
 export {
   loadAppConfig,
@@ -22,15 +22,15 @@ export {
   loadAIConfig,
   loadPageRoutes,
   loadLocaleOverrides,
-} from "@/lib/config-loader";
+} from "../../src/lib/config-loader";
 
-export { ThemeProvider } from "@/components/theme/theme-provider";
-export { ThemeSwitcher } from "@/components/theme/theme-switcher";
-export { ThemeScript } from "@/components/theme/theme-script";
+export { ThemeProvider } from "../../src/components/theme/theme-provider";
+export { ThemeSwitcher } from "../../src/components/theme/theme-switcher";
+export { ThemeScript } from "../../src/components/theme/theme-script";
 
-export { useApiQuery } from "@/hooks/use-api-query";
-export { useEventSource } from "@/hooks/use-event-source";
-export { useSSEAdapter } from "@/hooks/use-sse-adapter";
+export { useApiQuery } from "../../src/hooks/use-api-query";
+export { useEventSource } from "../../src/hooks/use-event-source";
+export { useSSEAdapter } from "../../src/hooks/use-sse-adapter";
 
-export { registerBlock, lazyBlock, getBlock, hasBlock, registeredBlockTypes } from "@/lib/block-registry";
-export { PageRenderer } from "@/components/page-renderer";
+export { registerBlock, lazyBlock, getBlock, hasBlock, registeredBlockTypes } from "../../src/lib/block-registry";
+export { PageRenderer } from "../../src/components/page-renderer";

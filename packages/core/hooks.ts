@@ -1,11 +1,11 @@
 /** @convergio/core/hooks — Data fetching and SSE hooks. */
-export { useApiQuery } from "@/hooks/use-api-query";
-export { useEventSource } from "@/hooks/use-event-source";
-export { useSSEAdapter } from "@/hooks/use-sse-adapter";
+export { useApiQuery } from "../../src/hooks/use-api-query";
+export { useEventSource } from "../../src/hooks/use-event-source";
+export { useSSEAdapter } from "../../src/hooks/use-sse-adapter";
 export {
   useBrain3DLive,
   useAgentTraceLive,
   useHubSpokeLive,
   useApprovalChainLive,
   useActiveMissionsLive,
-} from "@/hooks/use-sse-adapter.convenience";
+} from "../../src/hooks/use-sse-adapter.convenience";
