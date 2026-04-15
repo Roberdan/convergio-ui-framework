@@ -415,6 +415,22 @@ pnpm mcp   # starts the MCP server (stdio transport)
 }
 ```
 
+### Convergio Daemon Integration
+
+If running alongside the [Convergio daemon](https://github.com/Roberdan/convergio), `.mcp.json` in the repo root connects Claude Code to the daemon's MCP server (43+ `cvg_*` tools for plans, agents, knowledge base, mesh, and more):
+
+```json
+{
+  "mcpServers": {
+    "convergio": {
+      "command": "/path/to/convergio-mcp-server",
+      "args": ["--transport", "stdio"],
+      "env": { "CONVERGIO_MCP_RING": "1", "CONVERGIO_MCP_PROFILE": "compact" }
+    }
+  }
+}
+```
+
 ## Component Registry
 
 The `public/r/` directory contains a shadcn-compatible component registry:

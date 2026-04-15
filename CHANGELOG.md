@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.7.2] - 15 April 2026
+
+### Block Registry + Build Fixes
+- feat: 20 `.register.ts` files for dynamic block registration (blocks + Maranello data-viz, network, ops, strategy, agentic)
+- feat: 2 block wrappers (`ai-chat-block-wrapper.tsx`, `chart-block-wrapper.tsx`) for YAML page renderer
+- fix: Recharts SSG warning — `MnChart` now defers `ResponsiveContainer` render until client mount
+- fix: 3 lint warnings in `scripts/scan-deps.ts` (unused `relative` import, unused `findTsx` function) and `scripts/sync-registry-deps.ts` (unused `existsSync` import)
+- fix: Turbopack NFT trace — `api/chat/route.ts` uses dynamic import for `config-loader` to avoid fs tracing
+- chore: `.mcp.json` added for Convergio daemon MCP integration (43+ `cvg_*` tools via stdio)
+
 ## [1.7.1] - 14 April 2026
 
 ### Documentation Restructure
