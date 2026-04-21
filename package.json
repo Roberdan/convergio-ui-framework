@@ -1,6 +1,6 @@
 {
   "name": "convergio-frontend",
-  "version": "1.2.1",
+  "version": "1.8.0",
   "description": "Convergio Frontend Framework — operational shell with 100+ React components, 4 themes, and config-driven product presets. Built on Next.js 16.",
   "private": true,
   "scripts": {

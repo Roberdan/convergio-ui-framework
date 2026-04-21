@@ -1,6 +1,6 @@
 {
   "name": "@convergio/core",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "description": "Convergio UI Framework core — shell, config, theme, hooks, and page renderer for config-driven dashboards.",
   "license": "MPL-2.0",
   "type": "module",

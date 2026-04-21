@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.8.0] - 21 April 2026
+
+### MapLibre Geo Components (ported from mapcn, MIT)
+- feat(network): `MnGeoMap` — MapLibre GL JS tile map container, SSR-safe, auto theme detection from `data-theme` (navy/dark → dark basemap, light/colorblind → light), controlled + uncontrolled viewport, projection support (incl. globe), no default tile provider shipped (consumer supplies `styles`)
+- feat(network): `MnGeoMarker` + `MnGeoMarkerContent` + `MnGeoMarkerLabel` + `MnGeoMarkerPopup` + `MnGeoMarkerTooltip` — lat/lon-anchored markers with click/hover/drag handlers and composable slot children
+- feat(network): `MnGeoPopup` — standalone coordinate-anchored popup independent of markers, with `onClose` handler
+- feat(network): `MnGeoControls` — keyboard-accessible zoom / compass / locate / fullscreen overlay; live-rotating compass SVG
+- feat(i18n): new `geoMap` namespace with 8 English default labels (all interactive strings)
+- feat(catalog): 4 new catalog entries with `dependencies` + `registryDependencies`; network category now 14 components
+- feat(showcase): `MnGeoMap` live demo on `/showcase/network` using OSM + CARTO raster tiles (for illustration only — consumers pick their own tile provider)
+- feat(registry): 4 new `public/r/mn-geo-*.json` shadcn registry entries with inlined file content + updated index
+- feat(deps): `maplibre-gl@^5.15.0` added as regular dependency (BSD-3-Clause)
+- docs: 4 new `.mdx` docs pages + updated README, AGENTS.md, `.claude/CLAUDE.md` (component counts 103 → 107)
+- docs: `THIRD_PARTY_LICENSES.md` added — full mapcn MIT notice + MapLibre BSD-3 summary + tile-provider compliance guidance
+- test: 5 new Vitest smoke tests (MapLibre mocked because happy-dom lacks WebGL)
+
+### Compliance
+- mapcn is MIT (© 2025 Anmoldeep Singh); attribution preserved in per-file headers and `THIRD_PARTY_LICENSES.md`.
+- MapLibre GL JS is BSD-3-Clause; bundled unmodified via npm.
+- Tile data is NOT shipped — consumer supplies `styles` and complies with their chosen provider's TOS (OSM, CARTO, MapTiler, Mapbox, etc.). MapLibre renders `attributionControl` automatically.
+
 ## [1.7.2] - 15 April 2026
 
 ### Block Registry + Build Fixes

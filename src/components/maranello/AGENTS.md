@@ -1,6 +1,6 @@
 # Maranello Components
 
-103 React components with `Mn` prefix. CVA + cn() for variants. `"use client"` only if hooks used.
+107 React components with `Mn` prefix. CVA + cn() for variants. `"use client"` only if hooks used.
 
 ## Categories
 
@@ -14,7 +14,7 @@
 | `forms/` | 11 | Form fields, selects, date pickers, profiles | Jony |
 | `layout/` | 8 | Dashboards, grids, section cards, panels | Sara |
 | `navigation/` | 5 | Breadcrumbs, tabs, section nav, command palette | Sara |
-| `network/` | 10 | Mesh network, maps, system status, org charts | Nasra |
+| `network/` | 14 | Mesh network, maps (canvas + MapLibre tile), system status, org charts | Nasra |
 | `ops/` | 8 | Gantt, kanban, deployment tables, night jobs | Jony |
 | `shared/` | 2 | Format helpers, test utilities | — |
 | `strategy/` | 11 | OKR, SWOT, risk matrix, BCG, porter, canvas | Sara |

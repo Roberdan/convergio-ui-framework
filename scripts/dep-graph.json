@@ -43,6 +43,7 @@
   "mn-dashboard-renderer": [],
   "mn-dashboard-strip": [],
   "mn-data-table": [],
+  "mn-data-table.register": [],
   "mn-date-picker": [
     "mn-format"
   ],
@@ -67,14 +68,22 @@
   "mn-form-field": [],
   "mn-format": [],
   "mn-funnel": [],
+  "mn-funnel.register": [],
   "mn-gantt": [],
+  "mn-gantt.register": [],
   "mn-gauge": [
     "mn-gauge-crosshair"
   ],
   "mn-gauge-crosshair": [],
+  "mn-gauge.register": [],
+  "mn-geo-controls": [],
+  "mn-geo-map": [],
+  "mn-geo-marker": [],
+  "mn-geo-popup": [],
   "mn-grid-layout": [],
   "mn-half-gauge": [],
   "mn-hbar": [],
+  "mn-hbar.register": [],
   "mn-header-shell": [],
   "mn-heatmap": [],
   "mn-hub-spoke": [],
@@ -88,10 +97,12 @@
     "mn-format"
   ],
   "mn-kanban-board": [],
+  "mn-kanban-board.register": [],
   "mn-kpi-scorecard": [],
   "mn-layout-state-machine": [],
   "mn-login": [],
   "mn-map": [],
+  "mn-map.register": [],
   "mn-mesh-network": [
     "mn-mesh-network-canvas",
     "mn-mesh-network-card",
@@ -128,6 +139,7 @@
   "mn-nine-box-matrix": [],
   "mn-notification-center": [],
   "mn-okr": [],
+  "mn-okr.register": [],
   "mn-org-chart": [],
   "mn-pipeline-ranking": [
     "mn-format"
@@ -144,6 +156,7 @@
   "mn-social-graph": [],
   "mn-source-cards": [],
   "mn-speedometer": [],
+  "mn-speedometer.register": [],
   "mn-spinner": [],
   "mn-state-scaffold": [],
   "mn-stepper": [],
@@ -151,6 +164,7 @@
   "mn-streaming-text": [],
   "mn-swot": [],
   "mn-system-status": [],
+  "mn-system-status.register": [],
   "mn-tabs": [],
   "mn-theme-rotary": [],
   "mn-theme-toggle": [],
@@ -160,5 +174,6 @@
   "mn-user-table": [],
   "mn-voice-input": [],
   "mn-waterfall": [],
-  "mn-workflow-orchestrator": []
+  "mn-workflow-orchestrator": [],
+  "mn-workflow-orchestrator.register": []
 }

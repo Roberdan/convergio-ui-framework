@@ -1253,5 +1253,64 @@
     "files": [
       "data-viz/mn-waterfall.tsx"
     ]
+  },
+  {
+    "name": "mn-geo-map",
+    "type": "registry:ui",
+    "description": "mn-geo-map component",
+    "dependencies": [
+      "maplibre-gl",
+      "lucide-react"
+    ],
+    "registryDependencies": [],
+    "files": [
+      "network/mn-geo-map.tsx",
+      "network/mn-geo-map.helpers.ts"
+    ]
+  },
+  {
+    "name": "mn-geo-marker",
+    "type": "registry:ui",
+    "description": "mn-geo-marker component",
+    "dependencies": [
+      "maplibre-gl"
+    ],
+    "registryDependencies": [
+      "mn-geo-map"
+    ],
+    "files": [
+      "network/mn-geo-marker.tsx"
+    ]
+  },
+  {
+    "name": "mn-geo-popup",
+    "type": "registry:ui",
+    "description": "mn-geo-popup component",
+    "dependencies": [
+      "maplibre-gl",
+      "lucide-react"
+    ],
+    "registryDependencies": [
+      "mn-geo-map"
+    ],
+    "files": [
+      "network/mn-geo-popup.tsx",
+      "network/mn-geo-popup.helpers.tsx"
+    ]
+  },
+  {
+    "name": "mn-geo-controls",
+    "type": "registry:ui",
+    "description": "mn-geo-controls component",
+    "dependencies": [
+      "lucide-react"
+    ],
+    "registryDependencies": [
+      "mn-geo-map"
+    ],
+    "files": [
+      "network/mn-geo-controls.tsx",
+      "network/mn-geo-controls.helpers.tsx"
+    ]
   }
 ]

@@ -1,0 +1,61 @@
+---
+title: MnGeoMarker
+category: network
+description: "Interactive marker for MnGeoMap with click/hover/drag callbacks and popup slot"
+keywords: ["marker", "pin", "segnaposto", "map", "geo", "location", "coordinate"]
+---
+
+# MnGeoMarker
+
+Lat/lon-anchored marker rendered inside an `MnGeoMap`. Composable via slot
+children: `MnGeoMarkerContent`, `MnGeoMarkerLabel`, `MnGeoMarkerPopup`,
+`MnGeoMarkerTooltip`.
+
+## When to use
+
+Inside `MnGeoMap` to place a pin at a specific coordinate with optional popup,
+hover tooltip, or floating label.
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `longitude` | `number` | — | Required. |
+| `latitude` | `number` | — | Required. |
+| `draggable` | `boolean` | `false` | Enables drag callbacks. |
+| `onClick` | `(e: MouseEvent) => void` | — | |
+| `onMouseEnter` / `onMouseLeave` | `(e: MouseEvent) => void` | — | |
+| `onDragStart` / `onDrag` / `onDragEnd` | `(lngLat) => void` | — | Require `draggable`. |
+| `children` | `ReactNode` | — | Slot: `MnGeoMarkerContent`, `MnGeoMarkerPopup`, etc. |
+
+Plus all MapLibre `MarkerOptions` except `element`.
+
+## Example
+
+```tsx
+<MnGeoMarker
+  longitude={-74.006}
+  latitude={40.7128}
+  onClick={() => openDetails("ny")}
+>
+  <MnGeoMarkerContent ariaLabel="New York datacenter" />
+  <MnGeoMarkerLabel position="top">NYC</MnGeoMarkerLabel>
+  <MnGeoMarkerPopup closeButton>
+    <div className="font-semibold">New York</div>
+    <div className="text-xs">US-East-1 · 3 nodes</div>
+  </MnGeoMarkerPopup>
+</MnGeoMarker>
+```
+
+## Subcomponents
+
+- **`MnGeoMarkerContent`** — renders the marker DOM. Defaults to a themed dot. Accepts `ariaLabel`, `className`, custom `children`.
+- **`MnGeoMarkerLabel`** — floating text label above (`position="top"`) or below the marker.
+- **`MnGeoMarkerPopup`** — click-to-open popup attached to the marker. Accepts `closeButton`.
+- **`MnGeoMarkerTooltip`** — hover-triggered tooltip attached to the marker.
+
+## Accessibility
+
+- Marker DOM is a focusable `role="button"` with keyboard activation and
+  `focus-visible` ring using `var(--mn-focus-ring)`.
+- Provide a descriptive `ariaLabel` on `MnGeoMarkerContent` for screen readers.
