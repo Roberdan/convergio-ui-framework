@@ -38,12 +38,30 @@ export const test = base.extend<{
   },
 
   themeHelper: async ({ page }, use) => {
+    // Label-per-theme mirrors src/components/theme/theme-switcher.tsx THEME_META.
+    const THEME_LABEL: Record<Theme, string> = {
+      light: "Light",
+      dark: "Dark",
+      navy: "Navy",
+      colorblind: "Colorblind",
+    };
+
     const helper: ThemeHelper = {
+      /**
+       * Switch theme through the real header `ThemeSwitcher` dropdown.
+       *
+       * An earlier implementation wrote `localStorage` and reloaded; that
+       * fought with `page.addInitScript`, which re-runs on every reload and
+       * silently rewrote the stored theme — so `waitFor(theme)` timed out and
+       * the failures were masked by `continue-on-error`. Driving the UI
+       * matches production behaviour and stays stable across reloads.
+       */
       async set(theme: Theme) {
-        await page.evaluate((t) => {
-          localStorage.setItem("convergio-theme", t);
-        }, theme);
-        await page.reload();
+        const trigger = page.locator('button[aria-label^="Theme:"]');
+        await trigger.click();
+        await page
+          .getByRole("menuitem", { name: THEME_LABEL[theme], exact: true })
+          .click();
         await helper.waitFor(theme);
       },
 
