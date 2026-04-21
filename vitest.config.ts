@@ -16,14 +16,15 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov"],
-      // Ratchet from prior 40% floor. Current actual on main: statements ~46%,
-      // branches ~44%, functions ~53%, lines ~59%. Thresholds sit just below
-      // those to block regressions without forcing a speculative raise.
+      // Ratchet floor. Current actual with the v1.8.3 + high-blast-radius
+      // smoke suite: statements ~49.9%, branches ~49%, functions ~57%,
+      // lines ~63%. Thresholds sit 1–3 points below those so regressions
+      // fail CI but normal refactors have breathing room.
       thresholds: {
-        statements: 45,
-        branches: 42,
-        functions: 50,
-        lines: 55,
+        statements: 48,
+        branches: 46,
+        functions: 55,
+        lines: 60,
       },
     },
   },
