@@ -69,7 +69,7 @@ import type {
   NeuralNodesLabels,
   WorkflowOrchestratorLabels,
   ProcessTimelineLabels,
-  DeploymentTableLabels,  MapLabels,
+  DeploymentTableLabels,  MapLabels, GeoMapLabels,
   MeshNetworkCanvasLabels,
   MeshNetworkCardLabels,
   MeshNetworkToolbarLabels,
@@ -170,6 +170,7 @@ export interface LocaleMessages {
   workflowOrchestrator: WorkflowOrchestratorLabels;
   deploymentTable: DeploymentTableLabels;
   map: MapLabels;
+  geoMap: GeoMapLabels;
   meshNetworkCanvas: MeshNetworkCanvasLabels;
   meshNetworkCard: MeshNetworkCardLabels;
   meshNetworkToolbar: MeshNetworkToolbarLabels;

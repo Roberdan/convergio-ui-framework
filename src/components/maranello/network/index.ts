@@ -10,6 +10,30 @@ export type { MnSocialGraphProps, SocialGraphNode, SocialGraphEdge } from "./mn-
 export { MnOrgChart } from "./mn-org-chart"
 export type { MnOrgChartProps, OrgNode } from "./mn-org-chart"
 export { MnMap, type MnMapProps, type MapMarker } from "./mn-map"
+export { MnGeoMap, type MnGeoMapProps } from "./mn-geo-map"
+export type {
+  GeoMapRef,
+  GeoMapViewport,
+  GeoMapTheme,
+  GeoMapStyleOption,
+} from "./mn-geo-map.helpers"
+export {
+  MnGeoMarker,
+  MnGeoMarkerContent,
+  MnGeoMarkerLabel,
+  type MnGeoMarkerProps,
+  type MnGeoMarkerContentProps,
+  type MnGeoMarkerLabelProps,
+} from "./mn-geo-marker"
+export {
+  MnGeoPopup,
+  MnGeoMarkerPopup,
+  MnGeoMarkerTooltip,
+  type MnGeoPopupProps,
+  type MnGeoMarkerPopupProps,
+  type MnGeoMarkerTooltipProps,
+} from "./mn-geo-popup"
+export { MnGeoControls, type MnGeoControlsProps } from "./mn-geo-controls"
 export { MnMeshNetworkCanvas } from "./mn-mesh-network-canvas"
 export type { MnMeshNetworkCanvasProps } from "./mn-mesh-network-canvas"
 export { MnMeshNetworkCard, meshNodeStatusDot } from "./mn-mesh-network-card"

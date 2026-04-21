@@ -1,5 +1,5 @@
 import type {
-  DeploymentTableLabels, MapLabels, MeshNetworkCanvasLabels,
+  DeploymentTableLabels, GeoMapLabels, MapLabels, MeshNetworkCanvasLabels,
   MeshNetworkCardLabels, MeshNetworkToolbarLabels, MeshNetworkLabels,
   NetworkMessagesLabels, OrgChartLabels, SocialGraphLabels,
   SystemStatusLabels,
@@ -13,6 +13,17 @@ export const deploymentTableDefaults: DeploymentTableLabels = {
 export const mapDefaults: MapLabels = {
   marker: "Marker",
   interactiveMap: "Interactive map",
+};
+
+export const geoMapDefaults: GeoMapLabels = {
+  interactiveMap: "Interactive geographic map",
+  loading: "Loading map",
+  zoomIn: "Zoom in",
+  zoomOut: "Zoom out",
+  resetBearing: "Reset bearing to north",
+  findLocation: "Find my location",
+  toggleFullscreen: "Toggle fullscreen",
+  closePopup: "Close popup",
 };
 
 export const meshNetworkCanvasDefaults: MeshNetworkCanvasLabels = {
