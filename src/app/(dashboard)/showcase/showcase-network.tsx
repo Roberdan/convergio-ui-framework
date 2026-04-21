@@ -9,11 +9,17 @@ import {
   MnActiveMissions,
   MnNightJobs,
   MnMap,
+  MnGeoMap,
+  MnGeoMarker,
+  MnGeoMarkerContent,
+  MnGeoMarkerPopup,
+  MnGeoControls,
   MnMeshNetworkCanvas,
   MnMeshNetworkCard,
   MnMeshNetworkToolbar,
   MnSystemStatus,
 } from '@/components/maranello';
+import type { GeoMapStyleOption } from '@/components/maranello';
 import type { MeshNode, Service, Incident } from '@/components/maranello';
 import { CATALOG } from '@/lib/component-catalog';
 import { ComponentDoc } from './component-doc';
@@ -33,6 +39,46 @@ function entry(slug: string) {
   if (!e) throw new Error(`Missing catalog entry: ${slug}`);
   return e;
 }
+
+/**
+ * OpenStreetMap raster tile style — used here only for the showcase demo.
+ * Consumers of the framework should supply their own tile provider; OSM's
+ * Tile Usage Policy disallows heavy production traffic on tile.openstreetmap.org.
+ * Attribution is rendered automatically by MapLibre's attributionControl.
+ */
+const OSM_LIGHT_STYLE: GeoMapStyleOption = {
+  version: 8,
+  sources: {
+    osm: {
+      type: 'raster',
+      tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+      tileSize: 256,
+      attribution: '© OpenStreetMap contributors',
+    },
+  },
+  layers: [{ id: 'osm', type: 'raster', source: 'osm' }],
+};
+
+const OSM_DARK_STYLE: GeoMapStyleOption = {
+  version: 8,
+  sources: {
+    osmDark: {
+      type: 'raster',
+      tiles: ['https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'],
+      tileSize: 256,
+      attribution:
+        '© OpenStreetMap contributors · © CARTO',
+    },
+  },
+  layers: [{ id: 'osm-dark', type: 'raster', source: 'osmDark' }],
+};
+
+const geoCities = [
+  { id: 'ny', lon: -74.006, lat: 40.7128, label: 'New York', tone: 'active' },
+  { id: 'ld', lon: -0.1278, lat: 51.5074, label: 'London', tone: 'active' },
+  { id: 'tk', lon: 139.6503, lat: 35.6762, label: 'Tokyo', tone: 'warning' },
+  { id: 'sg', lon: 103.8198, lat: 1.3521, label: 'Singapore', tone: 'danger' },
+] as const;
 
 const mapMarkers = [
   { id: 1, lat: 40.7128, lon: -74.006, label: 'New York', detail: 'US-East-1 · 3 nodes', color: 'active' as const },
@@ -72,6 +118,86 @@ export function ShowcaseNetwork() {
             <div className="h-80">
               <MnMap markers={mapMarkers} className="h-full rounded-lg" />
             </div>
+          </ComponentDoc>
+        </div>
+
+        <div className="md:col-span-2">
+          <ComponentDoc
+            entry={entry('mn-geo-map')}
+            example={`<MnGeoMap styles={{ light, dark }} viewport={{ center: [0, 30], zoom: 1.5 }}>\n  {/* children: MnGeoControls, MnGeoMarker, MnGeoPopup */}\n</MnGeoMap>`}
+          >
+            <div className="h-96">
+              <MnGeoMap
+                styles={{ light: OSM_LIGHT_STYLE, dark: OSM_DARK_STYLE }}
+                viewport={{ center: [10, 30], zoom: 1.5 }}
+                className="h-full"
+              >
+                <MnGeoControls showZoom showCompass />
+                {geoCities.map((city) => (
+                  <MnGeoMarker
+                    key={city.id}
+                    longitude={city.lon}
+                    latitude={city.lat}
+                  >
+                    <MnGeoMarkerContent ariaLabel={city.label} />
+                    <MnGeoMarkerPopup closeButton>
+                      <div className="font-semibold">{city.label}</div>
+                      <div
+                        className="text-xs"
+                        style={{ color: 'var(--mn-text-muted)' }}
+                      >
+                        {city.tone === 'danger'
+                          ? 'Offline'
+                          : city.tone === 'warning'
+                            ? 'Degraded'
+                            : 'Operational'}
+                      </div>
+                    </MnGeoMarkerPopup>
+                  </MnGeoMarker>
+                ))}
+              </MnGeoMap>
+            </div>
+          </ComponentDoc>
+        </div>
+
+        <div className="md:col-span-2">
+          <ComponentDoc
+            entry={entry('mn-geo-marker')}
+            example={`<MnGeoMarker longitude={-74} latitude={40.71} onClick={…}>\n  <MnGeoMarkerContent ariaLabel="New York" />\n  <MnGeoMarkerLabel>NYC</MnGeoMarkerLabel>\n</MnGeoMarker>`}
+          >
+            <p className="text-sm" style={{ color: 'var(--mn-text-muted)' }}>
+              Rendered inside the MnGeoMap demo above. Use
+              <code> MnGeoMarkerContent</code>, <code>MnGeoMarkerLabel</code>,
+              <code> MnGeoMarkerPopup</code>, and <code>MnGeoMarkerTooltip</code>
+              as children to customize the marker DOM, label, popup, and hover
+              tooltip respectively.
+            </p>
+          </ComponentDoc>
+        </div>
+
+        <div className="md:col-span-2">
+          <ComponentDoc
+            entry={entry('mn-geo-popup')}
+            example={`<MnGeoPopup longitude={-74} latitude={40.71} closeButton onClose={…}>\n  Pop-up body\n</MnGeoPopup>`}
+          >
+            <p className="text-sm" style={{ color: 'var(--mn-text-muted)' }}>
+              Standalone coordinate-anchored popup; for a marker-attached popup
+              see <code>MnGeoMarkerPopup</code> (demoed inside MnGeoMap above).
+            </p>
+          </ComponentDoc>
+        </div>
+
+        <div className="md:col-span-2">
+          <ComponentDoc
+            entry={entry('mn-geo-controls')}
+            example={`<MnGeoControls showZoom showCompass showLocate showFullscreen position="top-right" />`}
+          >
+            <p className="text-sm" style={{ color: 'var(--mn-text-muted)' }}>
+              Keyboard-accessible overlay controls. The <code>showZoom</code>
+              and <code>showCompass</code> variants are active in the MnGeoMap
+              demo above; toggle additional flags to enable locate and
+              fullscreen.
+            </p>
           </ComponentDoc>
         </div>
 

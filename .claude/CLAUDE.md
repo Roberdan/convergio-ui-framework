@@ -1,7 +1,7 @@
 # Convergio UI Framework — Claude Code Instructions
 
 ## What is this
-Dashboard framework for the Convergio daemon. Next.js 16, React 19, 103 Maranello components.
+Dashboard framework for the Convergio daemon. Next.js 16, React 19, 107 Maranello components.
 Read root `CLAUDE.md` for design rules. Read `AGENTS.md` for project map.
 
 ## Convergio process (NON-NEGOTIABLE)

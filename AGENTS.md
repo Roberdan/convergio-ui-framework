@@ -1,12 +1,12 @@
 # Convergio UI Framework — Agent Guide
 
-Config-driven dashboard framework. 103 Maranello components, 4 themes, Next.js 16.
+Config-driven dashboard framework. 107 Maranello components, 4 themes, Next.js 16.
 
 ## Quick orientation
 
 | Directory | What | Guide |
 |-----------|------|-------|
-| `src/components/maranello/` | 103 Mn* design system components | Each category has its own AGENTS.md |
+| `src/components/maranello/` | 107 Mn* design system components | Each category has its own AGENTS.md |
 | `src/components/shell/` | App shell (sidebar, header, layout) | [AGENTS.md](src/components/shell/AGENTS.md) |
 | `src/components/blocks/` | Built-in page blocks (KPI, table, feed) | [AGENTS.md](src/components/blocks/AGENTS.md) |
 | `src/lib/` | Config loader, block registry, i18n, utils | [AGENTS.md](src/lib/AGENTS.md) |

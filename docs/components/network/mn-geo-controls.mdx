@@ -1,0 +1,53 @@
+---
+title: MnGeoControls
+category: network
+description: "Zoom, compass, locate and fullscreen controls overlay for MnGeoMap"
+keywords: ["zoom", "control", "controllo", "compass", "bussola", "fullscreen", "schermo intero", "locate"]
+---
+
+# MnGeoControls
+
+Keyboard-accessible control overlay for `MnGeoMap`. Groups zoom, compass
+(bearing reset), geolocation, and fullscreen toggle into one themed stack.
+
+## When to use
+
+Inside `MnGeoMap` to give users standard map controls. Each control is
+individually togglable.
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `position` | `"top-left" \| "top-right" \| "bottom-left" \| "bottom-right"` | `"bottom-right"` | Stack placement. |
+| `showZoom` | `boolean` | `true` | Zoom in / out buttons. |
+| `showCompass` | `boolean` | `false` | Reset-bearing + live pitch/rotate indicator. |
+| `showLocate` | `boolean` | `false` | "Find my location" (requires `navigator.geolocation`). |
+| `showFullscreen` | `boolean` | `false` | Fullscreen toggle. |
+| `onLocate` | `(coords: { longitude; latitude }) => void` | — | Fires after a successful geolocation. |
+| `className` | `string` | — | Extra classes on the stack wrapper. |
+
+## Example
+
+```tsx
+<MnGeoMap styles={{ light, dark }}>
+  <MnGeoControls
+    position="top-right"
+    showZoom
+    showCompass
+    showLocate
+    showFullscreen
+    onLocate={(c) => console.log("user is at", c)}
+  />
+</MnGeoMap>
+```
+
+## Accessibility
+
+- All buttons are `<button type="button">` with descriptive `aria-label`s
+  from `useLocale("geoMap")`.
+- Focus ring uses `var(--mn-focus-ring)` with inset offset.
+- Compass re-renders SVG transform on `rotate` / `pitch` events so sighted
+  users see a live heading indicator.
+- Locate button disables itself (`aria-disabled`) while geolocation is pending
+  and shows a spinner via `Loader2`.

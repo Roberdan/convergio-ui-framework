@@ -1,0 +1,55 @@
+---
+title: MnGeoPopup
+category: network
+description: "Anchored popup for MnGeoMap at a given coordinate, with close handler"
+keywords: ["popup", "tooltip", "suggerimento", "map", "overlay", "info"]
+---
+
+# MnGeoPopup
+
+Standalone popup anchored at a specific `longitude` / `latitude` inside an
+`MnGeoMap`, independent of any marker. Useful for highlighting regions, search
+results, or selection state driven by external data.
+
+## When to use
+
+Render rich content at a specific coordinate without associating it with a
+marker. For marker-attached popups, use `MnGeoMarkerPopup` instead.
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `longitude` | `number` | — | Required. |
+| `latitude` | `number` | — | Required. |
+| `closeButton` | `boolean` | `false` | Render the accessible close button. |
+| `onClose` | `() => void` | — | Fires when the popup closes. |
+| `offset` | `PopupOptions["offset"]` | `16` | Pixel offset from anchor. |
+| `maxWidth` | `string` | — | CSS max-width override. |
+| `className` | `string` | — | Extra classes on the popup surface. |
+| `children` | `ReactNode` | — | Popup body. |
+
+## Example
+
+```tsx
+const [selected, setSelected] = useState<{ lng: number; lat: number } | null>(null);
+
+<MnGeoMap styles={{ light, dark }}>
+  {selected && (
+    <MnGeoPopup
+      longitude={selected.lng}
+      latitude={selected.lat}
+      closeButton
+      onClose={() => setSelected(null)}
+    >
+      <div className="font-semibold">Selected point</div>
+      <div className="text-xs">{selected.lng.toFixed(3)}, {selected.lat.toFixed(3)}</div>
+    </MnGeoPopup>
+  )}
+</MnGeoMap>
+```
+
+## Accessibility
+
+- Root has `role="dialog"`.
+- Close button has `aria-label` from `useLocale("geoMap").closePopup`.

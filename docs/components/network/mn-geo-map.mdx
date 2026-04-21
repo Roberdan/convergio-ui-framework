@@ -1,0 +1,91 @@
+---
+title: MnGeoMap
+category: network
+description: "MapLibre-powered tile map container with 4-theme styling and SSR-safe init"
+keywords: ["geo", "geomap", "maplibre", "tile", "tiles", "basemap", "geography", "mappa", "cartina"]
+---
+
+# MnGeoMap
+
+Interactive tile-based geographic map powered by [MapLibre GL JS](https://maplibre.org/).
+Ported from [mapcn](https://www.mapcn.dev) (MIT) with Maranello theming and i18n.
+
+## When to use
+
+Use for interactive pan / zoom / rotate maps backed by real tile data (OSM,
+Carto, MapTiler, Mapbox, PMTiles, etc.). The framework ships **no** tile style
+or API key — you supply your own via the `styles` prop and retain sole
+responsibility for the tile provider's TOS and attribution requirements.
+
+For a lightweight stylised world map without tiles, see [`MnMap`](./mn-map.mdx).
+
+## Installation
+
+```bash
+pnpm add maplibre-gl
+```
+
+```tsx
+import {
+  MnGeoMap,
+  MnGeoMarker,
+  MnGeoMarkerContent,
+  MnGeoMarkerPopup,
+  MnGeoControls,
+} from "@/components/maranello";
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `styles` | `{ light?: GeoMapStyleOption; dark?: GeoMapStyleOption }` | — | Style URL or `StyleSpecification` per theme. Required for MapLibre to initialise. |
+| `theme` | `"light" \| "dark"` | auto | Force a theme. Omit to auto-detect from `data-theme` (navy/dark → dark, light/colorblind → light). |
+| `viewport` | `Partial<GeoMapViewport>` | — | Controlled viewport — pair with `onViewportChange`. |
+| `onViewportChange` | `(v: GeoMapViewport) => void` | — | Fires on every move / zoom / rotate / pitch. |
+| `projection` | `ProjectionSpecification` | — | e.g. `{ type: "globe" }` for 3D globe. |
+| `loading` | `boolean` | `false` | Force the loader overlay. |
+| `className` | `string` | — | Extra classes on the container. |
+| `children` | `ReactNode` | — | `MnGeoMarker`, `MnGeoPopup`, `MnGeoControls` subcomponents. |
+
+Plus all MapLibre `MapOptions` except `container` and `style`.
+
+## Example
+
+```tsx
+const LIGHT_STYLE = "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json";
+const DARK_STYLE = "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
+
+<div className="h-96">
+  <MnGeoMap
+    styles={{ light: LIGHT_STYLE, dark: DARK_STYLE }}
+    viewport={{ center: [10, 45], zoom: 4 }}
+  >
+    <MnGeoControls showZoom showCompass showLocate />
+
+    <MnGeoMarker longitude={10.866} latitude={44.531}>
+      <MnGeoMarkerContent ariaLabel="Maranello HQ" />
+      <MnGeoMarkerPopup closeButton>
+        <div className="font-semibold">Maranello HQ</div>
+      </MnGeoMarkerPopup>
+    </MnGeoMarker>
+  </MnGeoMap>
+</div>
+```
+
+## Accessibility
+
+- Container exposes `role="region"` with an i18n-ready aria-label from `useLocale("geoMap").interactiveMap`.
+- Loader is announced via `role="status"`.
+- All controls have `aria-label` and keyboard focus styles using `var(--mn-focus-ring)`.
+- Theme switches honour the user's selected Maranello theme; colorblind maps to the light basemap.
+
+## Tile-provider compliance
+
+- The framework renders MapLibre's `attributionControl` automatically — populate the
+  `attribution` field on every source in your `StyleSpecification`.
+- OSM raster tiles from `tile.openstreetmap.org` are rate-limited; do not use in
+  production.
+- Consider MapTiler, Mapbox, Protomaps, or self-hosted PMTiles for real workloads.
+
+See `THIRD_PARTY_LICENSES.md` in the repository root for the full license text.

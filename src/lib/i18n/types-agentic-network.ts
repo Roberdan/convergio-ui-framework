@@ -78,6 +78,17 @@ export interface MapLabels {
   interactiveMap: string;
 }
 
+export interface GeoMapLabels {
+  interactiveMap: string;
+  loading: string;
+  zoomIn: string;
+  zoomOut: string;
+  resetBearing: string;
+  findLocation: string;
+  toggleFullscreen: string;
+  closePopup: string;
+}
+
 export interface MeshNetworkCanvasLabels {
   meshNodes: string;
 }

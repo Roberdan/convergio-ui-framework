@@ -24,7 +24,7 @@ import { asyncSelectDefaults, calendarRangeDefaults, datePickerDefaults, dateRan
 import { adminShellDefaults, dashboardRendererDefaults, dashboardDefaults, dashboardStripDefaults, headerShellDefaults } from "./layout";
 import { breadcrumbDefaults, commandPaletteDefaults, sectionNavDefaults, stepperDefaults } from "./navigation";
 import { activeMissionsDefaults, agentTraceDefaults, approvalChainDefaults, augmentedBrainDefaults, augmentedBrainV2Defaults, chatDefaults, hubSpokeDefaults, neuralNodesDefaults, processTimelineDefaults, workflowOrchestratorDefaults } from "./agentic";
-import { deploymentTableDefaults, mapDefaults, meshNetworkCanvasDefaults, meshNetworkCardDefaults, meshNetworkToolbarDefaults, meshNetworkDefaults, networkMessagesDefaults, orgChartDefaults, socialGraphDefaults, systemStatusDefaults } from "./network";
+import { deploymentTableDefaults, geoMapDefaults, mapDefaults, meshNetworkCanvasDefaults, meshNetworkCardDefaults, meshNetworkToolbarDefaults, meshNetworkDefaults, networkMessagesDefaults, orgChartDefaults, socialGraphDefaults, systemStatusDefaults } from "./network";
 import { auditLogDefaults, binnacleDefaults, entityWorkbenchDefaults, facetWorkbenchDefaults, ganttDefaults, kanbanBoardDefaults, nightJobsDefaults, instrumentBinnacleDefaults } from "./ops";
 import { businessModelCanvasDefaults, customerJourneyMapDefaults, customerJourneyDefaults, decisionMatrixDefaults, okrDefaults, riskMatrixDefaults, strategyCanvasDefaults, swotDefaults, nineBoxMatrixDefaults, porterFiveForcesDefaults } from "./strategy";
 import { agentCostBreakdownDefaults, finOpsDefaults } from "./financial";
@@ -91,6 +91,7 @@ export const DEFAULT_MESSAGES: LocaleMessages = {
   workflowOrchestrator: workflowOrchestratorDefaults,
   deploymentTable: deploymentTableDefaults,
   map: mapDefaults,
+  geoMap: geoMapDefaults,
   meshNetworkCanvas: meshNetworkCanvasDefaults,
   meshNetworkCard: meshNetworkCardDefaults,
   meshNetworkToolbar: meshNetworkToolbarDefaults,
