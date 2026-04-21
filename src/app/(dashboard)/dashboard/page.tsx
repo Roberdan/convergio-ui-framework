@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useMemo, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useApiQuery } from '@/hooks/use-api-query';
 import { useSse } from '@/hooks/use-sse';
@@ -13,8 +14,26 @@ import { MnActivityFeed, type ActivityItem } from '@/components/maranello/feedba
 import {
   MnActiveMissions, type Mission, MnNeuralNodes, type NeuralNodesController,
   MnHubSpoke, type HubSpokeHub, MnAugmentedBrain, MnAugmentedBrainV2,
-  MnBrain3D,
 } from '@/components/maranello/agentic';
+
+// `MnBrain3D` pulls in `three` (~800 KB gz) + `react-force-graph-3d` +
+// `three-spritetext`. Load on demand so the dashboard First Load JS stays
+// lean for visitors who never scroll to the 3D panel.
+const MnBrain3D = dynamic(
+  () =>
+    import('@/components/maranello/agentic').then((m) => ({
+      default: m.MnBrain3D,
+    })),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        aria-hidden
+        className="h-[500px] w-full rounded-lg border bg-muted/30"
+      />
+    ),
+  },
+);
 import { MnBadge } from '@/components/maranello/data-display';
 import { MnChart } from '@/components/maranello/data-viz';
 import {
