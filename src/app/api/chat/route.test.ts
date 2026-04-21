@@ -60,8 +60,12 @@ function chatRequest(body: unknown): Request {
 }
 
 describe("POST /api/chat", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
+    // Reset the in-memory rate-limit bucket so test-to-test token consumption
+    // does not leak through the shared `"authenticated"` session key.
+    const { __resetBucketsForTests } = await import("@/lib/rate-limit");
+    __resetBucketsForTests();
   });
 
   it("returns 400 for invalid JSON body", async () => {
@@ -135,6 +139,24 @@ describe("POST /api/chat", () => {
     expect(res.status).toBe(200);
     expect(res.headers.get("X-RateLimit-Limit")).toBe("60");
     expect(res.headers.get("X-RateLimit-Remaining")).toBe("59");
+  });
+
+  it("returns 429 once the per-session bucket is drained", async () => {
+    const { POST } = await import("./route");
+    const req = () =>
+      chatRequest({ messages: [{ role: "user", content: "hi" }] });
+
+    // 60 requests exhaust the default bucket capacity.
+    for (let i = 0; i < 60; i++) {
+      const r = await POST(req());
+      expect(r.status).toBe(200);
+    }
+    const blocked = await POST(req());
+    expect(blocked.status).toBe(429);
+    const body = await blocked.json();
+    expect(body.error.code).toBe("RATE_LIMITED");
+    expect(blocked.headers.get("X-RateLimit-Remaining")).toBe("0");
+    expect(Number(blocked.headers.get("Retry-After"))).toBeGreaterThan(0);
   });
 
   it("returns 503 when no agents configured", async () => {
