@@ -2,7 +2,7 @@
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-convergio--ui--framework.vercel.app-blue)](https://convergio-ui-framework.vercel.app) [![Showcase](https://img.shields.io/badge/Showcase-Cockpit%20%26%20Components-gold)](https://convergio-ui-framework.vercel.app/showcase/cockpit)
 
-A **config-driven dashboard framework** with 107 React components, 4 themes, and a shadcn-compatible registry. Write YAML, get a full working app — sidebar, themes, AI chat, data visualizations — with zero custom code.
+A **config-driven dashboard framework** with 108 React components, 4 themes, and a shadcn-compatible registry. Write YAML, get a full working app — sidebar, themes, AI chat, data visualizations — with zero custom code.
 
 **Maranello** is the design system inside Convergio. The framework ships everything: layout shell, theme engine, config loader, page renderer, component showcase, and optional AI/desktop layers.
 
@@ -59,7 +59,7 @@ import { AppShell, loadNavSections, PageRenderer } from "@convergio/core";
 import { MnGauge } from "./components/maranello/data-viz/mn-gauge";
 ```
 
-This gives you the shell + config engine without copying all 107 components.
+This gives you the shell + config engine without copying all 108 components.
 
 ### 3. Registry Mode — Cherry-Pick Components Only
 
@@ -106,7 +106,7 @@ If no config file is found, the framework renders sensible defaults (app name "M
 |---|---|
 | Framework | Next.js 16 App Router |
 | UI Primitives | shadcn/ui + Base UI + Tailwind CSS v4 |
-| Design System | Maranello — 107 components with `Mn` prefix |
+| Design System | Maranello — 108 components with `Mn` prefix |
 | Typography | Outfit (headings), Inter (body), Barlow Condensed (mono/data) |
 | Themes | 4: Navy, Dark, Light, Colorblind (WCAG 2.2 AA) |
 | Icons | Lucide only (no emoji — CONSTITUTION P2) |
@@ -271,7 +271,7 @@ src/
     globals.css             # theme tokens: --mn-* + shadcn bridge vars
     layout.tsx              # root: fonts, theme script, CanvasSafeArc
   components/
-    maranello/              # Maranello Design System — 107 components
+    maranello/              # Maranello Design System — 108 components
       agentic/              #   7 AI/agent components
       data-display/         #  12 data display components
       data-viz/             #  14 data visualization components
@@ -285,7 +285,7 @@ src/
       strategy/             #  11 strategy components
       theme/                #   6 theme control + accessibility components
       shared/               #   shared utilities + tests
-      index.ts              #   barrel re-export (all 107 components)
+      index.ts              #   barrel re-export (all 108 components)
     blocks/                 # page blocks — renders config → UI
     page-renderer.tsx       # renders config pages → block grid
     shell/                  # sidebar, header, command-menu (Cmd-K)
@@ -300,7 +300,7 @@ src/
     config-loader.ts        # YAML parser + Zod validation (cached, file-watched in dev)
     config-schema.ts        # Zod schema for config file
     config-block-schemas.ts # Zod schemas for each block type
-    component-catalog.ts    # 107-entry catalog with bilingual search
+    component-catalog.ts    # 108-entry catalog with bilingual search
     env.ts                  # environment variable resolution
     icon-map.ts             # Lucide icon name → component resolver
     icon-slot.tsx           # <IconSlot name="..." /> for dynamic icons
@@ -309,7 +309,7 @@ src/
 src-tauri/                  # optional Tauri desktop scaffold
 docs/
   guides/                   # how-to guides (see Documentation section)
-  components/               # per-component MDX docs (107 files)
+  components/               # per-component MDX docs (108 files)
   adr/                      # architecture decision records
 ```
 
@@ -360,7 +360,7 @@ The built-in showcase at `/showcase` demonstrates all components with live inter
 ### Command Palette (Cmd-K)
 
 Press `Cmd+K` (or `Ctrl+K`) to open the command palette:
-- **Fuzzy search** across all 107 components (bilingual IT/EN keywords)
+- **Fuzzy search** across all 108 components (bilingual IT/EN keywords)
 - **Category navigation** — jump to any showcase section
 - **Theme switching** — switch between all 4 themes
 
@@ -376,7 +376,7 @@ pnpm mcp   # starts the MCP server (stdio transport)
 
 | Tool | Description |
 |---|---|
-| `search_components` | Fuzzy search the 107 component catalog by name, category, or keyword |
+| `search_components` | Fuzzy search the 108 component catalog by name, category, or keyword |
 | `get_component` | Full details: props, when-to-use, code example, file path |
 | `list_categories` | All categories with component counts |
 | `generate_yaml_page` | Generate valid YAML page config from a description |
@@ -437,7 +437,7 @@ The `public/r/` directory contains a shadcn-compatible component registry:
 
 ```
 public/r/
-  index.json              # full catalog with metadata for all 107 components
+  index.json              # full catalog with metadata for all 108 components
   mn-badge.json           # individual component (source + dependencies)
   mn-gauge.json
   ...
@@ -507,7 +507,7 @@ import { MnLocaleProvider } from "@/lib/i18n";
 
 ---
 
-## Component Catalog (107 components)
+## Component Catalog (108 components)
 
 ```tsx
 import { MnBadge, MnChart, MnDataTable, MnGauge } from "@/components/maranello"

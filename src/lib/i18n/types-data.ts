@@ -21,6 +21,8 @@ export interface DetailPanelLabels {
   cancel: string;
   save: string;
   close: string;
+  yes: string;
+  no: string;
 }
 
 export interface UserTableLabels {
@@ -100,6 +102,8 @@ export interface ActivityFeedLabels {
   noActivity: string;
   refreshFeed: string;
   refresh: string;
+  refreshing: string;
+  liveFeed: string;
 }
 
 export interface ModalLabels {

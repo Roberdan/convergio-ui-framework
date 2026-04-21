@@ -1,9 +1,37 @@
+import { createHmac } from "node:crypto";
 import { Page, BrowserContext } from "@playwright/test";
 
-/** HMAC-signed session cookie for dev secret. */
+const DEV_SESSION_SECRET = "convergio-dev-secret";
+const SESSION_VALUE = "authenticated";
+
+/**
+ * Sign a session value with HMAC-SHA256, matching `src/lib/session.ts`.
+ *
+ * Secret resolution:
+ *   E2E_SESSION_SECRET ?? SESSION_SECRET ?? dev fallback (non-prod only)
+ *
+ * Throws when NODE_ENV === "production" and no explicit secret is provided,
+ * mirroring the production guard in src/lib/session.ts.
+ */
+function signE2EValue(value: string): string {
+  const secret =
+    process.env.E2E_SESSION_SECRET ?? process.env.SESSION_SECRET ?? "";
+  if (process.env.NODE_ENV === "production") {
+    if (!secret || secret === DEV_SESSION_SECRET) {
+      throw new Error(
+        "E2E_SESSION_SECRET / SESSION_SECRET must be set to a non-default value in production",
+      );
+    }
+    return `${value}.${createHmac("sha256", secret).update(value).digest("hex")}`;
+  }
+  const effective = secret || DEV_SESSION_SECRET;
+  return `${value}.${createHmac("sha256", effective).update(value).digest("hex")}`;
+}
+
+/** HMAC-signed session cookie computed at test boot from env-supplied secret. */
 export const SESSION_COOKIE = {
   name: "session",
-  value: "authenticated.955738395f27445701db7db7c5262d188f16b7d76d4abaea47905d75a1a960f1",
+  value: signE2EValue(SESSION_VALUE),
   domain: "127.0.0.1",
   path: "/",
   httpOnly: true,
@@ -13,6 +41,22 @@ export const SESSION_COOKIE = {
 /** Set authenticated session cookie on the browser context. */
 export async function authenticate(context: BrowserContext) {
   await context.addCookies([SESSION_COOKIE]);
+}
+
+/** Cheap reachability probe for the Convergio daemon. */
+export async function isDaemonReachable(
+  url = process.env.CONVERGIO_DAEMON_URL ?? "http://localhost:8420",
+  timeoutMs = 1000,
+): Promise<boolean> {
+  try {
+    const ac = new AbortController();
+    const timer = setTimeout(() => ac.abort(), timeoutMs);
+    const res = await fetch(`${url}/health`, { signal: ac.signal });
+    clearTimeout(timer);
+    return res.ok;
+  } catch {
+    return false;
+  }
 }
 
 /** Infrastructure error filter for console noise. */

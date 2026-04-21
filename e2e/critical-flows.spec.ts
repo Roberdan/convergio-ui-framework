@@ -1,7 +1,24 @@
 import { test, expect } from "@playwright/test";
-import { authenticate, collectPageIssues, checkErrorBoundary, isInfraError } from "./helpers";
+import {
+  authenticate,
+  collectPageIssues,
+  checkErrorBoundary,
+  isInfraError,
+  isDaemonReachable,
+} from "./helpers";
 
-test.beforeEach(async ({ context }) => {
+let daemonReachable: boolean | null = null;
+
+test.beforeEach(async ({ context }, testInfo) => {
+  if (daemonReachable === null) {
+    daemonReachable = await isDaemonReachable();
+  }
+  if (!daemonReachable) {
+    testInfo.skip(
+      true,
+      "Convergio daemon not reachable (CONVERGIO_DAEMON_URL unset or :8420 offline)",
+    );
+  }
   await authenticate(context);
 });
 

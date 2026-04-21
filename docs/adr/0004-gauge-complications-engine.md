@@ -6,7 +6,7 @@ Status: Accepted | Date: 08 Apr 2026
 
 The old `convergio-design` demo had rich Ferrari Luce-inspired gauge instruments with complications: crosshair grids with scatter dots, multigraph sparkline overlays, center text overrides, and quadrant counts. These were implemented in `gauge-engine-complications.ts` in the IIFE/web-component build.
 
-When the React `MnGauge` component was created for `convergio-frontend`, it supported basic complications (arcBar, subDials, innerRing, odometer, statusLed, trend) but was missing crosshair and multigraph — the two most visually distinctive features of the old cockpit demo.
+When the React `MnGauge` component was created for `convergio-ui-framework`, it supported basic complications (arcBar, subDials, innerRing, odometer, statusLed, trend) but was missing crosshair and multigraph — the two most visually distinctive features of the old cockpit demo.
 
 ## Decision
 

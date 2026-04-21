@@ -57,9 +57,10 @@ const INPUT_CLS = "w-full rounded-md border border-border bg-background px-3 py-
 const VAL_CLS = "text-sm text-foreground"
 
 function FieldView({ field }: { field: DetailField }) {
+  const t = useLocale("detailPanel")
   const v = field.value
   if (v == null || v === "") return <span className="text-muted-foreground italic text-sm">—</span>
-  if (field.type === "boolean") return <span className={VAL_CLS}>{v ? "Yes" : "No"}</span>
+  if (field.type === "boolean") return <span className={VAL_CLS}>{v ? t.yes : t.no}</span>
   if (field.type === "select" && field.options) {
     const opt = field.options.find((o) => o.value === String(v))
     return <span className={VAL_CLS}>{opt?.label ?? String(v)}</span>
@@ -76,7 +77,7 @@ function FieldEditor({ field, value, onChange }: { field: DetailField; value: un
       return (
         <label className="inline-flex cursor-pointer items-center gap-2 text-sm">
           <input type="checkbox" checked={Boolean(value)} onChange={(e) => set(e.target.checked)} className="size-4 rounded border-border accent-[var(--mn-primary)]" />
-          {value ? "Yes" : "No"}
+          {value ? t.yes : t.no}
         </label>
       )
     case "select":

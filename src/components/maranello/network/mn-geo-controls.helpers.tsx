@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, type ReactNode } from "react";
 
-import { cn } from "@/lib/utils";
+import { cn, type StyleWithVars } from "@/lib/utils";
 
 import { useGeoMap } from "./mn-geo-map.helpers";
 
@@ -49,9 +49,8 @@ export function ControlButton({
       style={{
         color: "var(--mn-text)",
         borderBottom: isLast ? undefined : "1px solid var(--mn-border)",
-        // @ts-expect-error CSS custom property
         "--tw-ring-color": "var(--mn-focus-ring)",
-      }}
+      } as StyleWithVars}
       onMouseEnter={(e) => {
         if (!disabled) {
           (e.currentTarget as HTMLButtonElement).style.background =

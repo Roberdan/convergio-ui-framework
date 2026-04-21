@@ -1,5 +1,19 @@
 import { test, expect } from "@playwright/test";
-import { authenticate } from "./helpers";
+import { authenticate, isDaemonReachable } from "./helpers";
+
+let daemonReachable: boolean | null = null;
+
+test.beforeEach(async ({}, testInfo) => {
+  if (daemonReachable === null) {
+    daemonReachable = await isDaemonReachable();
+  }
+  if (!daemonReachable) {
+    testInfo.skip(
+      true,
+      "Convergio daemon not reachable (CONVERGIO_DAEMON_URL unset or :8420 offline)",
+    );
+  }
+});
 
 // Viewport presets
 const VIEWPORTS = [

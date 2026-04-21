@@ -7,6 +7,8 @@ export const activityFeedDefaults: ActivityFeedLabels = {
   noActivity: "No activity to display.",
   refreshFeed: "Refresh feed",
   refresh: "Refresh",
+  refreshing: "Refreshing…",
+  liveFeed: "Live feed",
 };
 
 export const modalDefaults: ModalLabels = {

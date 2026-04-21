@@ -111,7 +111,7 @@ export default function IconsPage() {
           </code>
           . See the full guide:{' '}
           <Link
-            href="https://github.com/nicobailon/convergio-frontend/blob/main/docs/guides/adding-icons.md"
+            href="https://github.com/Roberdan/convergio-ui-framework/blob/main/docs/guides/adding-icons.md"
             className="text-primary underline underline-offset-2 hover:text-primary/80"
           >
             docs/guides/adding-icons.md
