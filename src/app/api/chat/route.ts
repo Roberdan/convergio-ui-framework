@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { openai, createOpenAI } from "@ai-sdk/openai";
 import { streamText } from "ai";
 import { z } from "zod";
+import { consumeToken } from "@/lib/rate-limit";
 import { verifyValue } from "@/lib/session";
 import type { AgentConfig } from "@/types/ai";
 
@@ -88,6 +89,27 @@ export async function POST(req: Request) {
     );
   }
 
+  // Rate limit: 60 chat requests / minute steady state, per session.
+  const rate = consumeToken(sessionValue);
+  if (!rate.allowed) {
+    return Response.json(
+      {
+        error: {
+          code: "RATE_LIMITED",
+          message: "Chat request rate limit exceeded — slow down.",
+        },
+      },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(rate.retryAfterSec),
+          "X-RateLimit-Limit": String(rate.limit),
+          "X-RateLimit-Remaining": "0",
+        },
+      },
+    );
+  }
+
   let body: unknown;
   try {
     body = await req.json();
@@ -140,7 +162,7 @@ export async function POST(req: Request) {
   });
 
   const response = result.toTextStreamResponse();
-  response.headers.set("X-RateLimit-Limit", "60");
-  response.headers.set("X-RateLimit-Remaining", "59");
+  response.headers.set("X-RateLimit-Limit", String(rate.limit));
+  response.headers.set("X-RateLimit-Remaining", String(rate.remaining));
   return response;
 }
