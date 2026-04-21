@@ -1,16 +1,34 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import {
   MnAugmentedBrain,
   MnAugmentedBrainV2,
   MnBinnacle,
-  MnBrain3D,
   MnChat,
   MnDashboardStrip,
   MnInstrumentBinnacle,
   MnOrgChart,
   MnWorkflowOrchestrator,
 } from '@/components/maranello';
+
+// Lazy `MnBrain3D` to keep `three` + `react-force-graph-3d` out of the
+// agentic-showcase First Load JS.
+const MnBrain3D = dynamic(
+  () =>
+    import('@/components/maranello/agentic').then((m) => ({
+      default: m.MnBrain3D,
+    })),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        aria-hidden
+        className="h-[500px] w-full rounded-lg border bg-muted/30"
+      />
+    ),
+  },
+);
 import { CATALOG } from '@/lib/component-catalog';
 import { ComponentDoc } from './component-doc';
 import {
