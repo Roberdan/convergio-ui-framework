@@ -3,7 +3,7 @@
 import { X } from "lucide-react";
 import type { CSSProperties } from "react";
 
-import { cn } from "@/lib/utils";
+import { cn, type StyleWithVars } from "@/lib/utils";
 
 export const POPUP_SURFACE_CLASS = "relative max-w-xs rounded-md p-3 text-sm";
 
@@ -35,9 +35,8 @@ export function PopupCloseButton({
       )}
       style={{
         color: "var(--mn-text)",
-        // @ts-expect-error CSS custom property
         "--tw-ring-color": "var(--mn-focus-ring)",
-      }}
+      } as StyleWithVars}
       onMouseEnter={(e) => {
         (e.currentTarget as HTMLButtonElement).style.background =
           "var(--mn-hover-bg)";

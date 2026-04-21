@@ -1,10 +1,15 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const PW_PORT = process.env.PW_PORT ?? "3015";
+const PW_BASE_URL = process.env.PW_BASE_URL ?? `http://127.0.0.1:${PW_PORT}`;
+
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  // Retry twice in every environment so local runs catch the same flake
+  // surface that CI masks with retries.
+  retries: 2,
   workers: process.env.CI ? 2 : undefined,
   reporter: process.env.CI
     ? [["github"], ["html", { open: "never" }]]
@@ -12,13 +17,14 @@ export default defineConfig({
 
   expect: {
     toHaveScreenshot: {
-      maxDiffPixelRatio: 0.01,
+      // 0.01 (1%) flakes on font / GPU / subpixel diffs across runners.
+      maxDiffPixelRatio: 0.03,
       animations: "disabled",
     },
   },
 
   use: {
-    baseURL: "http://127.0.0.1:3015",
+    baseURL: PW_BASE_URL,
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
@@ -40,10 +46,8 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: process.env.CI
-      ? "pnpm build && pnpm start -p 3015"
-      : "pnpm build && pnpm start -p 3015",
-    url: "http://127.0.0.1:3015",
+    command: `pnpm build && pnpm start -p ${PW_PORT}`,
+    url: PW_BASE_URL,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },

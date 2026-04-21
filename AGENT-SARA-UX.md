@@ -39,7 +39,7 @@ See `docs/guides/recipes.md` for 5 composition recipes.
 |---|---|
 | `src/lib/config-loader.ts` | YAML → validated config (check before coding a page) |
 | `src/components/page-renderer.tsx` | Maps block types to components (dynamic registry) |
-| `src/lib/component-catalog-data.ts` | 103-entry catalog — search before creating UI |
+| `src/lib/component-catalog-data.ts` | 107-entry catalog — search before creating UI |
 | `src/hooks/use-api-query.ts` | SWR-like poller |
 | `src/hooks/use-sse-adapter.ts` | Reducer-based SSE state |
 | `docs/guides/recipes.md` | 5 composition recipes |

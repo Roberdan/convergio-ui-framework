@@ -20,6 +20,8 @@ export const detailPanelDefaults: DetailPanelLabels = {
   cancel: "Cancel",
   save: "Save",
   close: "Close",
+  yes: "Yes",
+  no: "No",
 };
 
 export const userTableDefaults: UserTableLabels = {

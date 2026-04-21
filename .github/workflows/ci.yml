@@ -52,6 +52,8 @@ jobs:
           restore-keys: |
             nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
             nextjs-${{ runner.os }}-
+      - name: Verify component counts
+        run: npx tsx scripts/verify-counts.ts
       - name: Build
         run: pnpm build
       - name: Unit tests
@@ -91,7 +93,6 @@ jobs:
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
       - name: E2E tests
-        continue-on-error: true
         run: pnpm test:e2e --project=chromium
       - name: Upload Playwright report
         if: always()

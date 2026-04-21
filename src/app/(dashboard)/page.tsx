@@ -14,7 +14,7 @@ const STATS = [
   { label: 'Themes', value: TOTAL_THEMES },
 ] as const;
 
-const GITHUB_URL = 'https://github.com/Roberdan/convergio-frontend';
+const GITHUB_URL = 'https://github.com/Roberdan/convergio-ui-framework';
 
 export default function HomePage() {
   return (

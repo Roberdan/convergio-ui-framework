@@ -40,6 +40,9 @@ export function MnGeoMarkerPopup({
     })
       .setMaxWidth("none")
       .setDOMContent(container);
+    // Popup instance is created once per mount; callers observe subsequent
+    // prop changes via the imperative `setOffset` / `setMaxWidth` / `setLngLat`
+    // calls below when the popup is open. Empty deps is deliberate.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -102,6 +105,9 @@ export function MnGeoMarkerTooltip({
       closeOnClick: true,
       closeButton: false,
     }).setMaxWidth("none");
+    // Popup instance is created once per mount; callers observe subsequent
+    // prop changes via the imperative `setOffset` / `setMaxWidth` / `setLngLat`
+    // calls below when the popup is open. Empty deps is deliberate.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -179,6 +185,9 @@ export function MnGeoPopup({
     })
       .setMaxWidth("none")
       .setLngLat([longitude, latitude]);
+    // Popup instance is created once per mount; callers observe subsequent
+    // prop changes via the imperative `setOffset` / `setMaxWidth` / `setLngLat`
+    // calls below when the popup is open. Empty deps is deliberate.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -10,12 +10,25 @@ import { cookies } from "next/headers";
 const COOKIE_NAME = "session";
 const ALGORITHM = { name: "HMAC", hash: "SHA-256" } as const;
 
+const DEV_SECRET = "convergio-dev-secret";
+
 /**
  * Return the session signing secret.
- * Falls back to a dev-only default — in production, always set SESSION_SECRET.
+ *
+ * Throws in production if SESSION_SECRET is missing or equal to the dev sentinel —
+ * a public repo-visible fallback must never sign real session cookies.
  */
 function getSecret(): string {
-  return process.env.SESSION_SECRET ?? "convergio-dev-secret";
+  const secret = process.env.SESSION_SECRET;
+  if (process.env.NODE_ENV === "production") {
+    if (!secret || secret === DEV_SECRET) {
+      throw new Error(
+        "SESSION_SECRET must be set to a non-default value in production",
+      );
+    }
+    return secret;
+  }
+  return secret && secret.length > 0 ? secret : DEV_SECRET;
 }
 
 async function importKey(secret: string): Promise<CryptoKey> {

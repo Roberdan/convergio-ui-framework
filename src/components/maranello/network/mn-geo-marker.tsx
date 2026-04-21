@@ -6,10 +6,16 @@
 "use client";
 
 import MapLibreGL, { type MarkerOptions } from "maplibre-gl";
-import { useEffect, useMemo, useRef, type ReactNode } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  type ReactNode,
+} from "react";
 import { createPortal } from "react-dom";
 
-import { cn } from "@/lib/utils";
+import { cn, type StyleWithVars } from "@/lib/utils";
 
 import {
   GeoMarkerContext,
@@ -47,9 +53,15 @@ export function MnGeoMarker({
   const cbRef = useRef({
     onClick, onMouseEnter, onMouseLeave, onDragStart, onDrag, onDragEnd,
   });
-  cbRef.current = {
-    onClick, onMouseEnter, onMouseLeave, onDragStart, onDrag, onDragEnd,
-  };
+
+  // Keep the latest callbacks in a ref without mutating during render —
+  // render-time mutation breaks React's purity contract under Suspense /
+  // concurrent rendering.
+  useLayoutEffect(() => {
+    cbRef.current = {
+      onClick, onMouseEnter, onMouseLeave, onDragStart, onDrag, onDragEnd,
+    };
+  });
 
   const marker = useMemo(() => {
     const inst = new MapLibreGL.Marker({
@@ -154,10 +166,7 @@ export function MnGeoMarkerContent({
         "focus-visible:ring-2 focus-visible:ring-offset-2 rounded-full",
         className,
       )}
-      style={{
-        // @ts-expect-error CSS custom property
-        "--tw-ring-color": "var(--mn-focus-ring)",
-      }}
+      style={{ "--tw-ring-color": "var(--mn-focus-ring)" } as StyleWithVars}
     >
       {children ?? <DefaultGeoMarkerIcon />}
     </div>,
