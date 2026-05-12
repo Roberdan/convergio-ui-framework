@@ -29,6 +29,23 @@ Specialist personas live in [`.claude/agents/`](./.claude/agents/) and can be in
 | `nasra` | Charts, gauges, real-time streaming, dashboards |
 | `sara-ux` | Page composition, API integration, data transforms |
 
+## MCP servers
+
+The repo ships two MCP servers in [.mcp.json](./.mcp.json):
+
+| Name | Purpose | Setup |
+|---|---|---|
+| `maranello-catalog` | Search the 108-entry component catalog (`search_components`, `get_component`, `analyze_yaml_needs`) | Works out of the box — runs `pnpm mcp` |
+| `convergio` | Talks to the Convergio daemon | Requires `CONVERGIO_DAEMON_BIN` env var pointing at the compiled `convergio-mcp-server` binary |
+
+For the `convergio` entry, add this to your shell rc once per machine:
+
+```bash
+export CONVERGIO_DAEMON_BIN="$HOME/GitHub/convergio/daemon/target/release/convergio-mcp-server"
+```
+
+Adjust the path if the daemon repo lives elsewhere. If the variable is unset, Claude Code will skip the server with a startup warning — the rest of the framework keeps working.
+
 ## Build commands
 
 ```bash
