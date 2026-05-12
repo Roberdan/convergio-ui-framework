@@ -1,26 +1,27 @@
 # Convergio UI Framework — AI Instructions
 
-## Quick start
-Read `AGENTS.md` for project overview. Each `src/` subdirectory has its own `AGENTS.md`.
+> Single source of truth for normative rules: [CONSTITUTION.md](./CONSTITUTION.md).
+> Project map and per-directory guides: [AGENTS.md](./AGENTS.md).
+> Convergio-specific workflow (worktrees, `cvg plan`, Thor gate): [.claude/CLAUDE.md](./.claude/CLAUDE.md).
+> Persona agents (Baccio, Jony, Nasra, Sara-UX): [.claude/agents/](./.claude/agents/).
 
-## Rules (NON-NEGOTIABLE)
-1. **No hardcoded colors** — `var(--mn-*)` tokens only
-2. **4 themes** — navy, dark, light, colorblind. Test all.
-3. **Lucide icons only** — zero emoji (CONSTITUTION P2)
-4. **250 lines max per file** — split to `.helpers.ts`
-5. **Named exports only** — no `export default`
-6. **TypeScript strict** — no `any`
-7. **WCAG 2.2 AA** — keyboard nav, focus rings, ARIA
-8. **i18n** — `useLocale("ns")` for all UI strings, no hardcoded English
-9. **Catalog-first** — search `src/lib/component-catalog-data.ts` before creating UI
-10. **No raw HTML tables** — use `MnDataTable`
-11. **No custom metric cards** — use `MnDashboardStrip` or `MnKpiScorecard`
+## Start here
+1. Skim [CONSTITUTION.md](./CONSTITUTION.md) — binding rules (P1-P12, A1-A7, T1-T4, C1-C4).
+2. Read [AGENTS.md](./AGENTS.md) — where things live.
+3. For task-specific work, enter the subdir and read its local `AGENTS.md`.
 
-## Component lookup
-Search `src/lib/component-catalog-data.ts` by keyword. Read the `whenToUse` field.
-Or use the MCP server: `pnpm mcp` → `search_components` tool.
+## Tooling shortcuts
 
-## Import convention
+### Component lookup
+Search `src/lib/component-catalog-data.ts` (107 entries) by keyword and read `whenToUse`. Or call the MCP server:
+
+```bash
+pnpm mcp            # exposes search_components, get_component, analyze_yaml_needs
+```
+
+The MCP server is also wired in [.mcp.json](./.mcp.json) as `maranello-catalog` for auto-discovery.
+
+### Import convention
 ```tsx
 import { MnDataTable, MnBadge } from "@/components/maranello";
 import { useLocale } from "@/lib/i18n";
@@ -28,17 +29,17 @@ import { BarChart3 } from "lucide-react";
 import { cn } from "@/lib/utils";
 ```
 
-## Color tokens
+### Color tokens (C3, T2)
 ```css
-var(--mn-accent)       var(--mn-surface)       var(--mn-text)
-var(--mn-success)      var(--mn-surface-raised) var(--mn-text-muted)
-var(--mn-warning)      var(--mn-surface-sunken) var(--mn-border)
-var(--mn-error)        var(--mn-hover-bg)       var(--mn-focus-ring)
+var(--mn-accent)       var(--mn-surface)         var(--mn-text)
+var(--mn-success)      var(--mn-surface-raised)  var(--mn-text-muted)
+var(--mn-warning)      var(--mn-surface-sunken)  var(--mn-border)
+var(--mn-error)        var(--mn-hover-bg)        var(--mn-focus-ring)
 ```
 
-## Page composition
+### Page composition
 ```tsx
-// CORRECT — Maranello components only, data mapping
+// Maranello components only, pure data mapping
 export function Page() {
   const data = useApiQuery(() => fetchData());
   return (

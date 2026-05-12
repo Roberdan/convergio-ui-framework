@@ -1,6 +1,6 @@
 # Maranello Components
 
-108 React components with `Mn` prefix. CVA + cn() for variants. `"use client"` only if hooks used.
+107 React components with `Mn` prefix. CVA + cn() for variants. `"use client"` only if hooks used.
 
 ## Categories
 
