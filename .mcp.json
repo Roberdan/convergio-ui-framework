@@ -7,6 +7,10 @@
         "CONVERGIO_MCP_RING": "1",
         "CONVERGIO_MCP_PROFILE": "compact"
       }
+    },
+    "maranello-catalog": {
+      "command": "pnpm",
+      "args": ["mcp"]
     }
   }
 }

@@ -309,7 +309,7 @@ src/
 src-tauri/                  # optional Tauri desktop scaffold
 docs/
   guides/                   # how-to guides (see Documentation section)
-  components/               # per-component MDX docs (108 files)
+  components/               # per-component MDX docs (107 files)
   adr/                      # architecture decision records
 ```
 
