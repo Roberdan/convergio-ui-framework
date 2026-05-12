@@ -13,7 +13,7 @@
 ## Tooling shortcuts
 
 ### Component lookup
-Search `src/lib/component-catalog-data.ts` (107 entries) by keyword and read `whenToUse`. Or call the MCP server:
+Search `src/lib/component-catalog-data.ts` (108 entries) by keyword and read `whenToUse`. Or call the MCP server:
 
 ```bash
 pnpm mcp            # exposes search_components, get_component, analyze_yaml_needs

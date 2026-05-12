@@ -1,6 +1,6 @@
 # Convergio UI Framework — Copilot Instructions
 
-Dashboard framework for the Convergio daemon. Next.js 16, React 19, 107 Maranello components.
+Dashboard framework for the Convergio daemon. Next.js 16, React 19, 108 Maranello components.
 
 ## Where to look
 
