@@ -1,8 +1,15 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixes
+
+- fix(api/chat): Azure content-filter rejections (`error.code === "content_filter"` on an HTTP 400, or `finishReason === "content-filter"` on an otherwise-200 stream) now surface as a readable notice appended to the text stream instead of a silently truncated response or an unhandled network error. Only the enum-like `error.code` is ever read from the provider error body — never the body text itself.
+
 ## [1.8.0] - 21 April 2026
 
 ### MapLibre Geo Components (ported from mapcn, MIT)
+
 - feat(network): `MnGeoMap` — MapLibre GL JS tile map container, SSR-safe, auto theme detection from `data-theme` (navy/dark → dark basemap, light/colorblind → light), controlled + uncontrolled viewport, projection support (incl. globe), no default tile provider shipped (consumer supplies `styles`)
 - feat(network): `MnGeoMarker` + `MnGeoMarkerContent` + `MnGeoMarkerLabel` + `MnGeoMarkerPopup` + `MnGeoMarkerTooltip` — lat/lon-anchored markers with click/hover/drag handlers and composable slot children
 - feat(network): `MnGeoPopup` — standalone coordinate-anchored popup independent of markers, with `onClose` handler
@@ -17,6 +24,7 @@
 - test: 5 new Vitest smoke tests (MapLibre mocked because happy-dom lacks WebGL)
 
 ### Compliance
+
 - mapcn is MIT (© 2025 Anmoldeep Singh); attribution preserved in per-file headers and `THIRD_PARTY_LICENSES.md`.
 - MapLibre GL JS is BSD-3-Clause; bundled unmodified via npm.
 - Tile data is NOT shipped — consumer supplies `styles` and complies with their chosen provider's TOS (OSM, CARTO, MapTiler, Mapbox, etc.). MapLibre renders `attributionControl` automatically.
@@ -24,6 +32,7 @@
 ## [1.7.2] - 15 April 2026
 
 ### Block Registry + Build Fixes
+
 - feat: 20 `.register.ts` files for dynamic block registration (blocks + Maranello data-viz, network, ops, strategy, agentic)
 - feat: 2 block wrappers (`ai-chat-block-wrapper.tsx`, `chart-block-wrapper.tsx`) for YAML page renderer
 - fix: Recharts SSG warning — `MnChart` now defers `ResponsiveContainer` render until client mount
@@ -34,6 +43,7 @@
 ## [1.7.1] - 14 April 2026
 
 ### Documentation Restructure
+
 - docs: per-folder `AGENTS.md` in every `src/` subdirectory (9 files) — any agent gets local context on entry
 - docs: root docs slimmed 1059→397 lines (−63%), zero duplication between files
 - docs: agent specialist files restored with full domain knowledge (gauge complications, CRUD patterns, a11y checklist, composition recipes) — updated for v1.7.0 (103 components, 10 MCP tools, 5 providers)
@@ -43,6 +53,7 @@
 ## [1.7.0] - 14 April 2026
 
 ### Core Package + Smart Registry
+
 - feat: dynamic block registry — PageRenderer loads components lazily from a Map-based registry instead of 12 static imports
 - feat: `registerBlock()` / `lazyBlock()` / `getBlock()` API in `src/lib/block-registry.ts`
 - feat: `block-registrations.ts` auto-registers all built-in block types for framework mode
@@ -56,6 +67,7 @@
 - chore: MCP server version 1.0.0 → 1.1.0, now 10 tools
 
 ### Provider summary (5 SDK providers)
+
 - `openai` — OpenAI API (OPENAI_API_KEY)
 - `azure` — Azure OpenAI (AZURE_OPENAI_ENDPOINT + AZURE_OPENAI_API_KEY)
 - `anthropic` — Anthropic API (ANTHROPIC_API_KEY)
@@ -65,6 +77,7 @@
 ## [1.6.0] - 14 April 2026
 
 ### Multi-Provider AI Routing
+
 - feat(ai): 8 provider options for chat agents, configured via `convergio.yaml`
 - SDK-based: `openai`, `anthropic`, `copilot`, `qwen` (via Vercel AI SDK)
 - CLI-based: `claude-cli`, `copilot-cli`, `qwen-cli` (spawn local binary, no API keys)
@@ -74,6 +87,7 @@
 ## [1.5.1] - 14 April 2026
 
 ### Theme Refinements
+
 - feat(theme): tint all neutral tokens per brand temperature — dark theme warm-amber, colorblind theme cool-blue, light theme warm ivory
 - feat(theme): per-theme tinted shadows with hairline glow borders replacing global pure-black shadows
 - All values verified WCAG AA compliant; navy theme unchanged (already tinted)
@@ -81,6 +95,7 @@
 ## [1.4.2] - 09 April 2026
 
 ### Bug Fixes (closes #51, #52, #53, #54)
+
 - fix(brain3d): `showTraffic` prop now correctly forwarded to scene renderer (#51)
 - fix(a11y): duration text in MnProcessTimeline accessible via sr-only span (#52)
 - fix(sse): reconnect timer cleared on unmount — prevents stacked retries (#53)
@@ -89,11 +104,13 @@
 ## [1.4.1] - 09 April 2026
 
 ### Bug Fixes
+
 - fix(gauge): reverted incorrect -90° Canvas angle offset from v1.3.1 — `startAngle`/`endAngle` props are already in Canvas coordinates and don't need transformation
 
 ## [1.4.0] - 09 April 2026
 
 ### Agentic Enhancements (closes #46, #47, #48, #49)
+
 - Feat: `useSSEAdapter<T>` — generic SSE adapter hook with reducer-based state accumulation
 - Feat: 5 convenience SSE hooks: `useBrain3DLive`, `useAgentTraceLive`, `useHubSpokeLive`, `useApprovalChainLive`, `useActiveMissionsLive`
 - Feat: `MnProcessTimeline` — new horizontal/vertical multi-step workflow visualization with actor avatars, status indicators, duration display, and click handlers
@@ -101,6 +118,7 @@
 - Feat: `MnBrain3D` — configurable animated edge particles with per-edge `particles`, `particleSpeed`, `particleColor`, `bidirectional` props; 20-particle cap for performance
 
 ### Code Quality
+
 - Fix: resolved all 20 ESLint warnings across 14 files (unused vars, img elements)
 - Fix: `react-hooks/refs` error in `useSSEAdapter` — moved ref update to useEffect
 - Fix: extracted `mn-agent-trace.helpers.tsx` to keep file under 250-line limit
@@ -109,14 +127,17 @@
 ## [1.3.1] - 09 April 2026
 
 ### Bug Fixes
+
 - fix(gauge): corrected MnGauge needle rotation off by 90° — applied -90° Canvas angle offset so the gauge arc spans 7→5 o'clock as expected (closes #43)
 
 ### Tests
+
 - test(e2e): added comprehensive full-navigation Playwright suite (529 lines) covering all 12 dashboard pages, sidebar navigation, modals, filters, stress tests, and accessibility checks
 
 ## [1.3.0] - 09 April 2026
 
 ### i18n (closes #41, #42)
+
 - Feat: framework-wide i18n system — `MnLocaleProvider` context, `useLocale()` hook, `resolveLocale()` for server components
 - Feat: YAML `locale:` section support in config schema and loader
 - Feat: 80+ typed i18n namespaces with English defaults covering all components
@@ -129,16 +150,19 @@
 ## [1.2.0] - 08 April 2026
 
 ### MCP Server
+
 - Feat: built-in Model Context Protocol server (`pnpm mcp`) with 7 tools for AI agent integration
 - Tools: `search_components`, `get_component`, `list_categories`, `generate_yaml_page`, `list_block_types`, `get_composition`, `get_theme_tokens`
 - Reads from the real component catalog and Zod schemas — zero hardcoded data
 - Supports stdio transport for Copilot CLI, Claude Desktop, and VS Code
 
 ### Onboarding (closes #35)
+
 - Docs: clarified that `convergio-design` is archived; `convergio-frontend` is the only starting point
 - Updated README "Two Ways to Use It" and AGENTS.md "Two Usage Modes" with explicit callout
 
 ### Cockpit Showcase & Gauge Complications
+
 - Feat: dedicated **Cockpit** showcase section (`/showcase/cockpit`) with 6 instrument groups faithful to the old convergio-design demo
 - Feat: `MnGauge` now supports **crosshair** complication (scatter dots, axis labels, quadrant counts) — new `crosshair` and `quadrantCounts` props
 - Feat: `MnGauge` now supports **multigraph** complication (sparkline area chart inside gauge face) — new `multigraph` prop
@@ -151,6 +175,7 @@
 - Feat: cockpit added to sidebar navigation with Gauge icon
 
 ### Preset Gallery
+
 - Feat: added `/showcase/presets` with three accessibility-first starter previews: workspace, ops, and executive
 - Feat: upgraded the showcase landing preview from toy widgets to product-style live surfaces
 - Docs: added curated preset YAMLs under `presets/` and quick-start instructions in `README.md`
@@ -158,6 +183,7 @@
 ## [1.1.0] - 07 April 2026
 
 ### Agent Skill Definitions
+
 - Docs: upgraded 4 AGENT-*.md from wave task lists to permanent skill definitions
   - **Nasra**: data-viz, charts, gauges, real-time streaming, monitoring
   - **Jony**: CRUD pages, data tables, forms, modals, detail panels
@@ -173,12 +199,14 @@ components, 4 themes, 17 dashboard pages, AI chat, shadcn-compatible registry,
 and complete documentation (7 guides, 102 component MDX docs).
 
 ### Night Agents Dashboard
+
 - Feat: `/night-agents` page — KPI strip, agent definitions table, active runs, tracked projects
 - Feat: typed API client (`api-night-agents.ts`) for all night-agents daemon endpoints
 - Feat: TypeScript types (`types/night-agents.ts`) mirroring daemon Rust crate
 - Feat: sidebar navigation entry under Operations (Moon icon)
 
 ### DX Improvements
+
 - Docs: `CLAUDE.md` — AI-first instructions with mandatory component selection table (30+ mappings)
 - Docs: `docs/guides/recipes.md` — 5 composition patterns (OKR Dashboard, CRUD Page, Analytics, Gantt+Detail, Simulator)
 - Docs: `docs/guides/common-mistakes.md` — 10 real mistakes with wrong vs correct code examples
@@ -186,6 +214,7 @@ and complete documentation (7 guides, 102 component MDX docs).
 - Feat: prescriptive `whenToUse` fields in `component-catalog-data.ts` for MnDataTable, MnDetailPanel, MnDashboardStrip, MnHbar, MnBadge
 
 ### Housekeeping
+
 - Fix: unified night-agents types (removed duplicate `types-night-agents.ts`)
 - Fix: aligned doc examples with actual component APIs (`tone` not `variant`, correct `MnStateScaffold` props)
 - Fix: night-agents page uses `MnDashboardStrip` instead of custom KpiCard (P10 compliance)
@@ -196,11 +225,13 @@ and complete documentation (7 guides, 102 component MDX docs).
 ## [0.3.0] - 06 April 2026
 
 ### Documentation & Onboarding
+
 - Docs: rewrote README.md — framework-first onboarding, two usage modes (framework vs registry), concrete YAML quickstart, mental model diagram, custom pages guide
 - Docs: created AGENTS.md — complete guide for AI coding agents (mental model, key files, conventions, common mistakes)
 - Chore: cleaned up 11 stale git branches (4 merged remote + 7 squash-merged remote + 1 local)
 
 ### W1: Fix & Restructure
+
 - Refactor: split 3 oversized files (gauge, date-range-picker, command-palette) into component + helpers
 - Refactor: fix network barrel exports (3 missing components)
 - Fix: replace hardcoded hex colors in 9 files with --mn-* CSS custom properties
@@ -209,6 +240,7 @@ and complete documentation (7 guides, 102 component MDX docs).
 - Fix: sidebar navigation with 12 category sections + Cmd-K update
 
 ### W2: Complete Showcase + A11y
+
 - Feat: add live demos for 34 missing components across all categories
 - Feat: component catalog (100 entries) with bilingual EN/IT fuzzy search
 - Feat: Cmd-K fuzzy component search across name, description, keywords
@@ -216,6 +248,7 @@ and complete documentation (7 guides, 102 component MDX docs).
 - Feat: inline component documentation with props table + code snippets
 
 ### W3: Guides & MDX Documentation
+
 - Docs: 100 .mdx component documentation files + generation script
 - Docs: guide "Creating a new component" with full example
 - Docs: guide "Adding icons" (Lucide-only policy)
@@ -225,6 +258,7 @@ and complete documentation (7 guides, 102 component MDX docs).
 ## [0.2.1] - 03 April 2026
 
 ### Documentation Cleanup
+
 - Rewrote README.md: accurate component count (100), correct AI SDK version (v6), proper architecture diagram, env var table, accurate config-driven docs
 - Deleted stale docs: waves/, PHASE2-SUMMARY.md, WT-test-foundation.md, plan-10040-notes.md
 - Fixed CONSTITUTION.md: clarified as governance/policy doc
@@ -243,6 +277,7 @@ and complete documentation (7 guides, 102 component MDX docs).
 Plan 10050 | 60 tasks | 16 waves | Thor validated
 
 #### Added
+
 - A2UI protocol frontend consumer: SSE client, block store, renderer, dashboard widget (W0)
 - WCAG 2.2 AA accessibility: focus-visible, skip links, semantic HTML, ARIA, status tokens (WA)
 - Block loading/error/empty states, chat UX improvements, design token system (WQ)
@@ -257,9 +292,11 @@ Plan 10050 | 60 tasks | 16 waves | Thor validated
 - Phase 2 summary documentation
 
 #### Changed
+
 - Foundation hardening: theme hydration, error boundaries, Zod validation, responsive layouts (WF)
 
 #### Fixed
+
 - Theme hydration flash on initial load
 - Missing error boundaries causing white screens
 
