@@ -5,6 +5,7 @@
 ### Fixes
 
 - fix(api/chat): Azure content-filter rejections (`error.code === "content_filter"` on an HTTP 400, or `finishReason === "content-filter"` on an otherwise-200 stream) now surface as a readable notice appended to the text stream instead of a silently truncated response or an unhandled network error. Only the enum-like `error.code` is ever read from the provider error body — never the body text itself.
+- test(api/chat): added `route.content-filter.integration.test.ts` — exercises the real `ai` `streamText()` + `APICallError` + `ai/test`'s official `MockLanguageModelV3` (not a mocked `ai` module) across success, `finishReason: "content-filter"`, a real `APICallError` thrown mid-stream, and two non-content-filter mid-stream errors that must propagate rather than being masked as a content-filter notice.
 
 ## [1.8.0] - 21 April 2026
 
