@@ -5,6 +5,7 @@ import { z } from "zod";
 import { consumeToken } from "@/lib/rate-limit";
 import { verifyValue } from "@/lib/session";
 import type { AgentConfig } from "@/types/ai";
+import { toTextStreamResponseWithContentFilterNotice } from "./content-filter-stream";
 
 /**
  * POST /api/chat — streaming chat completions via Vercel AI SDK.
@@ -18,10 +19,14 @@ import type { AgentConfig } from "@/types/ai";
  */
 
 const chatRequestSchema = z.object({
-  messages: z.array(z.object({
-    role: z.enum(["user", "assistant", "system"]),
-    content: z.string().min(1),
-  })).min(1),
+  messages: z
+    .array(
+      z.object({
+        role: z.enum(["user", "assistant", "system"]),
+        content: z.string().min(1),
+      }),
+    )
+    .min(1),
   agentId: z.string().optional(),
 });
 
@@ -41,21 +46,25 @@ function resolveModel(agent: AgentConfig) {
     }
     case "qwen": {
       const qwen = createOpenAI({
-        baseURL: process.env.QWEN_BASE_URL ?? "https://dashscope.aliyuncs.com/compatible-mode/v1",
+        baseURL:
+          process.env.QWEN_BASE_URL ??
+          "https://dashscope.aliyuncs.com/compatible-mode/v1",
         apiKey: process.env.QWEN_API_KEY ?? "",
       });
       return qwen(agent.model);
     }
     case "anthropic": {
       const anthropic = createOpenAI({
-        baseURL: process.env.ANTHROPIC_BASE_URL ?? "https://api.anthropic.com/v1",
+        baseURL:
+          process.env.ANTHROPIC_BASE_URL ?? "https://api.anthropic.com/v1",
         apiKey: process.env.ANTHROPIC_API_KEY ?? "",
       });
       return anthropic(agent.model);
     }
     case "copilot": {
       const copilot = createOpenAI({
-        baseURL: process.env.COPILOT_BASE_URL ?? "https://api.githubcopilot.com",
+        baseURL:
+          process.env.COPILOT_BASE_URL ?? "https://api.githubcopilot.com",
         apiKey: process.env.GITHUB_TOKEN ?? "",
       });
       return copilot(agent.model);
@@ -115,16 +124,29 @@ export async function POST(req: Request) {
     body = await req.json();
   } catch {
     return Response.json(
-      { error: { code: "INVALID_JSON", message: "Request body must be valid JSON" } },
+      {
+        error: {
+          code: "INVALID_JSON",
+          message: "Request body must be valid JSON",
+        },
+      },
       { status: 400 },
     );
   }
 
   const parsed = chatRequestSchema.safeParse(body);
   if (!parsed.success) {
-    const details = parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`);
+    const details = parsed.error.issues.map(
+      (i) => `${i.path.join(".")}: ${i.message}`,
+    );
     return Response.json(
-      { error: { code: "VALIDATION_ERROR", message: "Invalid request", details } },
+      {
+        error: {
+          code: "VALIDATION_ERROR",
+          message: "Invalid request",
+          details,
+        },
+      },
       { status: 422 },
     );
   }
@@ -134,8 +156,9 @@ export async function POST(req: Request) {
   const aiConfig = loadAIConfig();
 
   const agent =
-    aiConfig.agents.find((a) => a.id === (agentId ?? aiConfig.defaultAgentId)) ??
-    aiConfig.agents[0];
+    aiConfig.agents.find(
+      (a) => a.id === (agentId ?? aiConfig.defaultAgentId),
+    ) ?? aiConfig.agents[0];
 
   if (!agent) {
     return Response.json(
@@ -154,14 +177,20 @@ export async function POST(req: Request) {
     );
   }
 
+  // Aborted when the client cancels the response, so the provider call stops too.
+  const abortController = new AbortController();
   const result = streamText({
     model,
     system: agent.systemPrompt,
     messages,
+    abortSignal: abortController.signal,
     ...(agent.maxTokens ? { maxOutputTokens: agent.maxTokens } : {}),
   });
 
-  const response = result.toTextStreamResponse();
+  const response = toTextStreamResponseWithContentFilterNotice(
+    result,
+    abortController,
+  );
   response.headers.set("X-RateLimit-Limit", String(rate.limit));
   response.headers.set("X-RateLimit-Remaining", String(rate.remaining));
   return response;

@@ -23,13 +23,21 @@ vi.mock("@ai-sdk/openai", () => ({
   createOpenAI: vi.fn(() => vi.fn(() => ({ modelId: "qwen-plus" }))),
 }));
 
-vi.mock("ai", () => ({
+/**
+ * `streamText` is replaced with a stub whose result exposes the two members
+ * the route reads: a one-part `fullStream` and a `stop` finish reason.
+ * Content-filter behavior lives in content-filter-stream.test.ts.
+ */
+vi.mock("ai", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("ai")>()),
   streamText: vi.fn(() => ({
-    toTextStreamResponse: () =>
-      new Response("streamed", {
-        status: 200,
-        headers: new Headers({ "Content-Type": "text/plain" }),
-      }),
+    fullStream: new ReadableStream({
+      start(controller) {
+        controller.enqueue({ type: "text-delta", id: "t1", text: "streamed" });
+        controller.close();
+      },
+    }),
+    finishReason: Promise.resolve("stop"),
   })),
 }));
 
@@ -139,6 +147,7 @@ describe("POST /api/chat", () => {
     expect(res.status).toBe(200);
     expect(res.headers.get("X-RateLimit-Limit")).toBe("60");
     expect(res.headers.get("X-RateLimit-Remaining")).toBe("59");
+    expect(await res.text()).toBe("streamed");
   });
 
   it("returns 429 once the per-session bucket is drained", async () => {
