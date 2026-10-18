@@ -94,6 +94,37 @@ export function streamThatErrorsMidStream(
 }
 
 /**
+ * A provider stream that emits text, then an `error` part (how providers
+ * report an error chunk inside an otherwise-200 response), then finishes
+ * with finishReason "error". Unlike `controller.error()`, the stream itself
+ * ends normally, so only the error part signals the failure.
+ */
+export function streamWithErrorPartAfterText(
+  textDeltas: string[],
+  error: unknown,
+) {
+  return {
+    stream: new ReadableStream({
+      start(controller) {
+        controller.enqueue({ type: "stream-start", warnings: [] });
+        controller.enqueue({ type: "text-start", id: "t1" });
+        for (const delta of textDeltas) {
+          controller.enqueue({ type: "text-delta", id: "t1", delta });
+        }
+        controller.enqueue({ type: "error", error });
+        controller.enqueue({ type: "text-end", id: "t1" });
+        controller.enqueue({
+          type: "finish",
+          usage,
+          finishReason: { unified: "error", raw: "error" },
+        });
+        controller.close();
+      },
+    }),
+  };
+}
+
+/**
  * A provider stream that emits one text delta and then stalls. Like `fetch`,
  * it errors its body only when the request's abort signal fires, so a test
  * can observe whether client cancellation reaches the provider call.

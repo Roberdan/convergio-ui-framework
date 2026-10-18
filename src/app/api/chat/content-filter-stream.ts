@@ -44,8 +44,10 @@ export type ChatStreamResult = {
  * `streamText`: the SDK's stream views are tee branches, so only the signal
  * reaches the provider request. Nothing is read or written after that.
  *
- * Content-filter outcomes become an appended notice. Any other stream error
- * still errors the response, so it fails loudly instead of being swallowed.
+ * Content-filter outcomes become an appended notice. Any other error, whether
+ * the stream fails or the SDK reports an `error` part after partial output,
+ * errors the response, so it fails loudly instead of being swallowed or
+ * passed off as a complete answer.
  */
 export function toTextStreamResponseWithContentFilterNotice(
   result: ChatStreamResult,
@@ -63,7 +65,9 @@ export function toTextStreamResponseWithContentFilterNotice(
       contentFiltered = (await result.finishReason) === "content-filter";
       if (cancelled) return;
     }
-    if (contentFiltered) controller.enqueue(encoder.encode(CONTENT_FILTER_NOTICE));
+    if (contentFiltered) {
+      controller.enqueue(encoder.encode(CONTENT_FILTER_NOTICE));
+    }
     controller.close();
   }
 
@@ -79,7 +83,8 @@ export function toTextStreamResponseWithContentFilterNotice(
               controller.enqueue(encoder.encode(part.text));
               return;
             }
-            if (part.type === "error" && isContentFilterError(part.error)) {
+            if (part.type === "error") {
+              if (!isContentFilterError(part.error)) throw part.error;
               contentFiltered = true;
             }
           }

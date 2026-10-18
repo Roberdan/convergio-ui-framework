@@ -8,6 +8,7 @@ import {
   contentFilterError,
   stalledStreamUntilAborted,
   streamThatErrorsMidStream,
+  streamWithErrorPartAfterText,
   successStream,
 } from "./chat-test-fixtures";
 
@@ -164,6 +165,24 @@ describe("POST /api/chat — content-filter integration (real ai + MockLanguageM
 
     expect(res.status).toBe(200);
     await expect(res.text()).rejects.toBeTruthy();
+  });
+
+  it("does NOT silently truncate when the provider emits an unrelated error part after partial output and finishes with finishReason error", async () => {
+    // The SDK's default onError logs the error part server-side; keep CI output clean.
+    const serverLog = vi.spyOn(console, "error").mockImplementation(() => {});
+    fakeModel = new MockLanguageModelV3({
+      doStream: async () =>
+        streamWithErrorPartAfterText(["Partial reply. "], {
+          message: "SECRET_NONFILTER_UPSTREAM_DETAIL",
+          type: "server_error",
+        }),
+    });
+    const res = await postHi();
+
+    expect(res.status).toBe(200);
+    await expect(
+      res.text().finally(() => serverLog.mockRestore()),
+    ).rejects.toBeTruthy();
   });
 
   it("forwards client cancellation to the provider call while a read is still pending on a stalled stream", async () => {

@@ -150,12 +150,17 @@ describe("toTextStreamResponseWithContentFilterNotice", () => {
     );
   });
 
-  it("leaves a non-content-filter error part to the finish outcome, as before", async () => {
-    const parts = source([errorPart(new Error("deployment not found"))]);
+  it("fails the response on an unrelated error part after partial output, even when finishReason resolves", async () => {
+    const parts = source([
+      delta("Partial answer. "),
+      errorPart(new Error("upstream provider error")),
+    ]);
+    const stream = streamResult(parts.stream, async () => "error");
 
-    await expect(
-      respond(streamResult(parts.stream, noOutput)).text(),
-    ).rejects.toThrow(/No output generated/);
+    await expect(respond(stream).text()).rejects.toThrow(
+      /upstream provider error/,
+    );
+    expect(stream.counts.finishReason).toBe(0);
   });
 
   it("reads the source only as fast as a slow client consumes", async () => {
