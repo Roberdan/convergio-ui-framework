@@ -1,10 +1,11 @@
 import { cookies } from "next/headers";
 import { openai, createOpenAI } from "@ai-sdk/openai";
-import { streamText, APICallError } from "ai";
+import { streamText } from "ai";
 import { z } from "zod";
 import { consumeToken } from "@/lib/rate-limit";
 import { verifyValue } from "@/lib/session";
 import type { AgentConfig } from "@/types/ai";
+import { toTextStreamResponseWithContentFilterNotice } from "./content-filter-stream";
 
 /**
  * POST /api/chat — streaming chat completions via Vercel AI SDK.
@@ -77,63 +78,6 @@ function resolveModel(agent: AgentConfig) {
       throw new Error(`Unknown provider "${exhaustive}".`);
     }
   }
-}
-
-/**
- * Azure (and Azure-fronted OpenAI-compatible) providers reject or truncate a
- * generation under `content_filter` in two shapes:
- * - an immediate 400 `APICallError` whose parsed body is `{ error: { code: "content_filter" } }`
- * - a 200 response that completes with `finishReason === "content-filter"`
- * Both must reach the client as a readable notice appended to the text stream,
- * instead of a silently truncated response or an opaque network error. Only
- * the enum-like `error.code` is ever read from the error body — never the
- * body text itself, which may echo the prompt back.
- */
-const CONTENT_FILTER_NOTICE =
-  "\n\n⚠️ This response was stopped by the content filter and could not be completed.";
-
-function isContentFilterError(error: unknown): boolean {
-  if (!APICallError.isInstance(error)) return false;
-  const code = (error.data as { error?: { code?: unknown } } | undefined)?.error
-    ?.code;
-  return code === "content_filter";
-}
-
-/**
- * Wraps `streamText`'s text stream so a content-filter rejection — whether it
- * arrives as a thrown error mid-stream or as a `content-filter` finish reason
- * on an otherwise-200 response — surfaces as an appended notice instead of a
- * silently truncated or dropped stream. Any other stream error is re-thrown
- * so it still fails loudly (visible in server logs / Next.js error overlay)
- * rather than being swallowed.
- */
-function toTextStreamResponseWithContentFilterNotice(
-  result: ReturnType<typeof streamText>,
-): Response {
-  const encoder = new TextEncoder();
-  const stream = new ReadableStream<Uint8Array>({
-    async start(controller) {
-      try {
-        for await (const chunk of result.textStream) {
-          controller.enqueue(encoder.encode(chunk));
-        }
-        if ((await result.finishReason) === "content-filter") {
-          controller.enqueue(encoder.encode(CONTENT_FILTER_NOTICE));
-        }
-      } catch (err) {
-        if (isContentFilterError(err)) {
-          controller.enqueue(encoder.encode(CONTENT_FILTER_NOTICE));
-        } else {
-          controller.error(err);
-          return;
-        }
-      }
-      controller.close();
-    },
-  });
-  return new Response(stream, {
-    headers: { "Content-Type": "text/plain; charset=utf-8" },
-  });
 }
 
 export async function POST(req: Request) {
@@ -233,14 +177,20 @@ export async function POST(req: Request) {
     );
   }
 
+  // Aborted when the client cancels the response, so the provider call stops too.
+  const abortController = new AbortController();
   const result = streamText({
     model,
     system: agent.systemPrompt,
     messages,
+    abortSignal: abortController.signal,
     ...(agent.maxTokens ? { maxOutputTokens: agent.maxTokens } : {}),
   });
 
-  const response = toTextStreamResponseWithContentFilterNotice(result);
+  const response = toTextStreamResponseWithContentFilterNotice(
+    result,
+    abortController,
+  );
   response.headers.set("X-RateLimit-Limit", String(rate.limit));
   response.headers.set("X-RateLimit-Remaining", String(rate.remaining));
   return response;
