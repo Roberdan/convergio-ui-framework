@@ -125,6 +125,43 @@ export function streamWithErrorPartAfterText(
 }
 
 /**
+ * A provider stream that emits text and an unrelated `error` part, then keeps
+ * streaming a delta every millisecond until its request is aborted, like a
+ * live provider connection. `stop()` is the test's cleanup safety net.
+ */
+export function streamThatKeepsGoingAfterErrorPart(
+  error: unknown,
+  abortSignal: AbortSignal | undefined,
+) {
+  const state = { lateDeltas: 0, aborted: false };
+  let timer: ReturnType<typeof setInterval> | undefined;
+  const stop = () => clearInterval(timer);
+  const stream = new ReadableStream({
+    start(controller) {
+      controller.enqueue({ type: "stream-start", warnings: [] });
+      controller.enqueue({ type: "text-start", id: "t1" });
+      controller.enqueue({ type: "text-delta", id: "t1", delta: "Partial. " });
+      controller.enqueue({ type: "error", error });
+      timer = setInterval(() => {
+        state.lateDeltas += 1;
+        try {
+          controller.enqueue({ type: "text-delta", id: "t1", delta: "late " });
+        } catch {
+          stop();
+        }
+      }, 1);
+      abortSignal?.addEventListener("abort", () => {
+        stop();
+        state.aborted = true;
+        controller.error(abortSignal.reason);
+      });
+    },
+    cancel: stop,
+  });
+  return { stream, state, stop };
+}
+
+/**
  * A provider stream that emits one text delta and then stalls. Like `fetch`,
  * it errors its body only when the request's abort signal fires, so a test
  * can observe whether client cancellation reaches the provider call.

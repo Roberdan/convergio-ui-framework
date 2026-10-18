@@ -8,6 +8,7 @@ import {
   contentFilterError,
   stalledStreamUntilAborted,
   streamThatErrorsMidStream,
+  streamThatKeepsGoingAfterErrorPart,
   streamWithErrorPartAfterText,
   successStream,
 } from "./chat-test-fixtures";
@@ -183,6 +184,30 @@ describe("POST /api/chat — content-filter integration (real ai + MockLanguageM
     await expect(
       res.text().finally(() => serverLog.mockRestore()),
     ).rejects.toBeTruthy();
+  });
+
+  it("aborts the provider call when it keeps streaming after an unrelated error part (issue #99)", async () => {
+    // The SDK's default onError logs the error part server-side; keep CI output clean.
+    const serverLog = vi.spyOn(console, "error").mockImplementation(() => {});
+    let live: ReturnType<typeof streamThatKeepsGoingAfterErrorPart> | undefined;
+    fakeModel = new MockLanguageModelV3({
+      doStream: async ({ abortSignal }) => {
+        live = streamThatKeepsGoingAfterErrorPart(
+          { message: "SECRET_NONFILTER_UPSTREAM_DETAIL", type: "server_error" },
+          abortSignal,
+        );
+        return { stream: live.stream };
+      },
+    });
+    try {
+      const res = await postHi();
+
+      await expect(res.text()).rejects.toBeTruthy();
+      expect(live?.state.aborted).toBe(true);
+    } finally {
+      live?.stop();
+      serverLog.mockRestore();
+    }
   });
 
   it("forwards client cancellation to the provider call while a read is still pending on a stalled stream", async () => {
