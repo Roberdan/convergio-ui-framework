@@ -39,15 +39,19 @@ export type ChatStreamResult = {
  *
  * Pull-driven: the source is read only when the client reads (highWaterMark
  * 0), so a slow client never makes output pile up in the response queue.
- * Cancelling the response cancels a pending source read immediately and
- * aborts `abortController`, which must be the one whose signal was passed to
- * `streamText`: the SDK's stream views are tee branches, so only the signal
- * reaches the provider request. Nothing is read or written after that.
  *
- * Content-filter outcomes become an appended notice. Any other error, whether
- * the stream fails or the SDK reports an `error` part after partial output,
- * errors the response, so it fails loudly instead of being swallowed or
- * passed off as a complete answer.
+ * Every terminal path (normal end, content-filter notice, error, client
+ * cancellation) goes through `end()`: nothing is read or written afterwards,
+ * `abortController` is aborted and the source reader is cancelled without
+ * waiting for that cancellation, because an SDK tee branch can settle late or
+ * never. The abort is what stops the provider: `abortController` must be the
+ * one whose signal was passed to `streamText`, since the SDK's stream views
+ * are tee branches that a reader cancel alone never reaches.
+ *
+ * Content-filter outcomes end the response with the notice. Any other error,
+ * whether the stream fails or the SDK reports an `error` part after partial
+ * output, errors the response, so it fails loudly instead of being swallowed
+ * or passed off as a complete answer.
  */
 export function toTextStreamResponseWithContentFilterNotice(
   result: ChatStreamResult,
@@ -55,19 +59,21 @@ export function toTextStreamResponseWithContentFilterNotice(
 ): Response {
   const encoder = new TextEncoder();
   const reader = result.fullStream.getReader();
-  let cancelled = false;
-  let contentFiltered = false;
+  let ended = false;
 
-  async function finish(
+  function end(reason?: unknown): void {
+    if (ended) return;
+    ended = true;
+    abortController.abort(reason);
+    reader.cancel(reason).catch(() => {});
+  }
+
+  function close(
     controller: ReadableStreamDefaultController<Uint8Array>,
-  ): Promise<void> {
-    if (!contentFiltered) {
-      contentFiltered = (await result.finishReason) === "content-filter";
-      if (cancelled) return;
-    }
-    if (contentFiltered) {
-      controller.enqueue(encoder.encode(CONTENT_FILTER_NOTICE));
-    }
+    withNotice: boolean,
+  ): void {
+    end();
+    if (withNotice) controller.enqueue(encoder.encode(CONTENT_FILTER_NOTICE));
     controller.close();
   }
 
@@ -77,31 +83,28 @@ export function toTextStreamResponseWithContentFilterNotice(
         try {
           for (;;) {
             const { done, value: part } = await reader.read();
-            if (cancelled) return;
-            if (done) return await finish(controller);
+            if (ended) return;
+            if (done) break;
             if (part.type === "text-delta") {
               controller.enqueue(encoder.encode(part.text));
               return;
             }
-            if (part.type === "error") {
-              if (!isContentFilterError(part.error)) throw part.error;
-              contentFiltered = true;
-            }
+            if (part.type === "error") throw part.error;
           }
+          const finishReason = await result.finishReason;
+          if (!ended) close(controller, finishReason === "content-filter");
         } catch (err) {
-          if (cancelled) return;
-          if (!isContentFilterError(err)) {
-            controller.error(err);
+          if (ended) return;
+          if (isContentFilterError(err)) {
+            close(controller, true);
             return;
           }
-          controller.enqueue(encoder.encode(CONTENT_FILTER_NOTICE));
-          controller.close();
+          end(err);
+          controller.error(err);
         }
       },
       cancel(reason) {
-        cancelled = true;
-        abortController.abort(reason);
-        return reader.cancel(reason);
+        end(reason);
       },
     },
     { highWaterMark: 0 },
