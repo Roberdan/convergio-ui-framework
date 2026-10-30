@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### License
+
+- The project is now released under the MIT license (previously MPL-2.0): `LICENSE`, `packages/core/package.json` and the README are updated. Versions already published keep the license they were released with.
+
 ### Fixes
 
 - fix(api/chat): Azure content-filter rejections (`error.code === "content_filter"` on an HTTP 400, whether it rejects the provider call before any output or arrives mid-stream, or `finishReason === "content-filter"` on an otherwise-200 stream) now surface as a plain-text notice (`Warning: This response was stopped by the content filter and could not be completed.`) appended to the text stream instead of a silently truncated response or an unhandled network error. The adapter reads `streamText`'s `fullStream`, because its `textStream` drops the `error` part that carries a prompt rejection; for the same reason, an unrelated `error` part after partial output now errors the response instead of passing a truncated answer off as complete. Only the enum-like `error.code` is ever read from the provider error body — never the body text itself.
