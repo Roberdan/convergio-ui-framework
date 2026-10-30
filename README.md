@@ -582,4 +582,4 @@ import { MnBadge, MnChart, MnDataTable, MnGauge } from "@/components/maranello"
 
 ## License
 
-MPL-2.0
+MIT — see [LICENSE](./LICENSE).
