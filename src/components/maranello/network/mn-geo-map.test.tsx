@@ -126,3 +126,19 @@ describe("MnGeoControls", () => {
     ).toBeInTheDocument();
   });
 });
+
+describe("geo registry payloads", () => {
+  it("embed the current sources and only standard shadcn imports", async () => {
+    const { readFileSync } = await import("node:fs");
+    for (const name of ["mn-geo-map", "mn-geo-marker", "mn-geo-popup"]) {
+      const json = JSON.parse(readFileSync(`public/r/${name}.json`, "utf8"));
+      for (const file of json.files as { path: string; content: string }[]) {
+        if (file.path.endsWith(".helpers.tsx")) continue;
+        expect(file.content).toBe(readFileSync(`src/${file.path}`, "utf8"));
+        expect(file.content).not.toMatch(/import\s+MapLibreGL[\s,]/);
+      }
+    }
+    const marker = readFileSync("public/r/mn-geo-marker.json", "utf8");
+    expect(marker).not.toContain("StyleWithVars");
+  });
+});

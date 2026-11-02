@@ -1259,7 +1259,7 @@
     "type": "registry:ui",
     "description": "mn-geo-map component",
     "dependencies": [
-      "maplibre-gl",
+      "maplibre-gl@^6.4.1",
       "lucide-react"
     ],
     "registryDependencies": [],
@@ -1273,7 +1273,7 @@
     "type": "registry:ui",
     "description": "mn-geo-marker component",
     "dependencies": [
-      "maplibre-gl"
+      "maplibre-gl@^6.4.1"
     ],
     "registryDependencies": [
       "mn-geo-map"
@@ -1287,7 +1287,7 @@
     "type": "registry:ui",
     "description": "mn-geo-popup component",
     "dependencies": [
-      "maplibre-gl",
+      "maplibre-gl@^6.4.1",
       "lucide-react"
     ],
     "registryDependencies": [

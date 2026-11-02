@@ -1,6 +1,7 @@
 "use client";
 
-import MapLibreGL, { type PopupOptions } from "maplibre-gl";
+import * as MapLibreGL from "maplibre-gl";
+import type { PopupOptions } from "maplibre-gl";
 import { useEffect, useMemo, useRef, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 

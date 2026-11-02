@@ -5,17 +5,19 @@
  */
 "use client";
 
-import MapLibreGL, { type MarkerOptions } from "maplibre-gl";
+import * as MapLibreGL from "maplibre-gl";
+import type { MarkerOptions } from "maplibre-gl";
 import {
   useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
+  type CSSProperties,
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
 
-import { cn, type StyleWithVars } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 import {
   GeoMarkerContext,
@@ -166,7 +168,7 @@ export function MnGeoMarkerContent({
         "focus-visible:ring-2 focus-visible:ring-offset-2 rounded-full",
         className,
       )}
-      style={{ "--tw-ring-color": "var(--mn-focus-ring)" } as StyleWithVars}
+      style={{ "--tw-ring-color": "var(--mn-focus-ring)" } as CSSProperties}
     >
       {children ?? <DefaultGeoMarkerIcon />}
     </div>,

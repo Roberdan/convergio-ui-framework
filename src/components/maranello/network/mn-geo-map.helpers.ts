@@ -13,7 +13,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type MapLibreGL from "maplibre-gl";
+import type * as MapLibreGL from "maplibre-gl";
 
 export type GeoMapTheme = "light" | "dark";
 
