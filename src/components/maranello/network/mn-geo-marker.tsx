@@ -5,7 +5,8 @@
  */
 "use client";
 
-import MapLibreGL, { type MarkerOptions } from "maplibre-gl";
+import * as MapLibreGL from "maplibre-gl";
+import type { MarkerOptions } from "maplibre-gl";
 import {
   useEffect,
   useLayoutEffect,
